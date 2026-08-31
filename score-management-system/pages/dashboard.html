@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>系统仪表盘</title>
+    <style id="theme-vars">
+/* Score Management System - Brand CSS */
+/* Professional, clean, data-dense administrative interface */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Primary - Indigo Blue */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
+  --color-primary-800: #312e81;
+  --color-primary-900: #1e1b4b;
+
+  /* Neutral Scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* State Colors */
+  --state-success: #16a34a;
+  --state-warning: #d97706;
+  --state-error: #dc2626;
+  --state-info: #2563eb;
+
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* Semantic Aliases */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4f46e5;
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #818cf8;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased" style="font-family: var(--font-body);">
+    <main>
+      <!-- Project Shell: Sidebar + Header + Content Slot -->
+      <div data-viewport-mode="app-shell" class="flex h-screen overflow-hidden min-h-0">
+
+        <!-- ====== Left Sidebar (240px) ====== -->
+        <aside class="shrink-0 flex flex-col h-full" style="width: 240px; background-color: var(--color-neutral-800);">
+
+          <!-- Logo / System Name -->
+          <div class="flex items-center gap-3 px-5 py-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: var(--primary); border-radius: var(--radius-md);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5"/>
+              </svg>
+            </div>
+            <span class="truncate" style="color: #f8fafc; font-size: 15px; font-weight: 600; line-height: 1.2;">成绩管理系统</span>
+          </div>
+
+          <!-- Navigation Menu -->
+          <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-3" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+            <ul class="flex flex-col gap-1">
+
+              <!-- 系统仪表盘 (active) -->
+              <li>
+                <a href="dashboard.html" data-dom-id="nav-dashboard" data-active="true"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+                   style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+                  <i data-lucide="layout-dashboard" class="shrink-0" style="width: 20px; height: 20px;"></i>
+                  <span class="truncate" style="font-size: 14px; font-weight: 500;">系统仪表盘</span>
+                </a>
+              </li>
+
+              <!-- 数据导入 -->
+              <li>
+                <a href="data-import.html" data-dom-id="nav-data-import"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+                   style="color: #94a3b8;">
+                  <i data-lucide="upload" class="shrink-0" style="width: 20px; height: 20px;"></i>
+                  <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导入</span>
+                </a>
+              </li>
+
+              <!-- 成绩管理 -->
+              <li>
+                <a href="score-management.html" data-dom-id="nav-score-management"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+                   style="color: #94a3b8;">
+                  <i data-lucide="clipboard-list" class="shrink-0" style="width: 20px; height: 20px;"></i>
+                  <span class="truncate" style="font-size: 14px; font-weight: 500;">成绩管理</span>
+                </a>
+              </li>
+
+              <!-- 奖学金评定 -->
+              <li>
+                <a href="scholarship.html" data-dom-id="nav-scholarship"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+                   style="color: #94a3b8;">
+                  <i data-lucide="award" class="shrink-0" style="width: 20px; height: 20px;"></i>
+                  <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+                </a>
+              </li>
+
+              <!-- 数据导出 -->
+              <li>
+                <a href="data-export.html" data-dom-id="nav-data-export"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+                   style="color: #94a3b8;">
+                  <i data-lucide="download" class="shrink-0" style="width: 20px; height: 20px;"></i>
+                  <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导出</span>
+                </a>
+              </li>
+
+              <!-- 备份还原 -->
+              <li>
+                <a href="backup-restore.html" data-dom-id="nav-backup-restore"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+                   style="color: #94a3b8;">
+                  <i data-lucide="database" class="shrink-0" style="width: 20px; height: 20px;"></i>
+                  <span class="truncate" style="font-size: 14px; font-weight: 500;">备份还原</span>
+                </a>
+              </li>
+
+              <!-- 系统设置 -->
+              <li>
+                <a href="system-settings.html" data-dom-id="nav-system-settings"
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+                   style="color: #94a3b8;">
+                  <i data-lucide="settings" class="shrink-0" style="width: 20px; height: 20px;"></i>
+                  <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
+                </a>
+              </li>
+
+            </ul>
+          </nav>
+
+          <!-- Bottom: User Info -->
+          <div class="shrink-0 flex items-center gap-3 px-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
+            <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: rgba(79,70,229,0.25); border-radius: var(--radius-full);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="truncate" style="color: #f8fafc; font-size: 13px; font-weight: 500;">管理员</span>
+              <span class="truncate" style="color: #64748b; font-size: 12px;">admin@school.edu</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ====== Main Area ====== -->
+        <div class="flex flex-col flex-1 min-h-0 min-w-0">
+
+          <!-- Top Header (56px) -->
+          <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
+            <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
+              系统仪表盘
+            </h1>
+            <div class="flex items-center gap-3 shrink-0">
+              <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
+                <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+              </button>
+              <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+            </div>
+          </header>
+
+          <!-- Main Content Scroll Region -->
+          <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+            <div class="p-6 flex flex-col gap-6" style="max-width: 1280px;">
+
+              <!-- ========== Welcome Banner ========== -->
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2" style="padding: 20px 24px; background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border);">
+                <div>
+                  <h2 class="truncate" style="font-size: 20px; font-weight: 600; color: var(--foreground); line-height: 1.3; text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">欢迎回来，管理员</h2>
+                  <p class="truncate" style="font-size: 14px; color: var(--muted-foreground); margin-top: 4px;">2026年7月18日 星期六</p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <span class="inline-flex items-center" style="width: 8px; height: 8px; background-color: var(--state-success); border-radius: var(--radius-full);"></span>
+                  <span id="last-sync" class="truncate" style="font-size: 13px; color: var(--muted-foreground);">上次数据同步：加载中…</span>
+                </div>
+              </div>
+
+              <!-- ========== Stats Cards Row ========== -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                <!-- 在册学生总数 -->
+                <div class="flex flex-col justify-between" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border); border-left: 4px solid var(--primary); padding: 20px;">
+                  <div class="flex items-center justify-between">
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">在册学生总数</span>
+                    <i data-lucide="users" style="width: 20px; height: 20px; color: var(--muted-foreground);"></i>
+                  </div>
+                  <div class="flex items-end gap-2" style="margin-top: 12px;">
+                    <span id="stat-students" class="whitespace-nowrap" style="font-size: 28px; font-weight: 700; color: var(--foreground); font-variant-numeric: tabular-nums; line-height: 1;">—</span>
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); padding-bottom: 2px;">人</span>
+                  </div>
+                  <div class="flex items-center gap-1" style="margin-top: 8px;">
+                    <i data-lucide="trending-up" style="width: 14px; height: 14px; color: var(--state-success);"></i>
+                    <span class="whitespace-nowrap" style="font-size: 12px; color: var(--state-success);">+2.3%</span>
+                  </div>
+                </div>
+
+                <!-- 本次考试录入 -->
+                <div class="flex flex-col justify-between" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border); border-left: 4px solid var(--state-success); padding: 20px;">
+                  <div class="flex items-center justify-between">
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">本次考试录入</span>
+                    <i data-lucide="check-circle" style="width: 20px; height: 20px; color: var(--muted-foreground);"></i>
+                  </div>
+                  <div class="flex items-end gap-2" style="margin-top: 12px;">
+                    <span id="stat-scores" class="whitespace-nowrap" style="font-size: 28px; font-weight: 700; color: var(--foreground); font-variant-numeric: tabular-nums; line-height: 1;">—</span>
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); padding-bottom: 2px;">条</span>
+                  </div>
+                  <div class="flex items-center gap-1" style="margin-top: 8px;">
+                    <i data-lucide="check" style="width: 14px; height: 14px; color: var(--state-success);"></i>
+                    <span id="stat-scores-status" class="whitespace-nowrap" style="font-size: 12px; color: var(--state-success);">已全部录入</span>
+                  </div>
+                </div>
+
+                <!-- 待换算成绩 -->
+                <div class="flex flex-col justify-between" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border); border-left: 4px solid var(--state-warning); padding: 20px;">
+                  <div class="flex items-center justify-between">
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">待换算成绩</span>
+                    <i data-lucide="calculator" style="width: 20px; height: 20px; color: var(--muted-foreground);"></i>
+                  </div>
+                  <div class="flex items-end gap-2" style="margin-top: 12px;">
+                    <span id="stat-pending-scores" class="whitespace-nowrap" style="font-size: 28px; font-weight: 700; color: var(--state-warning); font-variant-numeric: tabular-nums; line-height: 1;">—</span>
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); padding-bottom: 2px;">条</span>
+                  </div>
+                  <div class="flex items-center gap-1" style="margin-top: 8px;">
+                    <i data-lucide="alert-triangle" style="width: 14px; height: 14px; color: var(--state-warning);"></i>
+                    <span id="stat-pending-scores-status" class="whitespace-nowrap" style="font-size: 12px; color: var(--state-warning);">需要处理</span>
+                  </div>
+                </div>
+
+                <!-- 奖学金候选 -->
+                <div class="flex flex-col justify-between" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border); border-left: 4px solid var(--primary); padding: 20px;">
+                  <div class="flex items-center justify-between">
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">奖学金候选</span>
+                    <i data-lucide="award" style="width: 20px; height: 20px; color: var(--muted-foreground);"></i>
+                  </div>
+                  <div class="flex items-end gap-2" style="margin-top: 12px;">
+                    <span id="stat-scholarships" class="whitespace-nowrap" style="font-size: 28px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; line-height: 1;">—</span>
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); padding-bottom: 2px;">人</span>
+                  </div>
+                  <div class="flex items-center gap-1" style="margin-top: 8px;">
+                    <i data-lucide="star" style="width: 14px; height: 14px; color: var(--primary);"></i>
+                    <span class="whitespace-nowrap" style="font-size: 12px; color: var(--primary);">符合条件</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- ========== Quick Actions Row ========== -->
+              <div>
+                <h3 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 12px; text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">快捷操作</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                  <!-- 导入成绩数据 -->
+                  <a href="data-import.html" data-dom-id="nav-data-import" class="flex items-center gap-3 group" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 16px 20px; transition: transform 120ms cubic-bezier(.2,.8,.2,1), box-shadow 120ms cubic-bezier(.2,.8,.2,1);" onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px -8px rgba(15,23,42,.12)';" onmouseleave="this.style.transform=''; this.style.boxShadow='';">
+                    <div class="shrink-0 flex items-center justify-center" style="width: 40px; height: 40px; background-color: var(--color-primary-50); border-radius: var(--radius-md);">
+                      <i data-lucide="upload" style="width: 20px; height: 20px; color: var(--primary);"></i>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="truncate" style="font-size: 14px; font-weight: 500; color: var(--foreground);">导入成绩数据</span>
+                      <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">上传Excel成绩表</span>
+                    </div>
+                  </a>
+
+                  <!-- 成绩查询管理 -->
+                  <a href="score-management.html" data-dom-id="nav-score-management" class="flex items-center gap-3 group" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 16px 20px; transition: transform 120ms cubic-bezier(.2,.8,.2,1), box-shadow 120ms cubic-bezier(.2,.8,.2,1);" onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px -8px rgba(15,23,42,.12)';" onmouseleave="this.style.transform=''; this.style.boxShadow='';">
+                    <div class="shrink-0 flex items-center justify-center" style="width: 40px; height: 40px; background-color: var(--color-primary-50); border-radius: var(--radius-md);">
+                      <i data-lucide="search" style="width: 20px; height: 20px; color: var(--primary);"></i>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="truncate" style="font-size: 14px; font-weight: 500; color: var(--foreground);">成绩查询管理</span>
+                      <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">查询与编辑成绩</span>
+                    </div>
+                  </a>
+
+                  <!-- 奖学金评定 -->
+                  <a href="scholarship.html" data-dom-id="nav-scholarship" class="flex items-center gap-3 group" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 16px 20px; transition: transform 120ms cubic-bezier(.2,.8,.2,1), box-shadow 120ms cubic-bezier(.2,.8,.2,1);" onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px -8px rgba(15,23,42,.12)';" onmouseleave="this.style.transform=''; this.style.boxShadow='';">
+                    <div class="shrink-0 flex items-center justify-center" style="width: 40px; height: 40px; background-color: var(--color-primary-50); border-radius: var(--radius-md);">
+                      <i data-lucide="award" style="width: 20px; height: 20px; color: var(--primary);"></i>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="truncate" style="font-size: 14px; font-weight: 500; color: var(--foreground);">奖学金评定</span>
+                      <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">筛选与公示候选</span>
+                    </div>
+                  </a>
+
+                  <!-- 数据导出备份 -->
+                  <a href="backup-restore.html" data-dom-id="nav-backup-restore" class="flex items-center gap-3 group" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 16px 20px; transition: transform 120ms cubic-bezier(.2,.8,.2,1), box-shadow 120ms cubic-bezier(.2,.8,.2,1);" onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px -8px rgba(15,23,42,.12)';" onmouseleave="this.style.transform=''; this.style.boxShadow='';">
+                    <div class="shrink-0 flex items-center justify-center" style="width: 40px; height: 40px; background-color: var(--color-primary-50); border-radius: var(--radius-md);">
+                      <i data-lucide="download" style="width: 20px; height: 20px; color: var(--primary);"></i>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="truncate" style="font-size: 14px; font-weight: 500; color: var(--foreground);">数据导出备份</span>
+                      <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">导出与系统备份</span>
+                    </div>
+                  </a>
+
+                </div>
+              </div>
+
+              <!-- ========== Recent Activity Table ========== -->
+              <div>
+                <h3 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 12px; text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">最近操作</h3>
+                <div class="overflow-x-auto" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border);">
+                  <table class="w-full" style="min-width: 640px;">
+                    <thead>
+                      <tr style="border-bottom: 1px solid var(--border);">
+                        <th class="text-left px-4 py-3 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground); min-width: 140px;">操作时间</th>
+                        <th class="text-left px-4 py-3 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground); min-width: 100px;">操作类型</th>
+                        <th class="text-left px-4 py-3 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground); min-width: 200px;">操作内容</th>
+                        <th class="text-left px-4 py-3 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground); min-width: 80px;">操作人</th>
+                        <th class="text-left px-4 py-3 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground); min-width: 80px;">状态</th>
+                      </tr>
+                    </thead>
+                    <tbody id="recent-logs">
+                      <tr>
+                        <td class="px-4 py-3 whitespace-nowrap truncate" style="font-size: 13px; color: var(--muted-foreground);" colspan="5">加载中…</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- ========== Upcoming Tasks Section ========== -->
+              <div>
+                <h3 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 12px; text-wrap: balance; word-break: keep-all; overflow-wrap: break-word;">待办事项</h3>
+                <div id="tasks-container" class="flex flex-col gap-3">
+                  <div style="color: var(--muted-foreground); font-size: 13px; padding: 14px 20px;">加载中…</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>lucide.createIcons();</script>
+    <script>
+    (function() {
+      function formatNumber(n) {
+        return Number(n || 0).toLocaleString('zh-CN');
+      }
+
+      function escapeHtml(text) {
+        if (text == null) return '';
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+      }
+
+      function formatDateTime(iso) {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return iso;
+        const pad = (x) => String(x).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      }
+
+      function timeAgo(iso) {
+        if (!iso) return '未知';
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return '未知';
+        const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+        if (diff < 60) return '刚刚';
+        if (diff < 3600) return Math.floor(diff / 60) + '分钟前';
+        if (diff < 86400) return Math.floor(diff / 3600) + '小时前';
+        return Math.floor(diff / 86400) + '天前';
+      }
+
+      function statusBadge(status) {
+        const s = (status || '').toString();
+        let color = 'var(--state-success)';
+        let bg = 'rgba(22,163,74,0.08)';
+        let label = s;
+        if (s.includes('待复核') || s.includes('待处理') || s.includes('处理中')) {
+          color = 'var(--state-warning)';
+          bg = 'rgba(217,119,6,0.08)';
+        } else if (s.includes('失败') || s.includes('错误')) {
+          color = 'var(--state-error)';
+          bg = 'rgba(220,38,38,0.08)';
+        }
+        return `<span class="inline-flex items-center gap-1 px-2 py-0.5 whitespace-nowrap" style="font-size: 12px; color: ${color}; background-color: ${bg}; border-radius: var(--radius-sm);">
+                  <span style="width: 6px; height: 6px; background-color: ${color}; border-radius: var(--radius-full);"></span>
+                  ${escapeHtml(label)}
+                </span>`;
+      }
+
+      function typeBadge(type) {
+        const t = (type || '').toString();
+        let color = 'var(--muted-foreground)';
+        let bg = 'var(--muted)';
+        if (t.includes('导入')) { color = 'var(--state-info)'; bg = 'rgba(37,99,235,0.08)'; }
+        else if (t.includes('导出')) { color = 'var(--state-info)'; bg = 'rgba(37,99,235,0.08)'; }
+        else if (t.includes('换算') || t.includes('筛选')) { color = 'var(--primary)'; bg = 'rgba(79,70,229,0.08)'; }
+        return `<span class="inline-flex items-center px-2 py-0.5 whitespace-nowrap" style="font-size: 12px; color: ${color}; background-color: ${bg}; border-radius: var(--radius-sm);">${escapeHtml(t)}</span>`;
+      }
+
+      async function loadStats() {
+        try {
+          const res = await fetch('/api/dashboard/stats?_=' + Date.now());
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+
+          document.getElementById('stat-students').textContent = formatNumber(data.counts.students);
+          document.getElementById('stat-scores').textContent = formatNumber(data.counts.scores);
+          const pendingScores = data.counts.pending_scores || 0;
+          document.getElementById('stat-pending-scores').textContent = formatNumber(pendingScores);
+          document.getElementById('stat-pending-scores-status').textContent = pendingScores > 0 ? '需要处理' : '无需处理';
+          document.getElementById('stat-scholarships').textContent = formatNumber(data.counts.pending_scholarships);
+
+          const logsBody = document.getElementById('recent-logs');
+          if (data.recent_logs && data.recent_logs.length > 0) {
+            logsBody.innerHTML = data.recent_logs.map((log, idx) => {
+              const border = idx < data.recent_logs.length - 1 ? 'border-bottom: 1px solid var(--border);' : '';
+              return `<tr style="${border}">
+                <td class="px-4 py-3 whitespace-nowrap truncate" style="font-size: 13px; color: var(--foreground);">${formatDateTime(log.created_at)}</td>
+                <td class="px-4 py-3 whitespace-nowrap truncate">${typeBadge(log.operation_type)}</td>
+                <td class="px-4 py-3 truncate" style="font-size: 13px; color: var(--foreground);">${escapeHtml(log.operation_detail || '')}</td>
+                <td class="px-4 py-3 whitespace-nowrap truncate" style="font-size: 13px; color: var(--muted-foreground);">管理员</td>
+                <td class="px-4 py-3 whitespace-nowrap">${statusBadge(log.status)}</td>
+              </tr>`;
+            }).join('');
+            document.getElementById('last-sync').textContent = '上次数据同步：' + timeAgo(data.recent_logs[0].created_at);
+          } else {
+            logsBody.innerHTML = '<tr><td class="px-4 py-3 whitespace-nowrap truncate" style="font-size: 13px; color: var(--muted-foreground);" colspan="5">暂无操作记录</td></tr>';
+            document.getElementById('last-sync').textContent = '上次数据同步：刚刚';
+          }
+        } catch (err) {
+          console.error('加载仪表盘数据失败', err);
+          document.getElementById('last-sync').textContent = '上次数据同步：加载失败';
+        }
+      }
+
+      async function loadTasks() {
+        const container = document.getElementById('tasks-container');
+        try {
+          const res = await fetch('/api/dashboard/tasks?_=' + Date.now());
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          const items = data.items || [];
+          if (items.length === 0) {
+            container.innerHTML = `<div style="color: var(--muted-foreground); font-size: 13px; padding: 14px 20px;">暂无待办事项</div>`;
+            return;
+          }
+          container.innerHTML = items.map(task => {
+            const isUrgent = task.urgency === 'high';
+            const borderColor = isUrgent ? 'rgba(220,38,38,0.2)' : 'var(--border)';
+            const dotColor = isUrgent ? 'var(--state-error)' : 'var(--state-info)';
+            const tag = isUrgent ? `<span class="shrink-0 inline-flex items-center px-2 py-0.5 whitespace-nowrap" style="font-size: 11px; color: var(--state-error); background-color: rgba(220,38,38,0.08); border-radius: var(--radius-sm);">紧急</span>` : '';
+            let link = '#';
+            if (task.link) {
+              const s = String(task.link).trim();
+              link = /^[a-zA-Z][a-zA-Z0-9+.-]*:/i.test(s) ? '#' : s;
+            }
+            return `<a href="${escapeHtml(link)}" class="flex items-center justify-between gap-4" style="background-color: var(--card); border-radius: var(--radius-lg); border: 1px solid ${borderColor}; padding: 14px 20px; cursor: pointer; transition: transform 120ms cubic-bezier(.2,.8,.2,1), box-shadow 120ms cubic-bezier(.2,.8,.2,1);" onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px -8px rgba(15,23,42,.12)';" onmouseleave="this.style.transform=''; this.style.boxShadow='';">
+              <div class="flex items-center gap-3 min-w-0 flex-1">
+                <div class="shrink-0 flex items-center justify-center" style="width: 8px; height: 8px; background-color: ${dotColor}; border-radius: var(--radius-full);"></div>
+                <span class="truncate" style="font-size: 14px; color: var(--foreground); ${isUrgent ? 'font-weight: 500;' : ''}">${escapeHtml(task.title)}</span>
+                ${tag}
+              </div>
+            </a>`;
+          }).join('');
+        } catch (err) {
+          console.error('加载待办事项失败', err);
+          container.innerHTML = `<div style="color: var(--muted-foreground); font-size: 13px; padding: 14px 20px;">加载失败</div>`;
+        }
+      }
+
+      loadStats();
+      loadTasks();
+    })();
+    </script>
+</body>
+</html>

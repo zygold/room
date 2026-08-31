@@ -1,0 +1,83 @@
+{
+  "root": {
+    "nodeId": "gen-project-shell",
+    "kind": "project-shell",
+    "output": "partials/project-shell.html",
+    "sharedRegions": ["sidebar-nav", "top-header", "main-wrapper"],
+    "privateRegions": [],
+    "mutableSlots": ["activeNavItem", "pageTitle"],
+    "status": "generated",
+    "children": [
+      {
+        "nodeId": "gen-page-dashboard",
+        "kind": "page-leaf",
+        "pageIds": ["page-dashboard"],
+        "output": "pages/dashboard.html",
+        "sharedRegions": [],
+        "privateRegions": ["main-content"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-data-import",
+        "kind": "page-leaf",
+        "pageIds": ["page-data-import"],
+        "output": "pages/data-import.html",
+        "sharedRegions": [],
+        "privateRegions": ["main-content"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-score-management",
+        "kind": "page-leaf",
+        "pageIds": ["page-score-management"],
+        "output": "pages/score-management.html",
+        "sharedRegions": [],
+        "privateRegions": ["main-content"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-scholarship",
+        "kind": "page-leaf",
+        "pageIds": ["page-scholarship"],
+        "output": "pages/scholarship.html",
+        "sharedRegions": [],
+        "privateRegions": ["main-content"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-data-export",
+        "kind": "page-leaf",
+        "pageIds": ["page-data-export"],
+        "output": "pages/data-export.html",
+        "sharedRegions": [],
+        "privateRegions": ["main-content"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-backup-restore",
+        "kind": "page-leaf",
+        "pageIds": ["page-backup-restore"],
+        "output": "pages/backup-restore.html",
+        "sharedRegions": [],
+        "privateRegions": ["main-content"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-system-settings",
+        "kind": "page-leaf",
+        "pageIds": ["page-system-settings"],
+        "output": "pages/system-settings.html",
+        "sharedRegions": [],
+        "privateRegions": ["main-content"],
+        "status": "planned",
+        "children": []
+      }
+    ]
+  }
+}

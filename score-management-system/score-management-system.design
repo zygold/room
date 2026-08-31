@@ -1,0 +1,263 @@
+{
+  "data": [
+    {
+      "id": "page-dashboard",
+      "title": "系统仪表盘",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1752830400000,
+      "canvasData": {
+        "x": 3920,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-e378f285",
+          "measuredAt": 1786929151338
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/dashboard.html",
+        "interactions": [
+          {
+            "domId": "nav-data-import",
+            "targetPageId": "page-data-import"
+          },
+          {
+            "domId": "nav-score-management",
+            "targetPageId": "page-score-management"
+          },
+          {
+            "domId": "nav-scholarship",
+            "targetPageId": "page-scholarship"
+          },
+          {
+            "domId": "nav-backup-restore",
+            "targetPageId": "page-backup-restore",
+            "hideEdge": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-data-import",
+      "title": "数据导入",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1752830400000,
+      "canvasData": {
+        "x": 168,
+        "y": 12,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-d65a89fc",
+          "measuredAt": 1786929151338
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/data-import.html",
+        "interactions": [
+          {
+            "domId": "nav-dashboard",
+            "targetPageId": "page-dashboard",
+            "hideEdge": true
+          },
+          {
+            "domId": "nav-score-management",
+            "targetPageId": "page-score-management"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-score-management",
+      "title": "成绩管理",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1752830400000,
+      "canvasData": {
+        "x": 820,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-de9fc51a",
+          "measuredAt": 1786929151338
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/score-management.html",
+        "interactions": [
+          {
+            "domId": "nav-dashboard",
+            "targetPageId": "page-dashboard",
+            "hideEdge": true
+          },
+          {
+            "domId": "nav-data-import",
+            "targetPageId": "page-data-import",
+            "hideEdge": true
+          },
+          {
+            "domId": "nav-scholarship",
+            "targetPageId": "page-scholarship"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-scholarship",
+      "title": "奖学金评定",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1752830400000,
+      "canvasData": {
+        "x": 1440,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-5040ccea",
+          "measuredAt": 1786929151338
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/scholarship.html",
+        "interactions": [
+          {
+            "domId": "nav-dashboard",
+            "targetPageId": "page-dashboard",
+            "hideEdge": true
+          },
+          {
+            "domId": "nav-score-management",
+            "targetPageId": "page-score-management",
+            "hideEdge": true
+          },
+          {
+            "domId": "nav-data-export",
+            "targetPageId": "page-data-export"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-data-export",
+      "title": "数据导出",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1752830400000,
+      "canvasData": {
+        "x": 2060,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-2e7bf410",
+          "measuredAt": 1786929151338
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/data-export.html",
+        "interactions": [
+          {
+            "domId": "nav-dashboard",
+            "targetPageId": "page-dashboard",
+            "hideEdge": true
+          },
+          {
+            "domId": "nav-backup-restore",
+            "targetPageId": "page-backup-restore"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-backup-restore",
+      "title": "备份还原",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1752830400000,
+      "canvasData": {
+        "x": 2680,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-21c9c65e",
+          "measuredAt": 1786929151338
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/backup-restore.html",
+        "interactions": [
+          {
+            "domId": "nav-dashboard",
+            "targetPageId": "page-dashboard",
+            "hideEdge": true
+          },
+          {
+            "domId": "nav-data-export",
+            "targetPageId": "page-data-export",
+            "hideEdge": true
+          },
+          {
+            "domId": "nav-system-settings",
+            "targetPageId": "page-system-settings"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-system-settings",
+      "title": "系统设置",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1752830400000,
+      "canvasData": {
+        "x": 3300,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-408c9077",
+          "measuredAt": 1786929151338
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/system-settings.html",
+        "interactions": [
+          {
+            "domId": "nav-dashboard",
+            "targetPageId": "page-dashboard"
+          },
+          {
+            "domId": "nav-backup-restore",
+            "targetPageId": "page-backup-restore",
+            "hideEdge": true
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": false,
+    "deviceType": "desktop",
+    "projectName": "成绩管理系统"
+  }
+}

@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>数据导出</title>
+    <style id="theme-vars">
+/* Score Management System - Brand CSS */
+/* Professional, clean, data-dense administrative interface */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Primary - Indigo Blue */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
+  --color-primary-800: #312e81;
+  --color-primary-900: #1e1b4b;
+
+  /* Neutral Scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* State Colors */
+  --state-success: #16a34a;
+  --state-warning: #d97706;
+  --state-error: #dc2626;
+  --state-info: #2563eb;
+
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* Semantic Aliases */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4f46e5;
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #818cf8;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+<!-- Project Shell: Sidebar + Header + Content Slot -->
+<!-- App-shell layout for score management admin system -->
+
+<div data-viewport-mode="app-shell" class="flex h-screen overflow-hidden min-h-0" style="font-family: var(--font-body);">
+
+  <!-- ====== Left Sidebar (240px) ====== -->
+  <aside class="shrink-0 flex flex-col h-full" style="width: 240px; background-color: var(--color-neutral-800);">
+
+    <!-- Logo / System Name -->
+    <div class="flex items-center gap-3 px-5 py-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: var(--primary); border-radius: var(--radius-md);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5"/>
+        </svg>
+      </div>
+      <span class="truncate" style="color: #f8fafc; font-size: 15px; font-weight: 600; line-height: 1.2;">成绩管理系统</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-3" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+
+      <ul class="flex flex-col gap-1">
+
+        <!-- 系统仪表盘 -->
+        <li>
+          <a href="dashboard.html" data-dom-id="nav-dashboard"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统仪表盘</span>
+          </a>
+        </li>
+
+        <!-- 数据导入 -->
+        <li>
+          <a href="data-import.html" data-dom-id="nav-data-import"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导入</span>
+          </a>
+        </li>
+
+        <!-- 成绩管理 -->
+        <li>
+          <a href="score-management.html" data-dom-id="nav-score-management"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+              <line x1="8" y1="16" x2="14" y2="16"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">成绩管理</span>
+          </a>
+        </li>
+
+        <!-- 奖学金评定 -->
+        <li>
+          <a href="scholarship.html" data-dom-id="nav-scholarship"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+          </a>
+        </li>
+
+        <!-- 数据导出 (ACTIVE) -->
+        <li>
+          <a href="data-export.html" data-dom-id="nav-data-export" data-active="true"
+             class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导出</span>
+          </a>
+        </li>
+
+        <!-- 备份还原 -->
+        <li>
+          <a href="backup-restore.html" data-dom-id="nav-backup-restore"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/>
+              <path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">备份还原</span>
+          </a>
+        </li>
+
+        <!-- 系统设置 -->
+        <li>
+          <a href="system-settings.html" data-dom-id="nav-system-settings"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Bottom: User Info -->
+    <div class="shrink-0 flex items-center gap-3 px-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: rgba(79,70,229,0.25); border-radius: var(--radius-full);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="truncate" style="color: #f8fafc; font-size: 13px; font-weight: 500;">管理员</span>
+        <span class="truncate" style="color: #64748b; font-size: 12px;">admin@school.edu</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== Main Area ====== -->
+  <div class="flex flex-col flex-1 min-h-0 min-w-0">
+
+    <!-- Top Header -->
+    <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
+      <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
+        数据导出
+      </h1>
+      <div class="flex items-center gap-3 shrink-0">
+        <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+        <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Scroll Region -->
+    <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+      <div class="p-6 max-w-5xl mx-auto">
+
+        <!-- ===== 1. Filter Conditions Panel ===== -->
+        <section class="rounded-lg p-5 mb-6" style="background-color: var(--card); border: 1px solid var(--border);">
+          <h2 class="mb-4" style="font-size: 15px; font-weight: 600; color: var(--foreground);">导出条件筛选</h2>
+
+          <!-- Row 1 -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="truncate" style="font-size: 13px; color: var(--muted-foreground);">年级</label>
+              <select id="filter-grade" class="w-full px-3 py-2 rounded-lg outline-none transition-shadow" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <option value="">全部年级</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="truncate" style="font-size: 13px; color: var(--muted-foreground);">专业</label>
+              <select id="filter-major" class="w-full px-3 py-2 rounded-lg outline-none transition-shadow" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <option value="">全部专业</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="truncate" style="font-size: 13px; color: var(--muted-foreground);">班级类别</label>
+              <select id="filter-class-type" class="w-full px-3 py-2 rounded-lg outline-none transition-shadow" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <option value="">全部类别</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="truncate" style="font-size: 13px; color: var(--muted-foreground);">班级</label>
+              <select id="filter-class" class="w-full px-3 py-2 rounded-lg outline-none transition-shadow" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <option value="">全部班级</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="truncate" style="font-size: 13px; color: var(--muted-foreground);">学年</label>
+              <select id="filter-school-year" class="w-full px-3 py-2 rounded-lg outline-none transition-shadow" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <option value="">全部学年</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="truncate" style="font-size: 13px; color: var(--muted-foreground);">学期</label>
+              <select id="filter-semester" class="w-full px-3 py-2 rounded-lg outline-none transition-shadow" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <option value="">全部学期</option>
+                <option value="第一学期">第一学期</option>
+                <option value="第二学期">第二学期</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="truncate" style="font-size: 13px; color: var(--muted-foreground);">考试类型</label>
+              <select id="filter-exam-type" class="w-full px-3 py-2 rounded-lg outline-none transition-shadow" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <option value="">全部类型</option>
+                <option value="月考">月考</option>
+                <option value="期中考试">期中考试</option>
+                <option value="期末考试">期末考试</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 3: Multi-select Exam Batches -->
+          <div class="flex flex-col gap-1.5 mb-4">
+            <label class="truncate" style="font-size: 13px; color: var(--muted-foreground);">考试批次（可多选）</label>
+            <div class="relative" id="exam-multiselect">
+              <button id="exam-dropdown-btn" type="button" class="w-full px-3 py-2 rounded-lg text-left flex items-center justify-between transition-shadow" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <span id="exam-selected-text" class="truncate">全部考试</span>
+                <svg id="exam-dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--muted-foreground); transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div id="exam-dropdown-menu" class="hidden absolute z-20 w-full mt-1 rounded-lg shadow-lg" style="background-color: var(--card); border: 1px solid var(--border); max-height: 280px; overflow-y: auto;">
+                <div class="flex items-center justify-between px-3 py-2 sticky top-0" style="background-color: var(--card); border-bottom: 1px solid var(--border);">
+                  <span style="font-size: 12px; color: var(--muted-foreground);">选择要导出的考试</span>
+                  <div class="flex items-center gap-2">
+                    <button id="exam-select-all" type="button" class="text-xs font-medium transition-colors" style="color: var(--primary);">全选</button>
+                    <button id="exam-clear-all" type="button" class="text-xs font-medium transition-colors" style="color: var(--muted-foreground);">清空</button>
+                  </div>
+                </div>
+                <div id="exam-checkbox-list" class="p-1"></div>
+                <div class="px-3 py-2 sticky bottom-0" style="background-color: var(--card); border-top: 1px solid var(--border);">
+                  <button id="exam-dropdown-ok" type="button" class="w-full px-3 py-1.5 rounded-md text-xs font-medium transition-colors" style="color: var(--primary-foreground); background-color: var(--primary);">确定</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Export Content Checkboxes -->
+          <div class="mb-5">
+            <label class="block mb-2.5" style="font-size: 13px; color: var(--muted-foreground);">导出内容</label>
+            <div class="flex flex-wrap gap-x-6 gap-y-2.5">
+              <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14px; color: var(--foreground);">
+                <input id="export-content-detail" type="checkbox" value="学生成绩明细" checked class="w-4 h-4 rounded export-content-checkbox" style="accent-color: var(--primary);">
+                <span>学生成绩明细</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14px; color: var(--foreground);">
+                <input id="export-content-summary" type="checkbox" value="班级汇总统计" class="w-4 h-4 rounded export-content-checkbox" style="accent-color: var(--primary);">
+                <span>班级汇总统计</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14px; color: var(--foreground);">
+                <input id="export-content-rank" type="checkbox" value="年级排名数据" class="w-4 h-4 rounded export-content-checkbox" style="accent-color: var(--primary);">
+                <span>年级排名数据</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14px; color: var(--foreground);">
+                <input id="export-content-professional" type="checkbox" value="专业课成绩明细" class="w-4 h-4 rounded export-content-checkbox" style="accent-color: var(--primary);">
+                <span>专业课成绩明细</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-3">
+            <button id="preview-btn" type="button" class="px-4 py-2 rounded-lg transition-colors" style="height: 40px; font-size: 14px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+              预览数据
+            </button>
+            <button id="export-btn" type="button" class="px-4 py-2 rounded-lg transition-colors" style="height: 40px; font-size: 14px; font-weight: 500; color: var(--primary-foreground); background-color: var(--primary);">
+              开始导出
+            </button>
+          </div>
+        </section>
+
+        <!-- ===== 2. Export Format Selection ===== -->
+        <section class="mb-6">
+          <h2 class="mb-4" style="font-size: 15px; font-weight: 600; color: var(--foreground);">选择导出格式</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+
+            <!-- Excel (selected) -->
+            <div id="format-xlsx" data-format="xlsx" class="format-card relative flex flex-col items-center gap-2 p-4 rounded-lg cursor-pointer transition-shadow" style="background-color: var(--card); border: 2px solid var(--primary);">
+              <div class="check-icon absolute top-2 right-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-xs font-medium whitespace-nowrap" style="font-size: 11px; color: var(--primary-foreground); background-color: var(--primary);">推荐</span>
+              <div class="icon-box flex items-center justify-center" style="width: 40px; height: 40px; border-radius: var(--radius-md); background-color: var(--color-primary-50);">
+                <i data-lucide="table-2" style="width: 22px; height: 22px; color: var(--primary);"></i>
+              </div>
+              <span class="text-center font-medium" style="font-size: 14px; color: var(--foreground);">Excel</span>
+              <span class="text-center" style="font-size: 11px; color: var(--muted-foreground);">(.xlsx)</span>
+              <span class="text-center line-clamp-2" style="font-size: 12px; color: var(--muted-foreground);">电子表格格式，适合编辑和二次计算</span>
+            </div>
+
+            <!-- Word -->
+            <div id="format-docx" data-format="docx" class="format-card relative flex flex-col items-center gap-2 p-4 rounded-lg cursor-pointer transition-shadow" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="check-icon absolute top-2 right-2 hidden">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="icon-box flex items-center justify-center" style="width: 40px; height: 40px; border-radius: var(--radius-md); background-color: var(--muted);">
+                <i data-lucide="file-text" style="width: 22px; height: 22px; color: var(--muted-foreground);"></i>
+              </div>
+              <span class="text-center font-medium" style="font-size: 14px; color: var(--foreground);">Word</span>
+              <span class="text-center" style="font-size: 11px; color: var(--muted-foreground);">(.docx)</span>
+              <span class="text-center line-clamp-2" style="font-size: 12px; color: var(--muted-foreground);">文档格式，适合打印和存档</span>
+            </div>
+
+            <!-- PDF -->
+            <div id="format-pdf" data-format="pdf" class="format-card relative flex flex-col items-center gap-2 p-4 rounded-lg cursor-pointer transition-shadow" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="check-icon absolute top-2 right-2 hidden">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="icon-box flex items-center justify-center" style="width: 40px; height: 40px; border-radius: var(--radius-md); background-color: var(--muted);">
+                <i data-lucide="file-down" style="width: 22px; height: 22px; color: var(--muted-foreground);"></i>
+              </div>
+              <span class="text-center font-medium" style="font-size: 14px; color: var(--foreground);">PDF</span>
+              <span class="text-center" style="font-size: 11px; color: var(--muted-foreground);">(.pdf)</span>
+              <span class="text-center line-clamp-2" style="font-size: 12px; color: var(--muted-foreground);">便携格式，适合公示和上报</span>
+            </div>
+
+            <!-- Markdown -->
+            <div id="format-md" data-format="md" class="format-card relative flex flex-col items-center gap-2 p-4 rounded-lg cursor-pointer transition-shadow" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="check-icon absolute top-2 right-2 hidden">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="icon-box flex items-center justify-center" style="width: 40px; height: 40px; border-radius: var(--radius-md); background-color: var(--muted);">
+                <i data-lucide="code-2" style="width: 22px; height: 22px; color: var(--muted-foreground);"></i>
+              </div>
+              <span class="text-center font-medium" style="font-size: 14px; color: var(--foreground);">Markdown</span>
+              <span class="text-center" style="font-size: 11px; color: var(--muted-foreground);">(.md)</span>
+              <span class="text-center line-clamp-2" style="font-size: 12px; color: var(--muted-foreground);">轻量格式，适合技术存档</span>
+            </div>
+
+            <!-- ZIP -->
+            <div id="format-zip" data-format="zip" class="format-card relative flex flex-col items-center gap-2 p-4 rounded-lg cursor-pointer transition-shadow" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="check-icon absolute top-2 right-2 hidden">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-xs font-medium whitespace-nowrap" style="font-size: 11px; color: var(--muted-foreground); background-color: var(--muted);">批量导出</span>
+              <div class="icon-box flex items-center justify-center" style="width: 40px; height: 40px; border-radius: var(--radius-md); background-color: var(--muted);">
+                <i data-lucide="archive" style="width: 22px; height: 22px; color: var(--muted-foreground);"></i>
+              </div>
+              <span class="text-center font-medium" style="font-size: 14px; color: var(--foreground);">压缩包</span>
+              <span class="text-center" style="font-size: 11px; color: var(--muted-foreground);">(.zip)</span>
+              <span class="text-center line-clamp-2" style="font-size: 12px; color: var(--muted-foreground);">多文件打包，一键归档</span>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ===== 3. Export Options Panel ===== -->
+        <section class="rounded-lg p-5 mb-6" style="background-color: var(--card); border: 1px solid var(--border);">
+          <h2 class="mb-4" style="font-size: 15px; font-weight: 600; color: var(--foreground);">导出选项</h2>
+
+          <!-- Checkbox options -->
+          <div class="flex flex-wrap gap-x-6 gap-y-2.5 mb-5">
+            <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14px; color: var(--foreground);">
+              <input id="option-watermark" type="checkbox" class="w-4 h-4 rounded export-option-checkbox" style="accent-color: var(--primary);">
+              <span>添加学校水印</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14px; color: var(--foreground);">
+              <input id="option-desensitize" type="checkbox" class="w-4 h-4 rounded export-option-checkbox" style="accent-color: var(--primary);">
+              <span>脱敏处理(隐藏手机号等)</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14px; color: var(--foreground);">
+              <input id="option-conversion" type="checkbox" class="w-4 h-4 rounded export-option-checkbox" style="accent-color: var(--primary);">
+              <span>导出换算成绩</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer" style="font-size: 14px; color: var(--foreground);">
+              <input id="option-split-class" type="checkbox" class="w-4 h-4 rounded export-option-checkbox" style="accent-color: var(--primary);">
+              <span>按班级分文件</span>
+            </label>
+          </div>
+
+          <!-- File naming rule -->
+          <div>
+            <label class="block mb-2" style="font-size: 13px; color: var(--muted-foreground);">文件命名规则</label>
+            <div class="flex items-center gap-2 flex-wrap">
+              <select id="filename-rule" class="px-3 py-2 rounded-lg outline-none" style="height: 40px; font-size: 14px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+                <option value="grade_exam" selected>{年级}{范围}成绩</option>
+                <option value="grade_major_exam">{年级}{专业}_{范围}成绩</option>
+                <option value="date">成绩导出_{日期}</option>
+              </select>
+              <input id="filename-preview" type="text" value="" readonly class="flex-1 min-w-0 px-3 py-2 rounded-lg" style="height: 40px; font-size: 13px; color: var(--muted-foreground); background-color: var(--muted); border: 1px solid var(--border);">
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== 4. Recent Export History ===== -->
+        <section class="rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);">
+          <div class="flex items-center justify-between px-5 py-4" style="border-bottom: 1px solid var(--border);">
+            <h2 style="font-size: 15px; font-weight: 600; color: var(--foreground);">近期导出记录</h2>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left" style="min-width: 640px;">
+              <thead>
+                <tr style="background-color: var(--muted);">
+                  <th class="px-5 py-2.5 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">导出时间</th>
+                  <th class="px-5 py-2.5 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">导出类型</th>
+                  <th class="px-5 py-2.5 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">筛选条件</th>
+                  <th class="px-5 py-2.5 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">格式</th>
+                  <th class="px-5 py-2.5 truncate" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">文件大小</th>
+                  <th class="px-5 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">操作</th>
+                </tr>
+              </thead>
+              <tbody id="history-tbody">
+                <tr>
+                  <td colspan="6" class="px-5 py-6 text-center" style="font-size: 14px; color: var(--muted-foreground);">加载中...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</div>
+    </main>
+
+<!-- 提示弹窗 -->
+<div id="alert-modal" class="fixed inset-0 z-50 hidden" style="background-color: rgba(15,23,42,0.45);">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="rounded-lg shadow-xl w-full max-w-sm" style="background-color: var(--card); border: 1px solid var(--border);">
+      <div class="p-5">
+        <p id="alert-modal-msg" style="font-size: 14px; color: var(--foreground); line-height: 1.6;"></p>
+      </div>
+      <div class="flex items-center justify-end px-5 py-4" style="border-top: 1px solid var(--border);">
+        <button id="alert-ok-btn" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 600; color: var(--primary-foreground); background-color: var(--primary);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">知道了</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 预览弹窗 -->
+<div id="preview-modal" class="fixed inset-0 z-50 hidden" style="background-color: rgba(15,23,42,0.45);">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="rounded-lg shadow-xl w-full max-w-4xl" style="background-color: var(--card); border: 1px solid var(--border); max-height: calc(100vh - 2rem); display: flex; flex-direction: column;">
+      <div class="flex items-center justify-between px-5 py-4" style="border-bottom: 1px solid var(--border);">
+        <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground);">数据预览（前10条）</h3>
+        <button id="preview-close-btn" class="flex items-center justify-center" style="width: 28px; height: 28px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="关闭">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="overflow-x-auto overflow-y-auto p-0" style="flex: 1;">
+        <table class="w-full text-left text-sm" style="min-width: 640px;">
+          <thead class="sticky top-0">
+            <tr style="background-color: var(--muted);">
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">姓名</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">年级</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">专业</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">班级类别</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">班级</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">考试</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">考试类型</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">语文</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">数学</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">英语</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">专业课</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">总分</th>
+              <th class="px-4 py-2.5 whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">状态</th>
+            </tr>
+          </thead>
+          <tbody id="preview-tbody" style="color: var(--foreground);"></tbody>
+        </table>
+      </div>
+      <div class="flex items-center justify-between px-5 py-4" style="border-top: 1px solid var(--border);">
+        <span id="preview-count" class="text-sm" style="color: var(--muted-foreground);"></span>
+        <button id="preview-close-btn2" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 500; color: var(--foreground); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='transparent'">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script>
+    (function() {
+      const API_BASE = '/api';
+      let currentFormat = 'xlsx';
+      let classList = [];
+
+      const filterGrade = document.getElementById('filter-grade');
+      const filterMajor = document.getElementById('filter-major');
+      const filterClassType = document.getElementById('filter-class-type');
+      const filterClass = document.getElementById('filter-class');
+      const filterSchoolYear = document.getElementById('filter-school-year');
+      const filterSemester = document.getElementById('filter-semester');
+      const filterExamType = document.getElementById('filter-exam-type');
+      const examDropdownBtn = document.getElementById('exam-dropdown-btn');
+      const examDropdownMenu = document.getElementById('exam-dropdown-menu');
+      const examDropdownArrow = document.getElementById('exam-dropdown-arrow');
+      const examSelectedText = document.getElementById('exam-selected-text');
+      const examCheckboxList = document.getElementById('exam-checkbox-list');
+      const examSelectAll = document.getElementById('exam-select-all');
+      const examClearAll = document.getElementById('exam-clear-all');
+      const examDropdownOk = document.getElementById('exam-dropdown-ok');
+      const filenameRule = document.getElementById('filename-rule');
+      const filenamePreview = document.getElementById('filename-preview');
+      const exportBtn = document.getElementById('export-btn');
+      const previewBtn = document.getElementById('preview-btn');
+      const historyTbody = document.getElementById('history-tbody');
+      const alertModal = document.getElementById('alert-modal');
+      const alertMsg = document.getElementById('alert-modal-msg');
+      const previewModal = document.getElementById('preview-modal');
+      const previewTbody = document.getElementById('preview-tbody');
+      const previewCount = document.getElementById('preview-count');
+      let examList = [];
+      let selectedExamIds = new Set();
+
+      async function apiGet(path) {
+        const res = await fetch(API_BASE + path);
+        if (!res.ok) throw new Error((await res.json()).detail || res.statusText);
+        return res.json();
+      }
+
+      async function apiPost(path, body) {
+        const res = await fetch(API_BASE + path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        if (!res.ok) throw new Error((await res.json()).detail || res.statusText);
+        return res.json();
+      }
+
+      async function apiDelete(path) {
+        const res = await fetch(API_BASE + path, { method: 'DELETE' });
+        if (!res.ok) throw new Error((await res.json()).detail || res.statusText);
+        return res.json();
+      }
+
+      function showAlert(msg) {
+        alertMsg.textContent = msg;
+        alertModal.classList.remove('hidden');
+      }
+
+      function escapeHtml(text) {
+        if (text == null) return '';
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+      }
+
+      document.getElementById('alert-ok-btn').addEventListener('click', () => {
+        alertModal.classList.add('hidden');
+      });
+
+      function setSelectOptions(select, items, valueField, textField, defaultText) {
+        const oldVal = select.value;
+        select.innerHTML = `<option value="">${defaultText}</option>`;
+        items.forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item[valueField];
+          opt.textContent = item[textField];
+          select.appendChild(opt);
+        });
+        const exists = Array.from(select.options).some(o => o.value === oldVal);
+        select.value = exists ? oldVal : '';
+      }
+
+      async function loadGrades() {
+        const grades = await apiGet('/grades');
+        setSelectOptions(filterGrade, grades, 'id', 'name', '全部年级');
+      }
+
+      async function loadMajors() {
+        const majors = await apiGet('/majors');
+        setSelectOptions(filterMajor, majors, 'id', 'name', '全部专业');
+      }
+
+      async function loadClassTypes() {
+        const types = await apiGet('/class-types');
+        setSelectOptions(filterClassType, types, 'id', 'name', '全部类别');
+      }
+
+      async function loadClasses() {
+        const gradeId = filterGrade.value;
+        const majorId = filterMajor.value;
+        const classTypeId = filterClassType.value;
+        let url = '/classes';
+        const params = [];
+        if (gradeId) params.push('grade_id=' + gradeId);
+        if (majorId) params.push('major_id=' + majorId);
+        if (classTypeId) params.push('class_type_id=' + classTypeId);
+        if (params.length) url += '?' + params.join('&');
+        classList = await apiGet(url) || [];
+        setSelectOptions(filterClass, classList, 'id', 'name', '全部班级');
+      }
+
+      function buildExamDisplay(schoolYear, semester, month, examName, examType) {
+        const name = (examName || '').trim();
+        if (!name) return '-';
+        const norm = (s) => String(s || '').replace(/[\s\-]/g, '');
+        const normName = norm(name);
+        const parts = [];
+        const sy = (schoolYear || '').trim();
+        if (sy && !normName.includes(norm(sy))) parts.push(sy);
+        const sem = (semester || '').trim();
+        if (sem && !normName.includes(norm(sem))) parts.push(sem);
+        const monthText = month ? `${month}月` : '';
+        if (monthText && !normName.includes(norm(monthText))) parts.push(monthText);
+        parts.push(name);
+        const type = (examType || '').trim();
+        if (type && !normName.includes(norm(type))) parts.push(`(${type})`);
+        return parts.join(' ') || '-';
+      }
+
+      async function loadSchoolYears() {
+        const exams = await apiGet('/scores/exams');
+        const years = [...new Set((exams || []).map(e => e.school_year).filter(Boolean))].sort().reverse();
+        const oldVal = filterSchoolYear.value;
+        filterSchoolYear.innerHTML = '<option value="">全部学年</option>' + years.map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
+        filterSchoolYear.value = years.includes(oldVal) ? oldVal : '';
+        return exams;
+      }
+
+      async function loadExams() {
+        const params = [];
+        if (filterSchoolYear.value) params.push('school_year=' + encodeURIComponent(filterSchoolYear.value));
+        if (filterSemester.value) params.push('semester=' + encodeURIComponent(filterSemester.value));
+        if (filterExamType.value) params.push('exam_type=' + encodeURIComponent(filterExamType.value));
+        let url = '/scores/exams';
+        if (params.length) url += '?' + params.join('&');
+        examList = await apiGet(url) || [];
+        renderExamCheckboxes();
+        updateExamSelectedText();
+      }
+
+      function renderExamCheckboxes() {
+        if (examList.length === 0) {
+          examCheckboxList.innerHTML = `<div class="px-3 py-4 text-center text-xs" style="color: var(--muted-foreground);">暂无考试批次</div>`;
+          return;
+        }
+        examCheckboxList.innerHTML = examList.map(e => {
+          const display = escapeHtml(buildExamDisplay(e.school_year, e.semester, e.month, e.name, e.exam_type));
+          const checked = selectedExamIds.has(String(e.id)) ? 'checked' : '';
+          return `<label class="flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-colors hover:bg-gray-100" style="font-size: 13px; color: var(--foreground);">
+            <input type="checkbox" value="${e.id}" class="exam-checkbox w-4 h-4 rounded" style="accent-color: var(--primary);" ${checked}>
+            <span class="truncate">${display}</span>
+          </label>`;
+        }).join('');
+      }
+
+      function updateExamSelectedText() {
+        if (selectedExamIds.size === 0) {
+          examSelectedText.textContent = '全部考试（按学年/学期/类型筛选）';
+          return;
+        }
+        const selectedNames = examList
+          .filter(e => selectedExamIds.has(String(e.id)))
+          .map(e => buildExamDisplay(e.school_year, e.semester, e.month, e.name, e.exam_type));
+        if (selectedNames.length <= 2) {
+          examSelectedText.textContent = selectedNames.join('、');
+        } else {
+          examSelectedText.textContent = `已选择 ${selectedNames.length} 个考试批次`;
+        }
+      }
+
+      function toggleExamDropdown(show) {
+        if (show) {
+          examDropdownMenu.classList.remove('hidden');
+          examDropdownArrow.style.transform = 'rotate(180deg)';
+        } else {
+          examDropdownMenu.classList.add('hidden');
+          examDropdownArrow.style.transform = 'rotate(0deg)';
+        }
+      }
+
+      function buildFilterCondition() {
+        const cond = {};
+        if (filterGrade.value) cond.grade_id = Number(filterGrade.value);
+        if (filterMajor.value) cond.major_id = Number(filterMajor.value);
+        if (filterClassType.value) cond.class_type_id = Number(filterClassType.value);
+        if (filterClass.value) cond.class_id = Number(filterClass.value);
+        if (filterExamType.value) cond.exam_type = filterExamType.value;
+        if (filterSchoolYear.value) cond.school_year = filterSchoolYear.value;
+        if (filterSemester.value) cond.semester = filterSemester.value;
+        if (selectedExamIds.size > 0) {
+          cond.exam_ids = Array.from(selectedExamIds).map(Number);
+        }
+        return cond;
+      }
+
+      function getExportType() {
+        const checked = document.querySelectorAll('.export-content-checkbox:checked');
+        if (checked.length === 0) return '学生成绩明细';
+        return Array.from(checked).map(cb => cb.value).join('、');
+      }
+
+      function getOptions() {
+        return {
+          watermark: document.getElementById('option-watermark').checked,
+          desensitize: document.getElementById('option-desensitize').checked,
+          include_converted: document.getElementById('option-conversion').checked,
+          split_class: document.getElementById('option-split-class').checked,
+        };
+      }
+
+      function formatScore(score) {
+        if (score === null || score === undefined || score === '') return '-';
+        const num = Number(score);
+        if (Number.isNaN(num)) return '-';
+        if (Number.isInteger(num)) return String(num);
+        return num.toFixed(1);
+      }
+
+      function formatFormat(fmt) {
+        const map = { xlsx: 'Excel', docx: 'Word', pdf: 'PDF', md: 'Markdown', zip: '压缩包' };
+        return map[fmt] || fmt;
+      }
+
+      function findOptionText(selectId, value) {
+        if (!value && value !== 0) return '';
+        const select = document.getElementById(selectId);
+        if (!select) return '';
+        const opt = Array.from(select.options).find(o => o.value === String(value));
+        return opt ? opt.text : '';
+      }
+
+      function updateFilenamePreview() {
+        const rule = filenameRule.value;
+        const grade = filterGrade.options[filterGrade.selectedIndex].text;
+        const major = filterMajor.options[filterMajor.selectedIndex].text;
+        const schoolYear = filterSchoolYear.options[filterSchoolYear.selectedIndex].text;
+        const semester = filterSemester.options[filterSemester.selectedIndex].text;
+        const examType = filterExamType.options[filterExamType.selectedIndex].text;
+        const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        const ext = currentFormat === 'md' ? 'md' : currentFormat;
+        let name = '';
+        if (rule === 'grade_exam') {
+          const scope = selectedExamIds.size > 0 ? '选定考试' : (schoolYear !== '全部学年' ? schoolYear + (semester !== '全部学期' ? semester : '') : examType);
+          name = `${grade}${scope}成绩_${date}.${ext}`;
+        } else if (rule === 'grade_major_exam') {
+          const scope = selectedExamIds.size > 0 ? '选定考试' : (schoolYear !== '全部学年' ? schoolYear + (semester !== '全部学期' ? semester : '') : examType);
+          name = `${grade}${major}_${scope}成绩_${date}.${ext}`;
+        } else if (rule === 'date') {
+          name = `成绩导出_${date}.${ext}`;
+        }
+        filenamePreview.value = name;
+      }
+
+      function selectFormat(fmt) {
+        currentFormat = fmt;
+        document.querySelectorAll('.format-card').forEach(card => {
+          const isSelected = card.dataset.format === fmt;
+          card.style.border = isSelected ? '2px solid var(--primary)' : '1px solid var(--border)';
+          const check = card.querySelector('.check-icon');
+          if (check) check.classList.toggle('hidden', !isSelected);
+          const iconBox = card.querySelector('.icon-box');
+          if (iconBox) {
+            iconBox.style.backgroundColor = isSelected ? 'var(--color-primary-50)' : 'var(--muted)';
+            const svg = iconBox.querySelector('svg');
+            if (svg) svg.style.color = isSelected ? 'var(--primary)' : 'var(--muted-foreground)';
+          }
+        });
+        updateFilenamePreview();
+      }
+
+      document.querySelectorAll('.format-card').forEach(card => {
+        card.addEventListener('click', () => selectFormat(card.dataset.format));
+      });
+
+      async function previewData() {
+        previewBtn.disabled = true;
+        previewBtn.textContent = '加载中...';
+        try {
+          const cond = buildFilterCondition();
+          const data = await apiPost('/export/preview', {
+            export_type: getExportType(),
+            filter_condition: cond,
+            format: currentFormat,
+            options: getOptions(),
+          });
+          const items = data.items || [];
+          previewCount.textContent = `共 ${data.total || 0} 条记录，显示前 ${items.length} 条`;
+          if (items.length === 0) {
+            previewTbody.innerHTML = `<tr><td colspan="13" class="px-4 py-6 text-center" style="color: var(--muted-foreground);">暂无数据</td></tr>`;
+          } else {
+            previewTbody.innerHTML = items.map((item, idx) => {
+              const bg = idx % 2 === 0 ? 'var(--card)' : 'var(--muted)';
+              const status = item.is_converted ? '已换算' : '原始';
+              return `<tr style="background-color: ${bg};">
+                <td class="px-4 py-2.5 whitespace-nowrap">${escapeHtml(item.student_name || '')}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap">${escapeHtml(item.grade_name || '')}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap">${escapeHtml(item.major_name || '')}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap">${escapeHtml(item.class_type_name || '')}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap">${escapeHtml(item.class_name || '')}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap">${escapeHtml(item.exam_name || '')}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap">${escapeHtml(item.exam_type || '')}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap text-center" style="font-variant-numeric: tabular-nums;">${formatScore(item.chinese_score)}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap text-center" style="font-variant-numeric: tabular-nums;">${formatScore(item.math_score)}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap text-center" style="font-variant-numeric: tabular-nums;">${formatScore(item.english_score)}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap text-center" style="font-variant-numeric: tabular-nums;">${formatScore(item.professional_score)}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap text-center font-semibold" style="font-variant-numeric: tabular-nums;">${formatScore(item.total_score)}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap text-center">${escapeHtml(status)}</td>
+              </tr>`;
+            }).join('');
+          }
+          previewModal.classList.remove('hidden');
+        } catch (e) {
+          showAlert('预览失败：' + e.message);
+        } finally {
+          previewBtn.disabled = false;
+          previewBtn.textContent = '预览数据';
+        }
+      }
+
+      function closePreview() {
+        previewModal.classList.add('hidden');
+      }
+
+      document.getElementById('preview-close-btn').addEventListener('click', closePreview);
+      document.getElementById('preview-close-btn2').addEventListener('click', closePreview);
+
+      async function startExport() {
+        exportBtn.disabled = true;
+        const originalText = exportBtn.textContent;
+        exportBtn.textContent = '导出中...';
+        try {
+          const cond = buildFilterCondition();
+          const result = await apiPost('/export/generate', {
+            export_type: getExportType(),
+            filter_condition: cond,
+            format: currentFormat,
+            options: getOptions(),
+          });
+          const a = document.createElement('a');
+          a.href = API_BASE + '/export/download/' + result.id;
+          a.download = result.file_name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          showAlert('导出成功：' + result.file_name + '（' + result.file_size + '）');
+          await loadHistory();
+        } catch (e) {
+          showAlert('导出失败：' + e.message);
+        } finally {
+          exportBtn.disabled = false;
+          exportBtn.textContent = originalText;
+        }
+      }
+
+      async function loadHistory() {
+        try {
+          const rows = await apiGet('/export/history');
+          if (!rows || rows.length === 0) {
+            historyTbody.innerHTML = `<tr><td colspan="6" class="px-5 py-6 text-center" style="font-size: 14px; color: var(--muted-foreground);">暂无导出记录</td></tr>`;
+            return;
+          }
+          historyTbody.innerHTML = rows.map((row, idx) => {
+            const isLast = idx === rows.length - 1;
+            const border = isLast ? '' : 'border-bottom: 1px solid var(--border);';
+            let filterText = '';
+            try {
+              const cond = JSON.parse(row.filter_condition || '{}');
+              const parts = [];
+              const gradeText = findOptionText('filter-grade', cond.grade_id);
+              const majorText = findOptionText('filter-major', cond.major_id);
+              const classText = findOptionText('filter-class', cond.class_id);
+              if (gradeText) parts.push(gradeText);
+              if (majorText) parts.push(majorText);
+              if (classText) parts.push(classText);
+              if (cond.exam_ids && cond.exam_ids.length) {
+                parts.push(`已选${cond.exam_ids.length}个考试`);
+              } else {
+                const sy = cond.school_year || '';
+                const sem = cond.semester || '';
+                const et = cond.exam_type || '';
+                if (sy && sem) parts.push(`${sy}${sem}`);
+                else if (sy) parts.push(sy);
+                else if (sem) parts.push(sem);
+                if (et) parts.push(et);
+              }
+              filterText = escapeHtml(parts.length ? parts.join('/') : '全部');
+            } catch (e) {
+              filterText = escapeHtml(row.filter_condition || '-');
+            }
+            return `<tr style="${border}">
+              <td class="px-5 py-3 truncate" style="font-size: 14px; color: var(--foreground);">${escapeHtml(row.created_at || '')}</td>
+              <td class="px-5 py-3 truncate" style="font-size: 14px; color: var(--foreground);">${escapeHtml(row.export_type || '')}</td>
+              <td class="px-5 py-3 truncate" style="font-size: 14px; color: var(--muted-foreground);">${filterText}</td>
+              <td class="px-5 py-3 whitespace-nowrap" style="font-size: 14px; color: var(--foreground);">${escapeHtml(formatFormat(row.format))}</td>
+              <td class="px-5 py-3 whitespace-nowrap" style="font-size: 14px; color: var(--foreground);">${escapeHtml(row.file_size || '')}</td>
+              <td class="px-5 py-3">
+                <div class="flex items-center gap-2">
+                  <button data-history-download="${row.id}" class="px-2.5 py-1 rounded-md text-xs font-medium transition-colors" style="font-size: 13px; color: var(--primary); background-color: var(--color-primary-50);">下载</button>
+                  <button data-history-delete="${row.id}" class="px-2.5 py-1 rounded-md text-xs font-medium transition-colors" style="font-size: 13px; color: var(--state-error); background-color: #fef2f2;">删除</button>
+                </div>
+              </td>
+            </tr>`;
+          }).join('');
+        } catch (e) {
+          historyTbody.innerHTML = `<tr><td colspan="6" class="px-5 py-6 text-center" style="font-size: 14px; color: var(--state-error);">加载失败：${escapeHtml(e.message)}</td></tr>`;
+        }
+      }
+
+      historyTbody.addEventListener('click', async (e) => {
+        const downloadId = e.target.dataset.historyDownload;
+        const deleteId = e.target.dataset.historyDelete;
+        if (downloadId) {
+          const a = document.createElement('a');
+          a.href = API_BASE + '/export/download/' + downloadId;
+          a.download = '';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        } else if (deleteId) {
+          try {
+            await apiDelete('/export/delete/' + deleteId);
+            await loadHistory();
+          } catch (e) {
+            showAlert('删除失败：' + e.message);
+          }
+        }
+      });
+
+      filterGrade.addEventListener('change', async () => {
+        await loadClasses();
+        await loadExams();
+        updateFilenamePreview();
+      });
+      filterMajor.addEventListener('change', async () => {
+        await loadClasses();
+        updateFilenamePreview();
+      });
+      filterClassType.addEventListener('change', async () => {
+        await loadClasses();
+        updateFilenamePreview();
+      });
+      filterClass.addEventListener('change', updateFilenamePreview);
+      filterSchoolYear.addEventListener('change', async () => {
+        selectedExamIds.clear();
+        await loadExams();
+        updateFilenamePreview();
+      });
+      filterSemester.addEventListener('change', async () => {
+        selectedExamIds.clear();
+        await loadExams();
+        updateFilenamePreview();
+      });
+      filterExamType.addEventListener('change', async () => {
+        selectedExamIds.clear();
+        await loadExams();
+        updateFilenamePreview();
+      });
+      filenameRule.addEventListener('change', updateFilenamePreview);
+
+      // Exam multi-select dropdown events
+      examDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = examDropdownMenu.classList.contains('hidden');
+        toggleExamDropdown(isHidden);
+      });
+      examDropdownOk.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleExamDropdown(false);
+      });
+      examSelectAll.addEventListener('click', (e) => {
+        e.stopPropagation();
+        examList.forEach(e => selectedExamIds.add(String(e.id)));
+        renderExamCheckboxes();
+        updateExamSelectedText();
+        updateFilenamePreview();
+      });
+      examClearAll.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedExamIds.clear();
+        renderExamCheckboxes();
+        updateExamSelectedText();
+        updateFilenamePreview();
+      });
+      examCheckboxList.addEventListener('change', (e) => {
+        if (!e.target.classList.contains('exam-checkbox')) return;
+        const id = e.target.value;
+        if (e.target.checked) selectedExamIds.add(id);
+        else selectedExamIds.delete(id);
+        updateExamSelectedText();
+        updateFilenamePreview();
+      });
+      document.addEventListener('click', (e) => {
+        if (!examDropdownMenu.classList.contains('hidden') && !examDropdownBtn.contains(e.target) && !examDropdownMenu.contains(e.target)) {
+          toggleExamDropdown(false);
+        }
+      });
+
+      previewBtn.addEventListener('click', previewData);
+      exportBtn.addEventListener('click', startExport);
+
+      async function init() {
+        await loadGrades();
+        await loadMajors();
+        await loadClassTypes();
+        await loadClasses();
+        await loadSchoolYears();
+        await loadExams();
+        updateFilenamePreview();
+        await loadHistory();
+        lucide.createIcons();
+      }
+      init();
+    })();
+    </script>
+</body>
+</html>

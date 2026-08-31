@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>数据导入</title>
+    <style id="theme-vars">
+/* Score Management System - Brand CSS */
+/* Professional, clean, data-dense administrative interface */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Primary - Indigo Blue */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
+  --color-primary-800: #312e81;
+  --color-primary-900: #1e1b4b;
+
+  /* Neutral Scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* State Colors */
+  --state-success: #16a34a;
+  --state-warning: #d97706;
+  --state-error: #dc2626;
+  --state-info: #2563eb;
+
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* Semantic Aliases */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4f46e5;
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #818cf8;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+<!-- Project Shell: Sidebar + Header + Content Slot -->
+<!-- App-shell layout for score management admin system -->
+
+<div data-viewport-mode="app-shell" class="flex h-screen overflow-hidden min-h-0" style="font-family: var(--font-body);">
+
+  <!-- ====== Left Sidebar (240px) ====== -->
+  <aside class="shrink-0 flex flex-col h-full" style="width: 240px; background-color: var(--color-neutral-800);">
+
+    <!-- Logo / System Name -->
+    <div class="flex items-center gap-3 px-5 py-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: var(--primary); border-radius: var(--radius-md);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5"/>
+        </svg>
+      </div>
+      <span class="truncate" style="color: #f8fafc; font-size: 15px; font-weight: 600; line-height: 1.2;">成绩管理系统</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-3" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+
+      <ul class="flex flex-col gap-1">
+
+        <!-- 系统仪表盘 -->
+        <li>
+          <a href="dashboard.html" data-dom-id="nav-dashboard"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统仪表盘</span>
+          </a>
+        </li>
+
+        <!-- 数据导入 -->
+        <li>
+          <a href="data-import.html" data-dom-id="nav-data-import" data-active="true"
+             class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导入</span>
+          </a>
+        </li>
+
+        <!-- 成绩管理 -->
+        <li>
+          <a href="score-management.html" data-dom-id="nav-score-management"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+              <line x1="8" y1="16" x2="14" y2="16"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">成绩管理</span>
+          </a>
+        </li>
+
+        <!-- 奖学金评定 -->
+        <li>
+          <a href="scholarship.html" data-dom-id="nav-scholarship"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+          </a>
+        </li>
+
+        <!-- 数据导出 -->
+        <li>
+          <a href="data-export.html" data-dom-id="nav-data-export"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导出</span>
+          </a>
+        </li>
+
+        <!-- 备份还原 -->
+        <li>
+          <a href="backup-restore.html" data-dom-id="nav-backup-restore"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/>
+              <path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">备份还原</span>
+          </a>
+        </li>
+
+        <!-- 系统设置 -->
+        <li>
+          <a href="system-settings.html" data-dom-id="nav-system-settings"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Bottom: User Info -->
+    <div class="shrink-0 flex items-center gap-3 px-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: rgba(79,70,229,0.25); border-radius: var(--radius-full);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="truncate" style="color: #f8fafc; font-size: 13px; font-weight: 500;">管理员</span>
+        <span class="truncate" style="color: #64748b; font-size: 12px;">admin@school.edu</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== Main Area (Sidebar + Header + Content) ====== -->
+  <div class="flex flex-col flex-1 min-h-0 min-w-0">
+
+    <!-- Top Header (56px) -->
+    <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
+      <!-- Left: Page Title -->
+      <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
+        数据导入
+      </h1>
+
+      <!-- Right: Actions -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Notification Bell -->
+        <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+
+        <!-- User Avatar -->
+        <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Scroll Region -->
+    <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+      <div class="p-6 space-y-6">
+
+        <!-- ====== 1. Import Metadata Section ====== -->
+        <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border);">
+          <input type="file" id="file-input" accept=".xlsx,.xls,.csv,.zip" multiple style="display:none">
+          <input type="file" id="teacher-file-input" accept=".xlsx,.xls,.csv" style="display:none">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground);">年级（可选）</label>
+              <select id="upload-grade" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                <option value="">不指定</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground);">专业（可选）</label>
+              <select id="upload-major" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                <option value="">不指定</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground);">考试类型</label>
+              <select id="upload-exam-type" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                <option value="月考">月考</option>
+                <option value="期中考试">期中考试</option>
+                <option value="期末考试">期末考试</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground);">学年 <span style="color: var(--state-error);">*</span></label>
+              <select id="upload-school-year" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                <option value="">请选择</option>
+                <option value="2024-2025">2024-2025</option>
+                <option value="2025-2026">2025-2026</option>
+                <option value="2026-2027">2026-2027</option>
+                <option value="2027-2028">2027-2028</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground);">学期 <span style="color: var(--state-error);">*</span></label>
+              <select id="upload-semester" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                <option value="">请选择</option>
+                <option value="第一学期">第一学期</option>
+                <option value="第二学期">第二学期</option>
+              </select>
+            </div>
+            <div id="upload-month-wrap">
+              <label style="font-size: 13px; color: var(--muted-foreground);">月份 <span style="color: var(--state-error);">*</span></label>
+              <select id="upload-month" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                <option value="">请选择</option>
+                <option value="1">1月</option>
+                <option value="2">2月</option>
+                <option value="3">3月</option>
+                <option value="4">4月</option>
+                <option value="5">5月</option>
+                <option value="6">6月</option>
+                <option value="7">7月</option>
+                <option value="8">8月</option>
+                <option value="9">9月</option>
+                <option value="10">10月</option>
+                <option value="11">11月</option>
+                <option value="12">12月</option>
+              </select>
+            </div>
+          </div>
+          <div id="upload-zone" class="flex flex-col items-center justify-center rounded-lg border-2 border-dashed py-12 px-6 mt-6 transition-colors cursor-pointer" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50);">
+            <svg class="shrink-0 mb-4" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p class="mb-1" style="font-size: 15px; font-weight: 500; color: var(--foreground);">拖拽文件到此处或点击上传</p>
+            <p style="font-size: 13px; color: var(--muted-foreground);">支持格式：.xlsx, .xls, .csv, .zip</p>
+            <p class="mt-1" style="font-size: 12px; color: var(--muted-foreground);">单个文件不超过 50MB</p>
+            <p id="upload-status" class="mt-2" style="font-size: 13px; color: var(--primary); font-weight: 500;"></p>
+          </div>
+        </div>
+
+        <!-- ====== 学科满分设置 ====== -->
+        <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border);">
+          <div class="flex items-center justify-between mb-4">
+            <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground);">学科满分设置（可选）</h3>
+            <span style="font-size: 12px; color: var(--muted-foreground);">导入时设置当次考试各科满分，未设置则使用系统默认值</span>
+          </div>
+          <div id="subject-config-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- 动态生成 -->
+          </div>
+          <p id="subject-config-tip" class="mt-3" style="font-size: 12px; color: var(--muted-foreground);">选择专业后可自动加载专业课默认满分。</p>
+        </div>
+
+        <!-- ====== 2. Two Tab Sections ====== -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- Tab 1: 成绩文件导入 -->
+          <div class="rounded-lg border" style="background-color: var(--card); border-color: var(--border);">
+            <!-- Tab Header -->
+            <div class="flex items-center justify-between border-b" style="border-color: var(--border);">
+              <button class="px-4 py-3 font-medium text-sm transition-colors" style="color: var(--primary); border-bottom: 2px solid var(--primary); font-size: 14px; font-weight: 500;">成绩文件导入</button>
+              <div class="flex items-center gap-2 mr-3">
+                <button id="batch-validate-btn" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors" style="background-color: var(--muted); color: var(--foreground);" disabled>批量校验</button>
+                <button id="batch-import-btn" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors" style="background-color: var(--primary); color: var(--primary-foreground);" disabled>批量导入</button>
+              </div>
+            </div>
+            <!-- Tab Body -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm" style="font-size: 13px;">
+                <thead>
+                  <tr style="background-color: var(--muted);">
+                    <th class="text-center px-4 py-3 font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 40px;">
+                      <input type="checkbox" id="select-all-files" class="cursor-pointer" style="width: 16px; height: 16px;">
+                    </th>
+                    <th class="text-left px-4 py-3 font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 160px;">文件名</th>
+                    <th class="text-left px-4 py-3 font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 100px;">年级/专业</th>
+                    <th class="text-left px-4 py-3 font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 80px;">考试类型</th>
+                    <th class="text-left px-4 py-3 font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 60px;">学生数</th>
+                    <th class="text-left px-4 py-3 font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 80px;">状态</th>
+                    <th class="text-left px-4 py-3 font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 80px;">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="score-files-table">
+                  <tr style="border-top: 1px solid var(--border);">
+                    <td class="px-4 py-3" colspan="7" style="color: var(--muted-foreground); font-size: 13px; text-align: center;">暂无文件，请上传</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 2: 班主任信息导入 -->
+          <div class="rounded-lg border" style="background-color: var(--card); border-color: var(--border);">
+            <!-- Tab Header -->
+            <div class="flex items-center border-b" style="border-color: var(--border);">
+              <button class="px-4 py-3 font-medium text-sm transition-colors" style="color: var(--primary); border-bottom: 2px solid var(--primary); font-size: 14px; font-weight: 500;">班主任信息导入</button>
+            </div>
+            <!-- Tab Body -->
+            <div class="p-6">
+              <div id="teacher-upload-zone" class="flex flex-col items-center justify-center rounded-lg border-2 border-dashed py-10 px-6 transition-colors cursor-pointer" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50);">
+                <svg class="shrink-0 mb-3" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <p style="font-size: 14px; font-weight: 500; color: var(--foreground);">上传班主任明细文件</p>
+                <p class="mt-1" style="font-size: 12px; color: var(--muted-foreground);">支持从政教处导出的班主任明细文件</p>
+                <p id="teacher-upload-status" class="mt-2" style="font-size: 13px; color: var(--primary); font-weight: 500;"></p>
+              </div>
+              <div id="teacher-result" class="mt-4 hidden rounded-md px-3 py-2" style="background-color: var(--muted);">
+                <p id="teacher-result-text" style="font-size: 12px; color: var(--muted-foreground); line-height: 1.5;"></p>
+              </div>
+              <div class="mt-4 flex items-start gap-2 rounded-md px-3 py-2" style="background-color: var(--muted);">
+                <svg class="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted-foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <p style="font-size: 12px; color: var(--muted-foreground); line-height: 1.5;">文件需包含班主任姓名、所带班级、联系方式等基本信息</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 3. Data Validation Status Panel ====== -->
+        <div id="validation-panel" class="rounded-lg border" style="background-color: var(--card); border-color: var(--border);">
+          <div class="flex items-center justify-between px-6 py-4 border-b" style="border-color: var(--border);">
+            <div class="flex items-center gap-2">
+              <svg class="shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground);">数据校验报告</h3>
+            </div>
+            <span id="validation-file-name" class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium whitespace-nowrap" style="background-color: rgba(37,99,235,0.1); color: var(--state-info); font-size: 12px;">请选择文件进行校验</span>
+          </div>
+          <div class="px-6 py-4">
+            <div id="validation-content" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="flex items-center gap-3 rounded-md px-4 py-3" style="background-color: var(--muted);">
+                <svg class="shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted-foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <div class="flex flex-col min-w-0">
+                  <span class="truncate" style="font-size: 13px; font-weight: 500; color: var(--foreground);">等待校验</span>
+                  <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">上传文件后点击“校验”按钮</span>
+                </div>
+              </div>
+            </div>
+            <!-- Conflict Warning -->
+            <div id="conflict-warning" class="hidden mt-3 p-3 rounded-md" style="background-color: rgba(217,119,6,0.08); border: 1px solid rgba(217,119,6,0.2);">
+              <div class="flex items-start gap-2">
+                <svg class="shrink-0 mt-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--state-warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <div class="flex flex-col min-w-0">
+                  <span class="truncate" style="font-size: 13px; font-weight: 500; color: var(--foreground);">检测到 <span id="conflict-count">0</span> 条同名同班学生成绩冲突</span>
+                  <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">冲突科目已存在成绩，请勾选下方“覆盖已有成绩”后重新点击确认导入</span>
+                </div>
+              </div>
+              <div id="conflict-details" class="mt-2" style="max-height: 200px; overflow-y: auto;"></div>
+              <label class="flex items-center gap-2 mt-3 cursor-pointer">
+                <input type="checkbox" id="overwrite-existing-checkbox" class="rounded" style="width: 16px; height: 16px;">
+                <span style="font-size: 13px; color: var(--foreground);">覆盖已有成绩（本次导入将用新成绩覆盖冲突学生的已有成绩）</span>
+              </label>
+              <button id="batch-reimport-overwrite-btn" class="hidden mt-3 px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--state-warning); color: #ffffff; font-size: 13px;">重新批量导入并覆盖冲突成绩</button>
+            </div>
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-3 mt-5 pt-4 border-t" style="border-color: var(--border);">
+              <button id="confirm-import-btn" class="px-5 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--primary); color: var(--primary-foreground); font-size: 14px;" disabled>确认导入</button>
+              <button id="fix-data-btn" class="px-5 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: transparent; color: var(--foreground); border: 1px solid var(--border); font-size: 14px;" disabled>修正数据</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 4. Import History ====== -->
+        <div class="rounded-lg border" style="background-color: var(--card); border-color: var(--border);">
+          <div class="flex items-center gap-2 px-6 py-4 border-b" style="border-color: var(--border);">
+            <svg class="shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground);">导入历史</h3>
+          </div>
+          <div id="import-history" class="divide-y" style="border-color: var(--border);">
+            <div class="px-6 py-3" style="color: var(--muted-foreground); font-size: 13px; text-align: center;">暂无导入记录</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+    </main>
+    <!-- Confirm Import Modal -->
+    <div id="confirm-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:50; overflow-y:auto; padding: 1rem;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 420px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 1rem;">确认导入成绩</h3>
+        <div class="space-y-4">
+          <div>
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">考试名称 <span style="color: var(--state-error);">*</span></label>
+            <input type="text" id="confirm-exam-name" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;" placeholder="例如：2025-2026第一学期高二期中考试">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">学年 <span style="color: var(--state-error);">*</span></label>
+              <select id="confirm-school-year" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                <option value="">请选择</option>
+                <option value="2024-2025">2024-2025</option>
+                <option value="2025-2026">2025-2026</option>
+                <option value="2026-2027">2026-2027</option>
+                <option value="2027-2028">2027-2028</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">学期 <span style="color: var(--state-error);">*</span></label>
+              <select id="confirm-semester" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                <option value="">请选择</option>
+                <option value="第一学期">第一学期</option>
+                <option value="第二学期">第二学期</option>
+              </select>
+            </div>
+          </div>
+          <div id="confirm-month-wrap">
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">月份 <span style="color: var(--state-error);">*</span></label>
+            <select id="confirm-month" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+              <option value="">请选择</option>
+              <option value="1">1月</option>
+              <option value="2">2月</option>
+              <option value="3">3月</option>
+              <option value="4">4月</option>
+              <option value="5">5月</option>
+              <option value="6">6月</option>
+              <option value="7">7月</option>
+              <option value="8">8月</option>
+              <option value="9">9月</option>
+              <option value="10">10月</option>
+              <option value="11">11月</option>
+              <option value="12">12月</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">合并到已有考试（可选）</label>
+            <select id="confirm-merge-exam" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+              <option value="">创建新考试</option>
+            </select>
+            <p style="font-size: 12px; color: var(--muted-foreground); margin-top: 4px;">选择已有考试后，专业课成绩将合并到该考试的语数外成绩中</p>
+          </div>
+          <div>
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">本次考试科目满分</label>
+            <div id="confirm-subject-config" class="rounded-md border p-3 space-y-2" style="border-color: var(--border); background-color: var(--muted);">
+              <p style="font-size: 12px; color: var(--muted-foreground);">请先校验文件以加载检测到的科目。</p>
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">考试日期</label>
+            <input type="date" id="confirm-exam-date" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+          </div>
+          <p id="confirm-modal-status" style="font-size: 13px; color: var(--state-error);"></p>
+        </div>
+        <div class="flex items-center justify-end gap-3 mt-6">
+          <button id="cancel-confirm-btn" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: transparent; color: var(--foreground); border: 1px solid var(--border);">取消</button>
+          <button id="submit-confirm-btn" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--primary); color: var(--primary-foreground);">确认导入</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generic Confirm Modal -->
+    <div id="generic-confirm-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:60; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 360px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 id="generic-confirm-title" style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 0.75rem;">确认操作</h3>
+        <p id="generic-confirm-message" style="font-size: 14px; color: var(--foreground); line-height: 1.5; white-space:pre-wrap;"></p>
+        <div class="flex items-center justify-end gap-3 mt-6">
+          <button id="generic-confirm-cancel" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: transparent; color: var(--foreground); border: 1px solid var(--border);">取消</button>
+          <button id="generic-confirm-ok" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--state-error); color: #fff;">确认</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generic Message Modal -->
+    <div id="generic-message-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:60; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 420px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 id="generic-message-title" style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 0.75rem;">提示</h3>
+        <p id="generic-message-body" style="font-size: 14px; color: var(--foreground); line-height: 1.5; white-space:pre-wrap;"></p>
+        <div class="flex items-center justify-end mt-6">
+          <button id="generic-message-ok" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--primary); color: var(--primary-foreground);">知道了</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Batch Import Modal -->
+    <div id="batch-import-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:55; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 640px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 0.75rem;">批量导入成绩</h3>
+        <p style="font-size: 13px; color: var(--muted-foreground); margin-bottom: 1rem;">以下文件将按上传时设置的考试信息分别导入为独立考试。</p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full" style="border-collapse: collapse; font-size: 13px;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border);">
+                <th class="text-left py-2 px-2" style="color: var(--muted-foreground); font-weight: 500;">文件名</th>
+                <th class="text-left py-2 px-2" style="color: var(--muted-foreground); font-weight: 500;">考试类型</th>
+                <th class="text-left py-2 px-2" style="color: var(--muted-foreground); font-weight: 500;">学年/学期</th>
+                <th class="text-left py-2 px-2" style="color: var(--muted-foreground); font-weight: 500;">考试名称 <span style="color: var(--state-error);">*</span></th>
+                <th class="text-left py-2 px-2" style="color: var(--muted-foreground); font-weight: 500;">覆盖已有</th>
+              </tr>
+            </thead>
+            <tbody id="batch-import-files-tbody"></tbody>
+          </table>
+        </div>
+        <p id="batch-import-status" style="font-size: 13px; color: var(--state-error); min-height: 1.25em;"></p>
+        <div class="flex items-center justify-end gap-3 mt-4">
+          <button id="batch-import-cancel" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: transparent; color: var(--foreground); border: 1px solid var(--border);">取消</button>
+          <button id="batch-import-submit" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--primary); color: var(--primary-foreground);">确认导入</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function() {
+      const API_BASE = '/api';
+      let currentFileId = null;
+      let currentValidation = null;
+      let selectedFileIds = new Set();
+      let isBatchMode = false;
+      let scoreFilesData = [];
+      let subjectConfig = {
+        "语文": { max_score: 150 },
+        "数学": { max_score: 150 },
+        "英语": { max_score: 100 },
+        "专业课": { max_score: 100 },
+      };
+      let professionalSubConfig = {};
+      let confirmSubjectConfig = {};
+      let confirmProfessionalSubjects = [];
+      let availableClasses = [];
+      let currentClassMapping = {};
+      let lastBatchFileConfigs = null;
+      let isBatchReimportMode = false;
+
+      const uploadZone = document.getElementById('upload-zone');
+      const fileInput = document.getElementById('file-input');
+      const uploadStatus = document.getElementById('upload-status');
+      const teacherUploadZone = document.getElementById('teacher-upload-zone');
+      const teacherFileInput = document.getElementById('teacher-file-input');
+      const teacherUploadStatus = document.getElementById('teacher-upload-status');
+      const teacherResult = document.getElementById('teacher-result');
+      const teacherResultText = document.getElementById('teacher-result-text');
+      const uploadGrade = document.getElementById('upload-grade');
+      const uploadMajor = document.getElementById('upload-major');
+      const uploadExamType = document.getElementById('upload-exam-type');
+      const uploadSchoolYear = document.getElementById('upload-school-year');
+      const uploadSemester = document.getElementById('upload-semester');
+      const uploadMonth = document.getElementById('upload-month');
+      const uploadMonthWrap = document.getElementById('upload-month-wrap');
+      const scoreFilesTable = document.getElementById('score-files-table');
+      const selectAllFiles = document.getElementById('select-all-files');
+      const batchImportBtn = document.getElementById('batch-import-btn');
+      const batchValidateBtn = document.getElementById('batch-validate-btn');
+      const batchImportModal = document.getElementById('batch-import-modal');
+      const batchImportFilesTbody = document.getElementById('batch-import-files-tbody');
+      const batchImportStatus = document.getElementById('batch-import-status');
+      const batchImportCancel = document.getElementById('batch-import-cancel');
+      const batchImportSubmit = document.getElementById('batch-import-submit');
+      const validationFileName = document.getElementById('validation-file-name');
+      const validationContent = document.getElementById('validation-content');
+      const confirmImportBtn = document.getElementById('confirm-import-btn');
+      const fixDataBtn = document.getElementById('fix-data-btn');
+      const conflictWarning = document.getElementById('conflict-warning');
+      const conflictCount = document.getElementById('conflict-count');
+      const conflictDetails = document.getElementById('conflict-details');
+      const overwriteExistingCheckbox = document.getElementById('overwrite-existing-checkbox');
+      const batchReimportOverwriteBtn = document.getElementById('batch-reimport-overwrite-btn');
+      const importHistory = document.getElementById('import-history');
+      const confirmModal = document.getElementById('confirm-modal');
+      const confirmExamName = document.getElementById('confirm-exam-name');
+      const confirmSchoolYear = document.getElementById('confirm-school-year');
+      const confirmSemester = document.getElementById('confirm-semester');
+      const confirmMonth = document.getElementById('confirm-month');
+      const confirmMonthWrap = document.getElementById('confirm-month-wrap');
+      const confirmMergeExam = document.getElementById('confirm-merge-exam');
+      const confirmExamDate = document.getElementById('confirm-exam-date');
+      const confirmModalStatus = document.getElementById('confirm-modal-status');
+      const cancelConfirmBtn = document.getElementById('cancel-confirm-btn');
+      const submitConfirmBtn = document.getElementById('submit-confirm-btn');
+
+      function setUploadStatus(msg, color) {
+        uploadStatus.textContent = msg;
+        uploadStatus.style.color = color || 'var(--primary)';
+      }
+
+      function escapeHtml(text) {
+        if (text == null) return '';
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+      }
+
+      function parseError(data) {
+        if (typeof data === 'string') return data;
+        if (!data) return '';
+        if (data.detail) {
+          if (typeof data.detail === 'string') return data.detail;
+          if (Array.isArray(data.detail)) {
+            return data.detail.map(e => e.msg || JSON.stringify(e)).join('; ');
+          }
+          return JSON.stringify(data.detail);
+        }
+        return JSON.stringify(data);
+      }
+
+      async function apiGet(path) {
+        const res = await fetch(API_BASE + path);
+        if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
+        return res.json();
+      }
+
+      async function apiPost(path, body) {
+        const res = await fetch(API_BASE + path, { method: 'POST', body: body });
+        if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
+        return res.json();
+      }
+
+      async function apiDelete(path) {
+        const res = await fetch(API_BASE + path, { method: 'DELETE' });
+        if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
+        return res.json();
+      }
+
+      function showCustomConfirm(title, message) {
+        return new Promise((resolve) => {
+          const modal = document.getElementById('generic-confirm-modal');
+          const okBtn = document.getElementById('generic-confirm-ok');
+          const cancelBtn = document.getElementById('generic-confirm-cancel');
+          document.getElementById('generic-confirm-title').textContent = title;
+          document.getElementById('generic-confirm-message').textContent = message;
+          modal.style.display = 'flex';
+          function cleanup() {
+            modal.style.display = 'none';
+            okBtn.onclick = null;
+            cancelBtn.onclick = null;
+          }
+          okBtn.onclick = () => { cleanup(); resolve(true); };
+          cancelBtn.onclick = () => { cleanup(); resolve(false); };
+        });
+      }
+
+      function showCustomMessage(title, message) {
+        return new Promise((resolve) => {
+          const modal = document.getElementById('generic-message-modal');
+          const okBtn = document.getElementById('generic-message-ok');
+          document.getElementById('generic-message-title').textContent = title;
+          document.getElementById('generic-message-body').textContent = message;
+          modal.style.display = 'flex';
+          okBtn.onclick = () => { modal.style.display = 'none'; okBtn.onclick = null; resolve(); };
+        });
+      }
+
+      function statusBadge(status) {
+        const map = {
+          '待校验': ['rgba(217,119,6,0.1)', 'var(--state-warning)'],
+          '校验通过': ['rgba(22,163,74,0.1)', 'var(--state-success)'],
+          '校验失败': ['rgba(239,68,68,0.1)', 'var(--state-error)'],
+          '已导入': ['rgba(37,99,235,0.1)', 'var(--state-info)'],
+          '校验中': ['rgba(37,99,235,0.1)', 'var(--state-info)']
+        };
+        const [bg, color] = map[status] || ['rgba(100,116,139,0.1)', 'var(--muted-foreground)'];
+        return `<span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium" style="background-color: ${bg}; color: ${color}; font-size: 12px;">${escapeHtml(status)}</span>`;
+      }
+
+      function renderFiles(files) {
+        if (!files || files.length === 0) {
+          scoreFilesTable.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="7" style="color: var(--muted-foreground); font-size: 13px; text-align: center;">暂无文件，请上传</td></tr>`;
+          selectedFileIds.clear();
+          updateFileSelectionUI();
+          return;
+        }
+        const selectableIds = new Set(files.filter(f => ['校验通过', '待校验', '校验失败'].includes(f.validation_status)).map(f => f.id));
+        for (const id of Array.from(selectedFileIds)) {
+          if (!selectableIds.has(id)) selectedFileIds.delete(id);
+        }
+        scoreFilesTable.innerHTML = files.map(f => {
+          const canSelect = ['校验通过', '待校验', '校验失败'].includes(f.validation_status);
+          const checked = selectedFileIds.has(f.id) ? 'checked' : '';
+          const checkbox = canSelect
+            ? `<input type="checkbox" class="file-row-checkbox cursor-pointer" data-id="${f.id}" ${checked} style="width: 16px; height: 16px;">`
+            : `<input type="checkbox" disabled style="width: 16px; height: 16px; opacity: 0.5;">`;
+          let actions = `<button class="text-xs font-medium transition-colors hover:underline" style="color: var(--state-error); font-size: 12px;" data-action="delete" data-id="${f.id}">删除</button>`;
+          if (f.validation_status === '待校验') {
+            actions = `<button class="text-xs font-medium transition-colors hover:underline mr-2" style="color: var(--primary); font-size: 12px;" data-action="validate" data-id="${f.id}">校验</button>` + actions;
+          } else if (f.validation_status === '校验通过') {
+            actions = `<button class="text-xs font-medium transition-colors hover:underline mr-2" style="color: var(--primary); font-size: 12px;" data-action="confirm" data-id="${f.id}">确认导入</button>` + actions;
+          } else if (f.validation_status === '校验失败') {
+            actions = `<button class="text-xs font-medium transition-colors hover:underline mr-2" style="color: var(--primary); font-size: 12px;" data-action="validate" data-id="${f.id}">重新校验</button>` + actions;
+          }
+          return `<tr style="border-top: 1px solid var(--border);">
+            <td class="px-4 py-3 text-center whitespace-nowrap">${checkbox}</td>
+            <td class="px-4 py-3 whitespace-nowrap truncate" style="color: var(--foreground); max-width: 200px;" title="${escapeHtml(f.file_name)}">${escapeHtml(f.file_name)}</td>
+            <td class="px-4 py-3 whitespace-nowrap truncate" style="color: var(--foreground);">${escapeHtml(f.grade_id || '—')} / ${escapeHtml(f.major_id || '—')}</td>
+            <td class="px-4 py-3 whitespace-nowrap" style="color: var(--foreground);">${escapeHtml(f.exam_type || '—')}</td>
+            <td class="px-4 py-3 whitespace-nowrap" style="color: var(--foreground);">${f.student_count || 0}</td>
+            <td class="px-4 py-3 whitespace-nowrap">${statusBadge(f.validation_status)}</td>
+            <td class="px-4 py-3 whitespace-nowrap">${actions}</td>
+          </tr>`;
+        }).join('');
+        updateFileSelectionUI();
+      }
+
+      function getValidatedFileIds() {
+        return (scoreFilesData || []).filter(f => f.validation_status === '校验通过').map(f => f.id);
+      }
+
+      function getPendingValidateFileIds() {
+        return (scoreFilesData || []).filter(f => f.validation_status === '待校验' || f.validation_status === '校验失败').map(f => f.id);
+      }
+
+      function updateFileSelectionUI() {
+        const rows = scoreFilesTable.querySelectorAll('.file-row-checkbox');
+        const validRows = Array.from(rows).filter(cb => !cb.disabled);
+        const checkedCount = validRows.filter(cb => cb.checked).length;
+        selectAllFiles.checked = validRows.length > 0 && checkedCount === validRows.length;
+        selectAllFiles.indeterminate = checkedCount > 0 && checkedCount < validRows.length;
+
+        const validatedIds = getValidatedFileIds();
+        const selectedValidatedIds = Array.from(selectedFileIds).filter(id => {
+          const row = scoreFilesData.find(f => f.id === id);
+          return row && row.validation_status === '校验通过';
+        });
+        const targetImportIds = selectedValidatedIds.length > 0 ? selectedValidatedIds : validatedIds;
+        batchImportBtn.disabled = targetImportIds.length === 0;
+        batchImportBtn.style.opacity = targetImportIds.length === 0 ? '0.5' : '1';
+        batchImportBtn.style.cursor = targetImportIds.length === 0 ? 'not-allowed' : 'pointer';
+        if (selectedValidatedIds.length > 0) {
+          batchImportBtn.textContent = `批量导入 (${selectedValidatedIds.length})`;
+        } else if (validatedIds.length > 0) {
+          batchImportBtn.textContent = `导入全部已校验 (${validatedIds.length})`;
+        } else {
+          batchImportBtn.textContent = '批量导入';
+        }
+
+        const pendingIds = getPendingValidateFileIds();
+        const selectedPendingIds = Array.from(selectedFileIds).filter(id => {
+          const row = scoreFilesData.find(f => f.id === id);
+          return row && (row.validation_status === '待校验' || row.validation_status === '校验失败');
+        });
+        const targetValidateIds = selectedPendingIds.length > 0 ? selectedPendingIds : pendingIds;
+        batchValidateBtn.disabled = targetValidateIds.length === 0;
+        batchValidateBtn.style.opacity = targetValidateIds.length === 0 ? '0.5' : '1';
+        batchValidateBtn.style.cursor = targetValidateIds.length === 0 ? 'not-allowed' : 'pointer';
+        if (targetValidateIds.length > 0) {
+          batchValidateBtn.textContent = `批量校验 (${targetValidateIds.length})`;
+        } else {
+          batchValidateBtn.textContent = '批量校验';
+        }
+      }
+
+      function renderHistory(files) {
+        const imported = files.filter(f => f.validation_status === '已导入');
+        if (imported.length === 0) {
+          importHistory.innerHTML = `<div class="px-6 py-3" style="color: var(--muted-foreground); font-size: 13px; text-align: center;">暂无导入记录</div>`;
+          return;
+        }
+        importHistory.innerHTML = imported.map(f => `
+          <div class="flex items-center justify-between px-6 py-3" style="border-color: var(--border);">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: rgba(22,163,74,0.1); border-radius: var(--radius-md);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--state-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="truncate" style="font-size: 13px; font-weight: 500; color: var(--foreground);">${escapeHtml(f.file_name)} 已导入</span>
+                <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">${f.student_count || 0}条记录</span>
+              </div>
+            </div>
+            <span class="shrink-0 whitespace-nowrap" style="font-size: 12px; color: var(--muted-foreground);">${escapeHtml(f.created_at || '')}</span>
+          </div>
+        `).join('');
+      }
+
+      async function loadFiles() {
+        try {
+          const files = await apiGet('/import/files');
+          scoreFilesData = files || [];
+          renderFiles(files);
+          renderHistory(files);
+        } catch (e) {
+          console.error('加载文件列表失败', e);
+          scoreFilesTable.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="6" style="color: var(--state-error); font-size: 13px; text-align: center;">加载失败：${escapeHtml(e.message)}</td></tr>`;
+        }
+      }
+
+      async function loadSubjectStandards() {
+        try {
+          const standards = await apiGet('/subject-standards');
+          const majorId = uploadMajor.value ? parseInt(uploadMajor.value, 10) : null;
+          const defaults = { "语文": 150, "数学": 150, "英语": 100, "专业课": 100 };
+          (standards || []).forEach(s => {
+            if (s.major_id === null) {
+              defaults[s.subject_name] = s.max_score;
+            } else if (s.major_id === majorId) {
+              defaults[s.subject_name] = s.max_score;
+            }
+          });
+          for (const [name, max] of Object.entries(defaults)) {
+            if (!subjectConfig[name]) subjectConfig[name] = { max_score: max };
+            else subjectConfig[name].max_score = max;
+          }
+          renderSubjectConfig();
+        } catch (e) {
+          console.warn('加载学科标准失败', e);
+        }
+      }
+
+      async function loadAvailableClasses() {
+        try {
+          availableClasses = await apiGet('/classes') || [];
+        } catch (e) {
+          console.warn('加载班级列表失败', e);
+          availableClasses = [];
+        }
+      }
+
+      function renderSubjectConfig() {
+        const grid = document.getElementById('subject-config-grid');
+        const majorId = uploadMajor.value ? parseInt(uploadMajor.value, 10) : null;
+        let html = '';
+        const core = ['语文', '数学', '英语'];
+        core.forEach(name => {
+          const cfg = subjectConfig[name] || { max_score: 100 };
+          html += renderSubjectInput(name, cfg.max_score);
+        });
+        if (majorId) {
+          html += renderSubjectInput('专业课', subjectConfig['专业课']?.max_score || 100);
+        }
+        grid.innerHTML = html;
+        document.getElementById('subject-config-tip').style.display = majorId ? 'none' : 'block';
+      }
+
+      function renderSubjectInput(name, value) {
+        return `<div class="flex items-center gap-2">
+    <label style="font-size: 13px; color: var(--foreground); white-space: nowrap;">${name}</label>
+    <input type="number" min="0" step="1" data-subject="${name}" value="${value}" class="subject-max-input w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+    <span style="font-size: 12px; color: var(--muted-foreground); white-space: nowrap;">分</span>
+  </div>`;
+      }
+
+      function collectSubjectConfig() {
+        const inputs = document.querySelectorAll('.subject-max-input');
+        const cfg = {};
+        inputs.forEach(input => {
+          const name = input.dataset.subject;
+          const val = parseFloat(input.value);
+          if (name && !isNaN(val) && val > 0) {
+            cfg[name] = { max_score: val };
+          }
+        });
+        return cfg;
+      }
+
+      async function loadSettings() {
+        try {
+          const [grades, majors] = await Promise.all([apiGet('/grades'), apiGet('/majors')]);
+          uploadGrade.innerHTML = '<option value="">不指定</option>' + (grades || []).map(g => `<option value="${g.id}">${escapeHtml(g.name)}</option>`).join('');
+          uploadMajor.innerHTML = '<option value="">不指定</option>' + (majors || []).map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
+          uploadMajor.addEventListener('change', loadSubjectStandards);
+          await loadSubjectStandards();
+        } catch (e) {
+          console.warn('加载年级/专业失败', e);
+        }
+      }
+
+      async function doUpload(files) {
+        if (!files || files.length === 0) return;
+        setUploadStatus(`正在上传 ${files.length} 个文件...`);
+        const form = new FormData();
+        for (const file of files) {
+          form.append('files', file);
+        }
+        if (uploadGrade.value) form.append('grade_id', uploadGrade.value);
+        if (uploadMajor.value) form.append('major_id', uploadMajor.value);
+        form.append('exam_type', uploadExamType.value);
+        if (uploadSchoolYear.value) form.append('school_year', uploadSchoolYear.value);
+        if (uploadSemester.value) form.append('semester', uploadSemester.value);
+        if (uploadMonth.value) form.append('month', uploadMonth.value);
+        const cfg = collectSubjectConfig();
+        form.append('subject_config', JSON.stringify(cfg));
+        try {
+          const result = await apiPost('/import/upload-multi', form);
+          const uploaded = result.uploaded || [];
+          const total = uploaded.reduce((sum, item) => sum + (item.student_count || 0), 0);
+          setUploadStatus(`上传成功：${uploaded.length} 个文件，共 ${total} 条记录`, 'var(--state-success)');
+          fileInput.value = '';
+          await loadFiles();
+        } catch (e) {
+          setUploadStatus(`上传失败：${e.message}`, 'var(--state-error)');
+        }
+      }
+
+      function setTeacherUploadStatus(msg, color) {
+        teacherUploadStatus.textContent = msg;
+        teacherUploadStatus.style.color = color || 'var(--primary)';
+      }
+
+      async function doUploadTeachers(files) {
+        if (!files || files.length === 0) return;
+        const file = files[0];
+        setTeacherUploadStatus('正在上传班主任明细文件...');
+        const form = new FormData();
+        form.append('file', file);
+        try {
+          const result = await fetch(API_BASE + '/import/upload-teachers', {
+            method: 'POST',
+            body: form
+          }).then(async r => {
+            if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+            return r.json();
+          });
+          setTeacherUploadStatus('上传成功', 'var(--state-success)');
+          teacherResult.classList.remove('hidden');
+          teacherResultText.textContent = `已处理 ${result.mappings} 条班级班主任映射，更新 ${result.updated_classes} 个班级、${result.updated_students} 名学生的班主任信息。`;
+          teacherResultText.style.color = 'var(--foreground)';
+          teacherFileInput.value = '';
+        } catch (e) {
+          setTeacherUploadStatus(`上传失败：${e.message}`, 'var(--state-error)');
+          teacherResult.classList.remove('hidden');
+          teacherResultText.textContent = e.message;
+          teacherResultText.style.color = 'var(--state-error)';
+        }
+      }
+
+      uploadZone.addEventListener('click', () => fileInput.click());
+      uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.borderColor = 'var(--primary)'; });
+      uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor = 'var(--color-primary-200)'; });
+      uploadZone.addEventListener('drop', e => {
+        e.preventDefault();
+        uploadZone.style.borderColor = 'var(--color-primary-200)';
+        const files = e.dataTransfer.files;
+        if (files.length) doUpload(files);
+      });
+      function toggleMonthVisibility() {
+        const isMonthly = uploadExamType.value === '月考';
+        uploadMonthWrap.style.display = isMonthly ? 'block' : 'none';
+        if (!isMonthly) uploadMonth.value = '';
+      }
+      uploadExamType.addEventListener('change', toggleMonthVisibility);
+      toggleMonthVisibility();
+
+      fileInput.addEventListener('change', () => { if (fileInput.files.length) doUpload(fileInput.files); });
+
+      selectAllFiles.addEventListener('change', (e) => {
+        const rows = scoreFilesTable.querySelectorAll('.file-row-checkbox');
+        rows.forEach(cb => {
+          if (cb.disabled) return;
+          cb.checked = e.target.checked;
+          const id = Number(cb.dataset.id);
+          if (e.target.checked) selectedFileIds.add(id);
+          else selectedFileIds.delete(id);
+        });
+        updateFileSelectionUI();
+      });
+
+      scoreFilesTable.addEventListener('change', (e) => {
+        if (!e.target.classList.contains('file-row-checkbox')) return;
+        const id = Number(e.target.dataset.id);
+        if (e.target.checked) selectedFileIds.add(id);
+        else selectedFileIds.delete(id);
+        updateFileSelectionUI();
+      });
+
+      scoreFilesTable.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const id = Number(btn.dataset.id);
+        const action = btn.dataset.action;
+        const row = scoreFilesData.find(f => f.id === id);
+        if (action === 'validate') {
+          window.validateFile(id, row ? row.file_name : '');
+        } else if (action === 'confirm') {
+          window.openConfirm(id);
+        } else if (action === 'delete') {
+          window.deleteFile(id);
+        }
+      });
+
+      function buildBatchExamName(row) {
+        const parts = [row.school_year || '', row.semester || ''];
+        if (row.exam_type === '月考' && row.month) parts.push(`${row.month}月`);
+        if (row.exam_type) parts.push(row.exam_type);
+        return parts.join('') || '导入考试';
+      }
+
+      function openBatchImportModal() {
+        const selectedValidatedIds = Array.from(selectedFileIds).filter(id => {
+          const row = scoreFilesData.find(f => f.id === id);
+          return row && row.validation_status === '校验通过';
+        });
+        if (selectedValidatedIds.length === 0) {
+          const validatedIds = getValidatedFileIds();
+          if (validatedIds.length === 0) return;
+          validatedIds.forEach(id => selectedFileIds.add(id));
+          updateFileSelectionUI();
+        }
+
+        const importIds = Array.from(selectedFileIds).filter(id => {
+          const row = scoreFilesData.find(f => f.id === id);
+          return row && row.validation_status === '校验通过';
+        });
+
+        batchImportFilesTbody.innerHTML = importIds.map(id => {
+          const row = scoreFilesData.find(f => f.id === id);
+          const examName = buildBatchExamName(row);
+          const semesterLabel = row.semester ? row.semester.replace('第', '').replace('学期', '') : '-';
+          return `<tr style="border-bottom: 1px solid var(--border);" data-id="${row.id}">
+            <td class="py-2 px-2 truncate" style="max-width: 160px; color: var(--foreground);" title="${escapeHtml(row.file_name)}">${escapeHtml(row.file_name)}</td>
+            <td class="py-2 px-2 whitespace-nowrap" style="color: var(--foreground);">${escapeHtml(row.exam_type || '-')}</td>
+            <td class="py-2 px-2 whitespace-nowrap" style="color: var(--foreground);">${escapeHtml(row.school_year || '-')} ${escapeHtml(semesterLabel)}</td>
+            <td class="py-2 px-2 whitespace-nowrap">
+              <input type="text" data-batch-name="${row.id}" value="${escapeHtml(examName)}" class="w-full rounded-md border px-2 py-1" style="min-width: 180px; border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 13px;" placeholder="请输入考试名称">
+            </td>
+            <td class="py-2 px-2 whitespace-nowrap text-center">
+              <input type="checkbox" data-batch-overwrite="${row.id}" title="覆盖该文件中冲突学生的已有成绩">
+            </td>
+          </tr>`;
+        }).join('');
+
+        batchImportStatus.textContent = '';
+        batchImportModal.style.display = 'flex';
+      }
+
+      function closeBatchImportModal() {
+        batchImportModal.style.display = 'none';
+      }
+
+      batchImportBtn.addEventListener('click', openBatchImportModal);
+      batchImportCancel.addEventListener('click', closeBatchImportModal);
+      batchImportModal.addEventListener('click', e => { if (e.target === batchImportModal) closeBatchImportModal(); });
+
+      async function runBatchImport(fileConfigs, isReimport = false) {
+        lastBatchFileConfigs = fileConfigs.map(c => ({ ...c }));
+        batchImportSubmit.disabled = true;
+        if (!isReimport) {
+          batchImportStatus.textContent = '正在导入，请稍候...';
+          batchImportStatus.style.color = 'var(--muted-foreground)';
+        } else {
+          batchReimportOverwriteBtn.disabled = true;
+          batchReimportOverwriteBtn.textContent = '正在重新导入...';
+        }
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 120000);
+
+        try {
+          const res = await fetch(API_BASE + '/import/confirm-batch', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ files: fileConfigs }),
+            signal: controller.signal,
+          });
+          clearTimeout(timeoutId);
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            const msg = parseError(errData) || res.statusText;
+            throw new Error(msg);
+          }
+          const result = await res.json();
+
+          closeBatchImportModal();
+          validationFileName.textContent = '批量导入结果';
+          const allConflicts = (result.results || []).flatMap(r => r.conflicts || []);
+          const allUnknownClasses = (result.results || []).flatMap(r => r.unknown_classes || []);
+          const hasIssues = allConflicts.length || allUnknownClasses.length;
+          const items = [
+            checkItem('批量导入完成', `共 ${result.file_count || 0} 个文件，新增 ${result.total_inserted || 0} 条，更新 ${result.total_updated || 0} 条`, hasIssues ? 'warning' : 'success'),
+          ];
+          (result.results || []).forEach(r => {
+            const status = r.skipped ? 'warning' : (r.merged ? 'info' : 'success');
+            let desc = r.skipped
+              ? (r.reason || '已跳过')
+              : (r.merged ? `合并到已有考试，新增 ${r.inserted || 0} 条，更新 ${r.updated || 0} 条` : `新增 ${r.inserted || 0} 条，更新 ${r.updated || 0} 条`);
+            if (r.unknown_classes && r.unknown_classes.length) {
+              desc += `（未匹配班级：${escapeHtml(r.unknown_classes.join('、'))}）`;
+            }
+            items.push(checkItem(r.file_name, desc, status));
+          });
+          validationContent.innerHTML = items.join('');
+          if (allConflicts.length) {
+            isBatchReimportMode = true;
+            showConflicts(allConflicts);
+          } else {
+            hideConflicts();
+          }
+          confirmImportBtn.disabled = true;
+          selectedFileIds.clear();
+          updateFileSelectionUI();
+          await loadFiles();
+          return result;
+        } catch (e) {
+          clearTimeout(timeoutId);
+          const message = e.name === 'AbortError' ? '请求超时（2分钟未响应），请稍后重试或检查后端日志' : e.message;
+          if (isReimport) {
+            batchReimportOverwriteBtn.textContent = '重新批量导入并覆盖冲突成绩';
+            validationContent.insertAdjacentHTML('afterbegin', checkItem('重新导入失败', message, 'error'));
+          } else {
+            batchImportStatus.textContent = `导入失败：${message}`;
+            batchImportStatus.style.color = 'var(--state-error)';
+          }
+          throw new Error(message);
+        } finally {
+          batchImportSubmit.disabled = false;
+          if (isReimport) {
+            batchReimportOverwriteBtn.disabled = false;
+          }
+        }
+      }
+
+      batchImportSubmit.addEventListener('click', async () => {
+        const importIds = Array.from(selectedFileIds).filter(id => {
+          const row = scoreFilesData.find(f => f.id === id);
+          return row && row.validation_status === '校验通过';
+        });
+        if (importIds.length === 0) {
+          batchImportStatus.textContent = '没有可导入的文件';
+          return;
+        }
+
+        const fileConfigs = [];
+        for (const id of importIds) {
+          const input = batchImportFilesTbody.querySelector(`input[data-batch-name="${id}"]`);
+          const overwriteInput = batchImportFilesTbody.querySelector(`input[data-batch-overwrite="${id}"]`);
+          const name = input ? input.value.trim() : '';
+          if (!name) {
+            batchImportStatus.textContent = '请为每个文件填写考试名称';
+            return;
+          }
+          fileConfigs.push({
+            file_id: id,
+            exam_name: name,
+            overwrite_existing: overwriteInput ? overwriteInput.checked : false,
+          });
+        }
+
+        await runBatchImport(fileConfigs);
+      });
+
+      batchReimportOverwriteBtn.addEventListener('click', async () => {
+        if (!lastBatchFileConfigs || lastBatchFileConfigs.length === 0) return;
+        const configs = lastBatchFileConfigs.map(c => ({ ...c, overwrite_existing: true }));
+        try {
+          await runBatchImport(configs, true);
+        } catch (e) {
+          console.error('重新批量导入失败', e);
+        }
+      });
+
+      batchValidateBtn.addEventListener('click', async () => {
+        // If no explicit selection, default to validating all pending/failed files
+        let idsToValidate = Array.from(selectedFileIds).filter(id => {
+          const row = scoreFilesData.find(f => f.id === id);
+          return row && (row.validation_status === '待校验' || row.validation_status === '校验失败');
+        });
+        if (idsToValidate.length === 0) {
+          idsToValidate = getPendingValidateFileIds();
+        }
+        if (idsToValidate.length === 0) return;
+
+        validationFileName.textContent = `批量校验 ${idsToValidate.length} 个文件`;
+        validationContent.innerHTML = `<div class="px-4 py-3" style="color: var(--muted-foreground); font-size: 13px; text-align: center; grid-column: 1 / -1;">正在批量校验，请稍候...</div>`;
+        confirmImportBtn.disabled = true;
+        fixDataBtn.disabled = true;
+
+        const results = [];
+        for (const id of idsToValidate) {
+          try {
+            const result = await apiPost(`/import/validate/${id}`, null);
+            results.push({ id, result, error: null });
+          } catch (e) {
+            results.push({ id, result: null, error: e.message });
+          }
+        }
+
+        const successCount = results.filter(r => r.result && r.result.status === '校验通过').length;
+        const failCount = results.length - successCount;
+        const items = [
+          checkItem('批量校验完成', `共 ${results.length} 个文件，成功 ${successCount} 个，失败 ${failCount} 个`, failCount === 0 ? 'success' : 'warning'),
+        ];
+        results.forEach(r => {
+          const row = scoreFilesData.find(f => f.id === r.id);
+          const name = row ? row.file_name : `文件#${r.id}`;
+          if (r.error) {
+            items.push(checkItem(name, `校验失败：${r.error}`, 'error'));
+          } else if (r.result.status === '校验通过') {
+            items.push(checkItem(name, `${r.result.records || 0} 条记录，校验通过`, 'success'));
+          } else {
+            items.push(checkItem(name, `发现 ${(r.result.errors || []).length} 个问题`, 'warning'));
+          }
+        });
+        validationContent.innerHTML = items.join('');
+        await loadFiles();
+      });
+
+      teacherUploadZone.addEventListener('click', () => teacherFileInput.click());
+      teacherUploadZone.addEventListener('dragover', e => { e.preventDefault(); teacherUploadZone.style.borderColor = 'var(--primary)'; });
+      teacherUploadZone.addEventListener('dragleave', () => { teacherUploadZone.style.borderColor = 'var(--color-primary-200)'; });
+      teacherUploadZone.addEventListener('drop', e => {
+        e.preventDefault();
+        teacherUploadZone.style.borderColor = 'var(--color-primary-200)';
+        const files = e.dataTransfer.files;
+        if (files.length) doUploadTeachers(files);
+      });
+      teacherFileInput.addEventListener('change', () => { if (teacherFileInput.files.length) doUploadTeachers(teacherFileInput.files); });
+
+      window.validateFile = async function(id, fileName) {
+        validationFileName.textContent = fileName || '校验中...';
+        validationContent.innerHTML = `<div class="px-4 py-3" style="color: var(--muted-foreground); font-size: 13px; text-align: center; grid-column: 1 / -1;">正在校验，请稍候...</div>`;
+        hideConflicts();
+        confirmImportBtn.disabled = true;
+        fixDataBtn.disabled = true;
+        currentFileId = id;
+        currentClassMapping = {};
+        if (overwriteExistingCheckbox) overwriteExistingCheckbox.checked = false;
+        try {
+          const result = await apiPost(`/import/validate/${id}`, null);
+          currentValidation = result;
+          renderValidation(result);
+          await loadFiles();
+        } catch (e) {
+          validationContent.innerHTML = `<div class="px-4 py-3" style="color: var(--state-error); font-size: 13px; text-align: center; grid-column: 1 / -1;">校验失败：${escapeHtml(e.message)}</div>`;
+        }
+      };
+
+      function renderClassMapping(unknownClasses) {
+        if (!unknownClasses || unknownClasses.length === 0 || availableClasses.length === 0) return '';
+        const options = availableClasses.map(c =>
+          `<option value="${c.id}">${escapeHtml(c.grade_name || '')} ${escapeHtml(c.name)}（${escapeHtml(c.major_name || '')}）</option>`
+        ).join('');
+        const rows = unknownClasses.map((name, idx) => `
+          <div class="flex items-center gap-2 py-1">
+            <span style="font-size: 13px; color: var(--foreground); white-space: nowrap; min-width: 140px;">${escapeHtml(name)} →</span>
+            <select class="class-mapping-select w-full rounded-md border px-2 py-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 13px;" data-unknown-class="${escapeHtml(name)}">
+              <option value="">请选择对应班级</option>
+              ${options}
+            </select>
+          </div>
+        `).join('');
+        return `
+          <div class="mt-3 px-4 py-3 rounded-md" style="background-color: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); grid-column: 1 / -1;">
+            <p style="font-size: 13px; color: var(--state-error); font-weight: 500; margin-bottom: 0.5rem;">以下班级未在系统中设置，请从下拉框选择对应的已有班级：</p>
+            <div class="flex flex-col gap-1">${rows}</div>
+          </div>
+        `;
+      }
+
+      function collectClassMapping() {
+        const mapping = {};
+        validationContent.querySelectorAll('.class-mapping-select').forEach(sel => {
+          const name = sel.dataset.unknownClass;
+          const val = sel.value;
+          if (name && val) {
+            mapping[name] = parseInt(val, 10);
+          }
+        });
+        return mapping;
+      }
+
+      function hasUnmappedClass() {
+        const selects = validationContent.querySelectorAll('.class-mapping-select');
+        if (selects.length === 0) return false;
+        return Array.from(selects).some(sel => !sel.value);
+      }
+
+      function renderValidation(result) {
+        hideConflicts();
+        const errors = result.errors || [];
+        const status = result.status;
+        const items = [];
+
+        items.push(checkItem('总记录数', `${result.records || 0} 条`, status === '校验通过' ? 'success' : 'info'));
+        if (result.duplicate_count) {
+          items.push(checkItem('重复数据检测', `发现 ${result.duplicate_count} 条重复`, 'warning'));
+        }
+        if (result.missing_count) {
+          items.push(checkItem('缺失数据', `${result.missing_count} 条记录存在缺失`, 'warning'));
+        }
+
+        const unknownClasses = result.unknown_classes || [];
+        const nonClassErrors = errors.filter(e => !e.unknown_classes);
+
+        if (errors.length === 0) {
+          items.push(checkItem('年级/专业/班级/姓名匹配', '校验通过（班级已存在于系统中，缺失学生将在导入时自动创建）', 'success'));
+        } else if (nonClassErrors.length === 0 && unknownClasses.length) {
+          items.push(checkItem('校验结果', `发现 ${unknownClasses.length} 个未匹配班级，请在下方面板中选择对应班级`, 'warning'));
+        } else {
+          items.push(checkItem('校验结果', `发现 ${errors.length} 个问题`, 'error'));
+        }
+
+        const validatedCount = getValidatedFileIds().length;
+        const batchTip = (status === '校验通过' && validatedCount >= 2)
+          ? `<div class="px-4 py-2 mt-3 rounded-md text-xs" style="background-color: rgba(79,70,229,0.08); color: var(--primary); grid-column: 1 / -1;">提示：当前共有 ${validatedCount} 个校验通过的文件。点击上方“导入全部已校验 (${validatedCount})”可将它们一次性导入同一个考试。</div>`
+          : '';
+        const classMappingHtml = renderClassMapping(unknownClasses);
+        validationContent.innerHTML = items.join('') + (nonClassErrors.length ? renderErrors(nonClassErrors) : '') + classMappingHtml + batchTip;
+
+        // 只有在没有非班级错误且所有未匹配班级都已选择对应班级时，才允许导入
+        confirmImportBtn.disabled = nonClassErrors.length > 0 || hasUnmappedClass();
+        fixDataBtn.disabled = errors.length === 0;
+
+        // 监听映射下拉框变化，实时更新按钮状态
+        validationContent.querySelectorAll('.class-mapping-select').forEach(sel => {
+          sel.addEventListener('change', () => {
+            currentClassMapping = collectClassMapping();
+            confirmImportBtn.disabled = nonClassErrors.length > 0 || hasUnmappedClass();
+          });
+        });
+
+        // 初始化确认弹窗的满分配置
+        if (result.detected_subjects) {
+          confirmSubjectConfig = {};
+          result.detected_subjects.forEach(item => {
+            confirmSubjectConfig[item.name] = { max_score: item.max_score };
+          });
+          confirmProfessionalSubjects = result.professional_subjects || [];
+          renderConfirmSubjectConfig();
+        }
+      }
+
+      function renderConfirmSubjectConfig() {
+        const container = document.getElementById('confirm-subject-config');
+        if (!currentValidation || !currentValidation.detected_subjects) {
+          // 未进行文件校验时（如批量导入），使用上传表单中的默认配置
+          let html = '<div class="grid grid-cols-2 gap-3">';
+          const names = ['语文', '数学', '英语'];
+          if (uploadMajor.value) names.push('专业课');
+          const defaults = { '语文': 150, '数学': 150, '英语': 100, '专业课': 100 };
+          names.forEach(name => {
+            const val = subjectConfig[name]?.max_score ?? defaults[name];
+            html += `<div class="flex items-center gap-2">
+        <span style="font-size: 13px; color: var(--foreground); white-space: nowrap;">${escapeHtml(name)}</span>
+        <input type="number" min="0" step="1" data-confirm-subject="${escapeHtml(name)}" value="${val}" class="confirm-subject-max w-full rounded-md border px-2 py-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 13px;">
+        <span style="font-size: 12px; color: var(--muted-foreground);">分</span>
+      </div>`;
+          });
+          html += '</div>';
+          container.innerHTML = html;
+          return;
+        }
+
+        let html = '<div class="grid grid-cols-2 gap-3">';
+        const detected = currentValidation.detected_subjects || [];
+        const profSubs = currentValidation.professional_subjects || [];
+
+        detected.forEach(item => {
+          const val = confirmSubjectConfig[item.name]?.max_score ?? item.max_score;
+          const safeName = escapeHtml(item.name);
+          if (item.name === '专业课' && profSubs.length > 0) {
+            html += `<div class="flex items-center gap-2">
+        <span style="font-size: 13px; color: var(--foreground); white-space: nowrap;">${safeName}（汇总）</span>
+        <input type="number" readonly data-confirm-subject="${safeName}" value="${val}" class="confirm-subject-max w-full rounded-md border px-2 py-1" style="border-color: var(--border); background-color: var(--color-neutral-100); color: var(--foreground); font-size: 13px;">
+        <span style="font-size: 12px; color: var(--muted-foreground);">分</span>
+      </div>`;
+          } else {
+            html += `<div class="flex items-center gap-2">
+        <span style="font-size: 13px; color: var(--foreground); white-space: nowrap;">${safeName}</span>
+        <input type="number" min="0" step="1" data-confirm-subject="${safeName}" value="${val}" class="confirm-subject-max w-full rounded-md border px-2 py-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 13px;">
+        <span style="font-size: 12px; color: var(--muted-foreground);">分</span>
+      </div>`;
+          }
+        });
+        html += '</div>';
+
+        if (profSubs.length > 0) {
+          html += '<div class="mt-3 pt-3 border-t" style="border-color: var(--border);"><p style="font-size: 12px; color: var(--muted-foreground); margin-bottom: 0.5rem;">专业课子课程（修改后汇总自动更新）</p><div class="grid grid-cols-2 gap-3">';
+          profSubs.forEach(item => {
+            const val = confirmProfessionalSubjects.find(s => s.name === item.name)?.max_score ?? item.max_score;
+            const safeName = escapeHtml(item.name);
+            html += `<div class="flex items-center gap-2">
+        <span style="font-size: 12px; color: var(--foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;" title="${safeName}">${safeName}</span>
+        <input type="number" min="0" step="1" data-prof-sub="${safeName}" value="${val}" class="confirm-prof-sub-max w-full rounded-md border px-2 py-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 13px;">
+        <span style="font-size: 12px; color: var(--muted-foreground);">分</span>
+      </div>`;
+          });
+          html += '</div></div>';
+        }
+
+        container.innerHTML = html;
+
+        container.querySelectorAll('.confirm-prof-sub-max').forEach(input => {
+          input.addEventListener('input', updateConfirmProfessionalTotal);
+        });
+      }
+
+      function updateConfirmProfessionalTotal() {
+        const inputs = document.querySelectorAll('.confirm-prof-sub-max');
+        let total = 0;
+        inputs.forEach(input => {
+          const val = parseFloat(input.value);
+          if (!isNaN(val) && val > 0) total += val;
+        });
+        const aggInput = document.querySelector('[data-confirm-subject="专业课"]');
+        if (aggInput) aggInput.value = total;
+      }
+
+      function collectConfirmSubjectConfig() {
+        const cfg = {};
+        document.querySelectorAll('.confirm-subject-max').forEach(input => {
+          const name = input.dataset.confirmSubject;
+          const val = parseFloat(input.value);
+          if (name && !isNaN(val) && val > 0) {
+            cfg[name] = { max_score: val };
+          }
+        });
+        document.querySelectorAll('.confirm-prof-sub-max').forEach(input => {
+          const name = input.dataset.profSub;
+          const val = parseFloat(input.value);
+          if (name && !isNaN(val) && val > 0) {
+            cfg[name] = { max_score: val };
+          }
+        });
+        return cfg;
+      }
+
+      function checkItem(title, desc, type) {
+        const colors = {
+          success: ['var(--state-success)', 'rgba(22,163,74,0.1)'],
+          warning: ['var(--state-warning)', 'rgba(217,119,6,0.06)'],
+          error: ['var(--state-error)', 'rgba(239,68,68,0.06)'],
+          info: ['var(--muted-foreground)', 'var(--muted)']
+        };
+        const [stroke, bg] = colors[type] || colors.info;
+        let icon;
+        if (type === 'success') icon = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>';
+        else if (type === 'warning') icon = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+        else if (type === 'error') icon = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
+        else icon = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>';
+        return `<div class="flex items-center gap-3 rounded-md px-4 py-3" style="background-color: ${bg};">
+          <svg class="shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon}</svg>
+          <div class="flex flex-col min-w-0">
+            <span class="truncate" style="font-size: 13px; font-weight: 500; color: var(--foreground);">${escapeHtml(title)}</span>
+            <span class="truncate" style="font-size: 12px; color: ${stroke};">${escapeHtml(desc)}</span>
+          </div>
+        </div>`;
+      }
+
+      function renderErrors(errors) {
+        const list = errors.slice(0, 20).map(e => `<li style="font-size: 12px; color: var(--foreground); margin-bottom: 4px;">第 ${e.row || '-'} 行：${escapeHtml(e.msg)}</li>`).join('');
+        const more = errors.length > 20 ? `<li style="font-size: 12px; color: var(--muted-foreground);">...还有 ${errors.length - 20} 条错误</li>` : '';
+        return `<div style="grid-column: 1 / -1; margin-top: 0.5rem;">
+          <p style="font-size: 13px; font-weight: 500; color: var(--foreground); margin-bottom: 0.5rem;">错误明细：</p>
+          <ul style="max-height: 200px; overflow-y: auto; background-color: var(--muted); border-radius: var(--radius-md); padding: 0.75rem 1rem;">${list}${more}</ul>
+        </div>`;
+      }
+
+      function renderWarnings(warnings) {
+        const list = warnings.slice(0, 20).map(w => `<li style="font-size: 12px; color: var(--foreground); margin-bottom: 4px;">第 ${w.row || '-'} 行：${escapeHtml(w.msg)}</li>`).join('');
+        const more = warnings.length > 20 ? `<li style="font-size: 12px; color: var(--muted-foreground);">...还有 ${warnings.length - 20} 条警告</li>` : '';
+        return `<div style="grid-column: 1 / -1; margin-top: 0.5rem;">
+          <p style="font-size: 13px; font-weight: 500; color: var(--foreground); margin-bottom: 0.5rem;">警告明细：</p>
+          <ul style="max-height: 200px; overflow-y: auto; background-color: rgba(217,119,6,0.06); border-radius: var(--radius-md); padding: 0.75rem 1rem;">${list}${more}</ul>
+        </div>`;
+      }
+
+      function hideConflicts() {
+        if (conflictWarning) conflictWarning.classList.add('hidden');
+        if (batchReimportOverwriteBtn) batchReimportOverwriteBtn.classList.add('hidden');
+        isBatchReimportMode = false;
+        lastBatchFileConfigs = null;
+      }
+
+      function renderConflicts(conflicts) {
+        const list = conflicts.slice(0, 20).map(c => {
+          const fields = escapeHtml((c.conflict_fields || []).join('、'));
+          const no = c.student_no ? `（学号 ${escapeHtml(c.student_no)}）` : '';
+          return `<li style="font-size: 12px; color: var(--foreground); margin-bottom: 4px;">${escapeHtml(c.name)}${no} · ${escapeHtml(c.class_name || '')} · 冲突科目：${fields}</li>`;
+        }).join('');
+        const more = conflicts.length > 20 ? `<li style="font-size: 12px; color: var(--muted-foreground);">...还有 ${conflicts.length - 20} 条冲突</li>` : '';
+        return `<ul style="max-height: 200px; overflow-y: auto; background-color: rgba(217,119,6,0.06); border-radius: var(--radius-md); padding: 0.75rem 1rem;">${list}${more}</ul>`;
+      }
+
+      function showConflicts(conflicts) {
+        if (!conflictWarning || !conflictCount || !conflictDetails) return;
+        conflictCount.textContent = conflicts.length;
+        conflictDetails.innerHTML = renderConflicts(conflicts);
+        conflictWarning.classList.remove('hidden');
+        if (isBatchReimportMode && batchReimportOverwriteBtn) {
+          batchReimportOverwriteBtn.classList.remove('hidden');
+        }
+      }
+
+      function buildDefaultExamName() {
+        const year = uploadSchoolYear.value;
+        const sem = uploadSemester.value;
+        const type = uploadExamType.value;
+        const month = uploadMonth.value;
+        const grade = uploadGrade.options[uploadGrade.selectedIndex]?.text || '';
+        const parts = [year, sem].filter(Boolean);
+        if (type === '月考' && month) parts.push(`${month}月`);
+        if (grade && grade !== '不指定') parts.push(grade);
+        if (type) parts.push(type);
+        return parts.join('');
+      }
+
+      function toggleConfirmMonthVisibility() {
+        const isMonthly = uploadExamType.value === '月考';
+        confirmMonthWrap.style.display = isMonthly ? 'block' : 'none';
+        if (!isMonthly) confirmMonth.value = '';
+      }
+
+      async function loadExamsForMerge() {
+        try {
+          const exams = await apiGet('/scores/exams');
+          const options = exams.map(e => {
+            const label = escapeHtml([e.name, e.school_year, e.semester].filter(Boolean).join(' '));
+            return `<option value="${e.id}">${label}</option>`;
+          }).join('');
+          confirmMergeExam.innerHTML = '<option value="">创建新考试</option>' + options;
+        } catch (e) {
+          console.warn('加载考试列表失败', e);
+          confirmMergeExam.innerHTML = '<option value="">创建新考试</option>';
+        }
+      }
+
+      window.openConfirm = async function(id) {
+        isBatchMode = false;
+        currentFileId = id;
+        const row = scoreFilesData.find(f => f.id === id);
+
+        // 优先使用文件上传时携带的 metadata
+        confirmSchoolYear.value = row && row.school_year ? row.school_year : (uploadSchoolYear.value || '');
+        confirmSemester.value = row && row.semester ? row.semester : (uploadSemester.value || '');
+        confirmMonth.value = row && row.month ? String(row.month) : (uploadMonth.value || '');
+        confirmMergeExam.value = '';
+
+        // 根据文件自身的考试类型决定是否显示月份
+        const fileExamType = row && row.exam_type ? row.exam_type : uploadExamType.value;
+        confirmMonthWrap.style.display = fileExamType === '月考' ? 'block' : 'none';
+
+        // 根据文件 metadata 生成默认考试名称
+        const defaultName = buildBatchExamName(row) || buildDefaultExamName();
+        confirmExamName.value = defaultName;
+        confirmExamDate.value = new Date().toISOString().slice(0, 10);
+        confirmModalStatus.textContent = '';
+        await loadExamsForMerge();
+        renderConfirmSubjectConfig();
+        confirmModal.style.display = 'flex';
+      };
+
+      function closeConfirm() {
+        confirmModal.style.display = 'none';
+      }
+
+      cancelConfirmBtn.addEventListener('click', closeConfirm);
+      confirmModal.addEventListener('click', e => { if (e.target === confirmModal) closeConfirm(); });
+
+      submitConfirmBtn.addEventListener('click', async () => {
+        const name = confirmExamName.value.trim();
+        if (!name) {
+          confirmModalStatus.textContent = '请输入考试名称';
+          return;
+        }
+        if (!confirmSchoolYear.value) {
+          confirmModalStatus.textContent = '请选择学年';
+          return;
+        }
+        if (!confirmSemester.value) {
+          confirmModalStatus.textContent = '请选择学期';
+          return;
+        }
+        if (uploadExamType.value === '月考' && !confirmMonth.value) {
+          confirmModalStatus.textContent = '请选择月份';
+          return;
+        }
+        confirmModalStatus.textContent = '正在导入...';
+        try {
+          const mergeExamId = confirmMergeExam.value ? parseInt(confirmMergeExam.value, 10) : null;
+          const month = uploadExamType.value === '月考' ? parseInt(confirmMonth.value, 10) : null;
+          const subjectConfig = collectConfirmSubjectConfig();
+          const classMapping = currentClassMapping || {};
+          const overwriteExisting = overwriteExistingCheckbox && overwriteExistingCheckbox.checked;
+          const basePayload = {
+            exam_name: name,
+            exam_date: confirmExamDate.value || null,
+            school_year: confirmSchoolYear.value,
+            semester: confirmSemester.value,
+            month: month,
+            merge_exam_id: mergeExamId,
+            subject_config: subjectConfig,
+            class_mapping: classMapping,
+            overwrite_existing: overwriteExisting,
+          };
+          const body = JSON.stringify(basePayload);
+          const url = API_BASE + `/import/confirm/${currentFileId}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body
+          });
+          const result = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            if (res.status === 400 && result.detail && result.detail.code === 'UNKNOWN_CLASS') {
+              closeConfirm();
+              const classes = (result.detail.unknown_classes || []).join('、');
+              validationContent.innerHTML = checkItem('未匹配班级', `以下班级未在系统中设置，请先在班级管理中创建或调整成绩表班级名：${escapeHtml(classes)}`, 'error');
+              confirmImportBtn.disabled = true;
+              return;
+            }
+            if (res.status === 409 && result.detail && result.detail.conflicts) {
+              closeConfirm();
+              showConflicts(result.detail.conflicts);
+              validationContent.innerHTML = checkItem('导入冲突', `发现 ${result.detail.conflicts.length} 条同名同班学生成绩冲突，请勾选“覆盖已有成绩”后重新点击确认导入`, 'warning');
+              // 保留确认导入按钮可用，让用户勾选覆盖后重新导入
+              confirmImportBtn.disabled = false;
+              return;
+            }
+            throw new Error(result.detail && typeof result.detail === 'string' ? result.detail : (result.detail && result.detail.message) || res.statusText);
+          }
+          closeConfirm();
+          hideConflicts();
+          const mergeInfo = result.merged ? `（合并到已有考试，更新 ${result.updated || 0} 条）` : '';
+          validationContent.innerHTML = `<div class="px-4 py-3" style="color: var(--state-success); font-size: 13px; text-align: center; grid-column: 1 / -1;">导入成功：新增 ${result.inserted || 0} 条成绩记录 ${mergeInfo}</div>`;
+          confirmImportBtn.disabled = true;
+          await loadFiles();
+        } catch (e) {
+          confirmModalStatus.textContent = `导入失败：${e.message}`;
+        }
+      });
+
+      window.deleteFile = async function(id) {
+        const confirmed = await showCustomConfirm('确认删除', '确定删除该文件记录？');
+        if (!confirmed) return;
+        try {
+          await apiDelete(`/import/delete/${id}`);
+          await loadFiles();
+        } catch (e) {
+          await showCustomMessage('删除失败', '删除失败：' + e.message);
+        }
+      };
+
+      confirmImportBtn.addEventListener('click', () => {
+        if (currentFileId) openConfirm(currentFileId);
+      });
+
+      fixDataBtn.addEventListener('click', async () => {
+        const errors = (currentValidation && currentValidation.errors) || [];
+        if (errors.length) {
+          const message = `共有 ${errors.length} 条待修正记录，请在源 Excel 中修改后重新上传。\n\n前 5 条示例：\n${errors.slice(0, 5).map(e => `第 ${e.row} 行：${e.msg}`).join('\n')}`;
+          await showCustomMessage('待修正记录', message);
+        }
+      });
+
+      loadSettings();
+      loadFiles();
+      loadAvailableClasses();
+    })();
+    </script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

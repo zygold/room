@@ -1,0 +1,280 @@
+{
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.07.06.8",
+    "version_source": "skill-version.json",
+    "runtime_skill_dir": "c:\\Users\\赵洋\\.trae-cn\\builtin\\design\\default\\skills\\solo-design",
+    "recorded_at": "2026-07-18T12:08:00+08:00"
+  },
+  "project": {
+    "name": "成绩管理系统",
+    "path": "h:\\DAIMA\\CJjiangxuej\\score-management-system",
+    "operation": "create",
+    "deviceType": "desktop",
+    "language": "zh-CN",
+    "dashboardMode": true,
+    "designRead": "admin dashboard / school admin staff / calm professional trust / high density / avoid playful decorative elements",
+    "designDials": {
+      "layoutVariance": 2,
+      "motionIntensity": 1,
+      "visualDensity": 4
+    },
+    "intentProfile": {
+      "caseFamily": "free_exploration",
+      "graphicStrategy": null,
+      "sourceType": null,
+      "routingReason": "new project, no library, data-dense admin UI"
+    },
+    "generationTree": {
+      "root": {
+        "nodeId": "gen-project-shell",
+        "kind": "project-shell",
+        "output": "partials/project-shell.html",
+        "sharedRegions": ["sidebar-nav", "top-header", "main-wrapper"],
+        "privateRegions": [],
+        "status": "planned",
+        "children": [
+          {
+            "nodeId": "gen-page-dashboard",
+            "kind": "page-leaf",
+            "pageIds": ["page-dashboard"],
+            "output": "pages/dashboard.html",
+            "sharedRegions": [],
+            "privateRegions": ["main-content"],
+            "status": "planned",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-data-import",
+            "kind": "page-leaf",
+            "pageIds": ["page-data-import"],
+            "output": "pages/data-import.html",
+            "sharedRegions": [],
+            "privateRegions": ["main-content"],
+            "status": "planned",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-score-management",
+            "kind": "page-leaf",
+            "pageIds": ["page-score-management"],
+            "output": "pages/score-management.html",
+            "sharedRegions": [],
+            "privateRegions": ["main-content"],
+            "status": "planned",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-scholarship",
+            "kind": "page-leaf",
+            "pageIds": ["page-scholarship"],
+            "output": "pages/scholarship.html",
+            "sharedRegions": [],
+            "privateRegions": ["main-content"],
+            "status": "planned",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-data-export",
+            "kind": "page-leaf",
+            "pageIds": ["page-data-export"],
+            "output": "pages/data-export.html",
+            "sharedRegions": [],
+            "privateRegions": ["main-content"],
+            "status": "planned",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-backup-restore",
+            "kind": "page-leaf",
+            "pageIds": ["page-backup-restore"],
+            "output": "pages/backup-restore.html",
+            "sharedRegions": [],
+            "privateRegions": ["main-content"],
+            "status": "planned",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-system-settings",
+            "kind": "page-leaf",
+            "pageIds": ["page-system-settings"],
+            "output": "pages/system-settings.html",
+            "sharedRegions": [],
+            "privateRegions": ["main-content"],
+            "status": "planned",
+            "children": []
+          }
+        ]
+      }
+    },
+    "styleContinuityAnchors": {
+      "colorSystem": "Indigo primary (#4f46e5), neutral slate scale, state colors for success/warning/error",
+      "typographySystem": "Inter + Noto Sans SC, sans-serif headings and body",
+      "surfaceDepthModel": "Border-led static surfaces, 0.05 max shadow alpha for static cards",
+      "radiusScale": "4px/8px/12px restrained radius"
+    },
+    "sharedProjectShellContract": {
+      "sidebarWidth": "240px",
+      "sidebarBg": "#1e293b",
+      "sidebarText": "#f8fafc",
+      "sidebarActiveBg": "rgba(79,70,229,0.15)",
+      "sidebarActiveText": "#818cf8",
+      "headerHeight": "56px",
+      "headerBg": "#ffffff",
+      "headerBorder": "#e2e8f0"
+    }
+  },
+  "pages": [
+    {
+      "nodeId": "page-dashboard",
+      "title": "系统仪表盘",
+      "htmlSrc": "pages/dashboard.html",
+      "pageIndex": 1,
+      "pageKind": "dashboard",
+      "visualNorthStar": "Data overview at a glance with stat cards and quick actions",
+      "compositionPattern": "stats-grid",
+      "continuityAnchors": {
+        "colorSystem": "Indigo primary (#4f46e5), neutral slate scale",
+        "typographySystem": "Inter + Noto Sans SC",
+        "surfaceDepthModel": "Border-led static surfaces",
+        "radiusScale": "4px/8px/12px"
+      },
+      "soulElement": "Quick action cards showing real-time data context like 'Last synced 3m ago'",
+      "chartsRequired": true,
+      "imagePlan": []
+    },
+    {
+      "nodeId": "page-data-import",
+      "title": "数据导入",
+      "htmlSrc": "pages/data-import.html",
+      "pageIndex": 2,
+      "pageKind": "task-driven",
+      "visualNorthStar": "Clear upload workflow with file validation feedback",
+      "compositionPattern": "form-centric",
+      "continuityAnchors": {
+        "colorSystem": "Indigo primary (#4f46e5), neutral slate scale",
+        "typographySystem": "Inter + Noto Sans SC",
+        "surfaceDepthModel": "Border-led static surfaces",
+        "radiusScale": "4px/8px/12px"
+      },
+      "soulElement": "Drag-and-drop upload zone with real-time file validation progress indicators",
+      "chartsRequired": false,
+      "imagePlan": []
+    },
+    {
+      "nodeId": "page-score-management",
+      "title": "成绩管理",
+      "htmlSrc": "pages/score-management.html",
+      "pageIndex": 3,
+      "pageKind": "information-dense",
+      "visualNorthStar": "Comprehensive grade table with multi-dimensional filtering",
+      "compositionPattern": "data-table-centric",
+      "continuityAnchors": {
+        "colorSystem": "Indigo primary (#4f46e5), neutral slate scale",
+        "typographySystem": "Inter + Noto Sans SC",
+        "surfaceDepthModel": "Border-led static surfaces",
+        "radiusScale": "4px/8px/12px"
+      },
+      "soulElement": "Inline score conversion badges showing original and converted values side by side",
+      "chartsRequired": false,
+      "imagePlan": []
+    },
+    {
+      "nodeId": "page-scholarship",
+      "title": "奖学金评定",
+      "htmlSrc": "pages/scholarship.html",
+      "pageIndex": 4,
+      "pageKind": "task-driven",
+      "visualNorthStar": "Scholarship rule configuration and candidate list management",
+      "compositionPattern": "split-panel",
+      "continuityAnchors": {
+        "colorSystem": "Indigo primary (#4f46e5), neutral slate scale",
+        "typographySystem": "Inter + Noto Sans SC",
+        "surfaceDepthModel": "Border-led static surfaces",
+        "radiusScale": "4px/8px/12px"
+      },
+      "soulElement": "Visual rule builder showing condition chains with AND/OR connectors",
+      "chartsRequired": false,
+      "imagePlan": []
+    },
+    {
+      "nodeId": "page-data-export",
+      "title": "数据导出",
+      "htmlSrc": "pages/data-export.html",
+      "pageIndex": 5,
+      "pageKind": "task-driven",
+      "visualNorthStar": "Multi-format export with flexible filter conditions",
+      "compositionPattern": "form-centric",
+      "continuityAnchors": {
+        "colorSystem": "Indigo primary (#4f46e5), neutral slate scale",
+        "typographySystem": "Inter + Noto Sans SC",
+        "surfaceDepthModel": "Border-led static surfaces",
+        "radiusScale": "4px/8px/12px"
+      },
+      "soulElement": "Format selector cards with file-type icons and estimated file size indicators",
+      "chartsRequired": false,
+      "imagePlan": []
+    },
+    {
+      "nodeId": "page-backup-restore",
+      "title": "备份还原",
+      "htmlSrc": "pages/backup-restore.html",
+      "pageIndex": 6,
+      "pageKind": "information-dense",
+      "visualNorthStar": "Backup history timeline with restore confirmation flow",
+      "compositionPattern": "list-centric",
+      "continuityAnchors": {
+        "colorSystem": "Indigo primary (#4f46e5), neutral slate scale",
+        "typographySystem": "Inter + Noto Sans SC",
+        "surfaceDepthModel": "Border-led static surfaces",
+        "radiusScale": "4px/8px/12px"
+      },
+      "soulElement": "Backup timeline with health indicators and storage usage gauge",
+      "chartsRequired": false,
+      "imagePlan": []
+    },
+    {
+      "nodeId": "page-system-settings",
+      "title": "系统设置",
+      "htmlSrc": "pages/system-settings.html",
+      "pageIndex": 7,
+      "pageKind": "information-dense",
+      "visualNorthStar": "System configuration panels with clear grouping",
+      "compositionPattern": "settings-grid",
+      "continuityAnchors": {
+        "colorSystem": "Indigo primary (#4f46e5), neutral slate scale",
+        "typographySystem": "Inter + Noto Sans SC",
+        "surfaceDepthModel": "Border-led static surfaces",
+        "radiusScale": "4px/8px/12px"
+      },
+      "soulElement": "Subject score standard reference cards with pass/fail threshold visualizations",
+      "chartsRequired": false,
+      "imagePlan": []
+    }
+  ],
+  "wiringPlan": [
+    {"source": "page-dashboard", "target": "page-data-import", "domId": "nav-data-import"},
+    {"source": "page-dashboard", "target": "page-score-management", "domId": "nav-score-management"},
+    {"source": "page-dashboard", "target": "page-scholarship", "domId": "nav-scholarship"},
+    {"source": "page-data-import", "target": "page-score-management", "domId": "nav-score-management"},
+    {"source": "page-data-import", "target": "page-dashboard", "domId": "nav-dashboard"},
+    {"source": "page-score-management", "target": "page-scholarship", "domId": "nav-scholarship"},
+    {"source": "page-score-management", "target": "page-data-import", "domId": "nav-data-import"},
+    {"source": "page-scholarship", "target": "page-data-export", "domId": "nav-data-export"},
+    {"source": "page-scholarship", "target": "page-score-management", "domId": "nav-score-management"},
+    {"source": "page-data-export", "target": "page-backup-restore", "domId": "nav-backup-restore"},
+    {"source": "page-data-export", "target": "page-scholarship", "domId": "nav-scholarship"},
+    {"source": "page-backup-restore", "target": "page-system-settings", "domId": "nav-system-settings"},
+    {"source": "page-backup-restore", "target": "page-data-export", "domId": "nav-data-export"},
+    {"source": "page-system-settings", "target": "page-dashboard", "domId": "nav-dashboard"},
+    {"source": "page-system-settings", "target": "page-backup-restore", "domId": "nav-backup-restore"}
+  ],
+  "hiddenInteractionPlan": [
+    {"source": "page-data-import", "target": "page-dashboard", "domId": "back-dashboard", "hideEdge": true},
+    {"source": "page-score-management", "target": "page-dashboard", "domId": "back-dashboard", "hideEdge": true},
+    {"source": "page-scholarship", "target": "page-dashboard", "domId": "back-dashboard", "hideEdge": true},
+    {"source": "page-data-export", "target": "page-dashboard", "domId": "back-dashboard", "hideEdge": true},
+    {"source": "page-backup-restore", "target": "page-dashboard", "domId": "back-dashboard", "hideEdge": true},
+    {"source": "page-system-settings", "target": "page-dashboard", "domId": "back-dashboard", "hideEdge": true}
+  ]
+}

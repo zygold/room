@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.07.06.8",
+    "version_source": "skill-version.json",
+    "runtime_skill_dir": "c:\\Users\\赵洋\\.trae-cn\\builtin\\design\\default\\skills\\solo-design",
+    "recorded_at": "2026-07-18T12:08:00+08:00",
+    "read_status": "ok"
+  },
+  "operatingMode": "free-explore",
+  "renderBlockingErrorCount": 0,
+  "softWarningCount": 7,
+  "renderBlockingErrors": [],
+  "softWarnings": [
+    "[html-quality] backup-restore.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] dashboard.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] data-export.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] data-import.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] scholarship.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] score-management.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] system-settings.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference."
+  ],
+  "repairPlanHints": [],
+  "errorCount": 0,
+  "warningCount": 7,
+  "errors": [],
+  "warnings": [
+    "[html-quality] backup-restore.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] dashboard.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] data-export.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] data-import.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] scholarship.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] score-management.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] system-settings.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference."
+  ],
+  "designDir": "h:\\DAIMA\\CJjiangxuej\\score-management-system",
+  "expectedPages": 7,
+  "requireInteractions": null,
+  "checkedAt": "2026-07-18T04:46:27.714Z"
+}

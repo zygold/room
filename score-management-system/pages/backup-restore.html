@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>备份还原</title>
+    <style id="theme-vars">
+/* Score Management System - Brand CSS */
+/* Professional, clean, data-dense administrative interface */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Primary - Indigo Blue */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
+  --color-primary-800: #312e81;
+  --color-primary-900: #1e1b4b;
+
+  /* Neutral Scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* State Colors */
+  --state-success: #16a34a;
+  --state-warning: #d97706;
+  --state-error: #dc2626;
+  --state-info: #2563eb;
+
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* Semantic Aliases */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4f46e5;
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #818cf8;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <main>
+<!-- Project Shell: Sidebar + Header + Content Slot -->
+<!-- App-shell layout for score management admin system -->
+
+<div data-viewport-mode="app-shell" class="flex h-screen overflow-hidden min-h-0" style="font-family: var(--font-body);">
+
+  <!-- ====== Left Sidebar (240px) ====== -->
+  <aside class="shrink-0 flex flex-col h-full" style="width: 240px; background-color: var(--color-neutral-800);">
+
+    <!-- Logo / System Name -->
+    <div class="flex items-center gap-3 px-5 py-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: var(--primary); border-radius: var(--radius-md);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5"/>
+        </svg>
+      </div>
+      <span class="truncate" style="color: #f8fafc; font-size: 15px; font-weight: 600; line-height: 1.2;">成绩管理系统</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-3" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+
+      <ul class="flex flex-col gap-1">
+
+        <!-- 系统仪表盘 -->
+        <li>
+          <a href="dashboard.html" data-dom-id="nav-dashboard"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统仪表盘</span>
+          </a>
+        </li>
+
+        <!-- 数据导入 -->
+        <li>
+          <a href="data-import.html" data-dom-id="nav-data-import"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导入</span>
+          </a>
+        </li>
+
+        <!-- 成绩管理 -->
+        <li>
+          <a href="score-management.html" data-dom-id="nav-score-management"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+              <line x1="8" y1="16" x2="14" y2="16"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">成绩管理</span>
+          </a>
+        </li>
+
+        <!-- 奖学金评定 -->
+        <li>
+          <a href="scholarship.html" data-dom-id="nav-scholarship"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+          </a>
+        </li>
+
+        <!-- 数据导出 -->
+        <li>
+          <a href="data-export.html" data-dom-id="nav-data-export"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导出</span>
+          </a>
+        </li>
+
+        <!-- 备份还原 (ACTIVE) -->
+        <li>
+          <a href="backup-restore.html" data-dom-id="nav-backup-restore" data-active="true"
+             class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/>
+              <path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">备份还原</span>
+          </a>
+        </li>
+
+        <!-- 系统设置 -->
+        <li>
+          <a href="system-settings.html" data-dom-id="nav-system-settings"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Bottom: User Info -->
+    <div class="shrink-0 flex items-center gap-3 px-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: rgba(79,70,229,0.25); border-radius: var(--radius-full);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="truncate" style="color: #f8fafc; font-size: 13px; font-weight: 500;">管理员</span>
+        <span class="truncate" style="color: #64748b; font-size: 12px;">admin@school.edu</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== Main Area (Sidebar + Header + Content) ====== -->
+  <div class="flex flex-col flex-1 min-h-0 min-w-0">
+
+    <!-- Top Header (56px) -->
+    <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
+      <!-- Left: Page Title -->
+      <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
+        备份还原
+      </h1>
+
+      <!-- Right: Actions -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Notification Bell -->
+        <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+
+        <!-- User Avatar -->
+        <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Scroll Region -->
+    <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+      <div class="p-6">
+
+        <!-- ======================== 1. Storage Overview Card ======================== -->
+        <div class="rounded-lg p-5" style="background-color: var(--card); border: 1px solid var(--border);">
+          <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Left: Storage Bar -->
+            <div class="flex-1 min-w-0">
+              <h2 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 12px;">存储空间使用</h2>
+              <div class="flex items-center gap-3 mb-2">
+                <div class="flex-1 h-3 rounded-full overflow-hidden" style="background-color: var(--muted);">
+                  <div class="h-full rounded-full" style="width: 24%; background-color: var(--primary);"></div>
+                </div>
+                <span class="shrink-0 whitespace-nowrap" style="font-size: 14px; font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums;">2.4GB / 10GB</span>
+              </div>
+              <p class="truncate" style="font-size: 13px; color: var(--muted-foreground);">已使用 24%，剩余 7.6GB 可用空间</p>
+            </div>
+            <!-- Right: Quick Stats -->
+            <div class="flex gap-4 shrink-0">
+              <div class="flex flex-col items-center justify-center px-5 py-3 rounded-lg" style="background-color: var(--muted); min-width: 100px;">
+                <span class="whitespace-nowrap" style="font-size: 22px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums;">45</span>
+                <span class="whitespace-nowrap" style="font-size: 12px; color: var(--muted-foreground);">自动备份</span>
+              </div>
+              <div class="flex flex-col items-center justify-center px-5 py-3 rounded-lg" style="background-color: var(--muted); min-width: 100px;">
+                <span class="whitespace-nowrap" style="font-size: 22px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums;">12</span>
+                <span class="whitespace-nowrap" style="font-size: 12px; color: var(--muted-foreground);">手动备份</span>
+              </div>
+              <div class="flex flex-col items-center justify-center px-5 py-3 rounded-lg" style="background-color: var(--muted); min-width: 100px;">
+                <span class="whitespace-nowrap" style="font-size: 22px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums;">8</span>
+                <span class="whitespace-nowrap" style="font-size: 12px; color: var(--muted-foreground);">增量备份</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacer -->
+        <div style="height: 24px;"></div>
+
+        <!-- ======================== 2. Backup Configuration Panel ======================== -->
+        <div class="rounded-lg p-5" style="background-color: var(--card); border: 1px solid var(--border);">
+          <h2 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 20px;">自动备份策略</h2>
+
+          <div class="flex flex-col gap-5">
+            <!-- Toggle: 关闭软件时自动备份 -->
+            <div class="flex items-center justify-between">
+              <span class="truncate" style="font-size: 14px; color: var(--foreground);">关闭软件时自动备份</span>
+              <div class="shrink-0 relative" style="width: 44px; height: 24px; background-color: var(--state-success, #16a34a); border-radius: var(--radius-full); cursor: pointer;">
+                <div class="absolute top-0.5" style="left: 22px; width: 20px; height: 20px; background-color: #fff; border-radius: var(--radius-full); transition: transform 0.2s;"></div>
+              </div>
+            </div>
+
+            <!-- Toggle: 每次导入成绩后强制备份 -->
+            <div class="flex items-center justify-between">
+              <span class="truncate" style="font-size: 14px; color: var(--foreground);">每次导入成绩后强制备份</span>
+              <div class="shrink-0 relative" style="width: 44px; height: 24px; background-color: var(--state-success, #16a34a); border-radius: var(--radius-full); cursor: pointer;">
+                <div class="absolute top-0.5" style="left: 22px; width: 20px; height: 20px; background-color: #fff; border-radius: var(--radius-full); transition: transform 0.2s;"></div>
+              </div>
+            </div>
+
+            <!-- Toggle: 定时周期备份 (OFF) -->
+            <div class="flex items-center justify-between">
+              <span class="truncate" style="font-size: 14px; color: var(--foreground);">定时周期备份</span>
+              <div class="shrink-0 relative" style="width: 44px; height: 24px; background-color: var(--color-neutral-300); border-radius: var(--radius-full); cursor: pointer;">
+                <div class="absolute top-0.5" style="left: 2px; width: 20px; height: 20px; background-color: #fff; border-radius: var(--radius-full); transition: transform 0.2s;"></div>
+              </div>
+            </div>
+            <!-- Time input -->
+            <div class="flex items-center gap-3 pl-1" style="margin-top: -8px;">
+              <i data-lucide="clock" style="width: 16px; height: 16px; color: var(--muted-foreground);"></i>
+              <input type="text" value="每日 22:00" readonly
+                     class="px-3 py-1.5 rounded-md truncate"
+                     style="width: 140px; height: 36px; font-size: 14px; color: var(--muted-foreground); background-color: var(--muted); border: 1px solid var(--border);">
+            </div>
+
+            <!-- Divider -->
+            <div style="height: 1px; background-color: var(--border);"></div>
+
+            <!-- Backup Retention -->
+            <div class="flex items-center gap-4">
+              <label class="shrink-0 whitespace-nowrap" style="font-size: 14px; color: var(--foreground);">保留最近</label>
+              <select class="px-3 py-2 rounded-md shrink-0" style="height: 36px; font-size: 14px; color: var(--foreground); background-color: var(--muted); border: 1px solid var(--border); cursor: pointer;">
+                <option>7天</option>
+                <option selected>30天</option>
+                <option>90天</option>
+              </select>
+            </div>
+
+            <!-- Divider -->
+            <div style="height: 1px; background-color: var(--border);"></div>
+
+            <!-- Backup Destinations -->
+            <div>
+              <h3 class="truncate" style="font-size: 14px; font-weight: 600; color: var(--foreground); margin-bottom: 12px;">备份目标</h3>
+              <div class="flex flex-col gap-3">
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                  <div class="shrink-0 flex items-center justify-center" style="width: 18px; height: 18px; border: 2px solid var(--primary); border-radius: 3px; background-color: var(--primary);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <span class="truncate" style="font-size: 14px; color: var(--foreground);">本地文件夹</span>
+                  <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">C:\ScoreBackup\</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                  <div class="shrink-0 flex items-center justify-center" style="width: 18px; height: 18px; border: 2px solid var(--primary); border-radius: 3px; background-color: var(--primary);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <span class="truncate" style="font-size: 14px; color: var(--foreground);">D盘备份</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                  <div class="shrink-0 flex items-center justify-center" style="width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 3px; background-color: var(--card);">
+                  </div>
+                  <span class="truncate" style="font-size: 14px; color: var(--foreground);">加密压缩</span>
+                  <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">设置密码</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="flex justify-end pt-2">
+              <button class="px-5 py-2 rounded-lg whitespace-nowrap" style="font-size: 14px; font-weight: 600; color: var(--primary-foreground); background-color: var(--primary); cursor: pointer; transition: opacity 0.15s;">
+                保存配置
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacer -->
+        <div style="height: 24px;"></div>
+
+        <!-- ======================== 3. Manual Actions Row ======================== -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Card 1: 立即备份 -->
+          <div class="rounded-lg p-5 flex flex-col justify-between" style="background-color: var(--card); border: 1px solid var(--border); min-height: 120px;">
+            <div class="min-w-0">
+              <h3 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 6px;">立即备份</h3>
+              <p class="truncate" style="font-size: 13px; color: var(--muted-foreground);">创建当前数据的完整备份</p>
+            </div>
+            <div class="flex justify-end shrink-0 pt-4">
+              <button class="px-5 py-2 rounded-lg whitespace-nowrap" style="font-size: 14px; font-weight: 600; color: var(--primary-foreground); background-color: var(--primary); cursor: pointer; transition: opacity 0.15s;">
+                执行备份
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: 全量导出Excel -->
+          <div class="rounded-lg p-5 flex flex-col justify-between" style="background-color: var(--card); border: 1px solid var(--border); min-height: 120px;">
+            <div class="min-w-0">
+              <h3 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 6px;">全量导出Excel</h3>
+              <p class="line-clamp-2" style="font-size: 13px; color: var(--muted-foreground);">导出全校所有年级考试成绩汇总作为离线存档</p>
+            </div>
+            <div class="flex justify-end shrink-0 pt-4">
+              <button class="px-5 py-2 rounded-lg whitespace-nowrap" style="font-size: 14px; font-weight: 600; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); cursor: pointer; transition: opacity 0.15s;">
+                导出Excel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacer -->
+        <div style="height: 24px;"></div>
+
+        <!-- ======================== 4. Backup History Timeline ======================== -->
+        <div class="rounded-lg p-5" style="background-color: var(--card); border: 1px solid var(--border);">
+          <div class="flex items-center justify-between gap-4 mb-5">
+            <h2 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground);">备份历史记录</h2>
+            <div class="shrink-0 relative" style="width: 220px;">
+              <i data-lucide="search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted-foreground); pointer-events: none;"></i>
+              <input type="text" placeholder="搜索备份记录..."
+                     class="w-full pl-8 pr-3 py-2 rounded-md"
+                     style="height: 36px; font-size: 14px; color: var(--foreground); background-color: var(--muted); border: 1px solid var(--border);">
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-3">
+
+            <!-- Row 1: 2026-07-18 11:35 -->
+            <div class="rounded-lg p-4" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="flex flex-col sm:flex-row sm:items-start gap-3">
+                <!-- Left: Time -->
+                <div class="shrink-0 sm:w-36">
+                  <p class="whitespace-nowrap" style="font-size: 13px; font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums;">2026-07-18 11:35</p>
+                </div>
+                <!-- Right: Content -->
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md whitespace-nowrap" style="font-size: 12px; font-weight: 500; color: var(--primary); background-color: var(--color-primary-50, #eef2ff);">自动备份</span>
+                    <span class="truncate" style="font-size: 14px; color: var(--foreground);">导入成绩后备份</span>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); font-variant-numeric: tabular-nums;">2.4MB</span>
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">包含124条新成绩</span>
+                  </div>
+                </div>
+                <!-- Actions -->
+                <div class="shrink-0 flex items-center gap-2">
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--primary-foreground); background-color: var(--state-warning, #d97706); cursor: pointer;">恢复</button>
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); cursor: pointer;">下载</button>
+                  <button class="px-2 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; color: var(--state-error, #dc2626); cursor: pointer;">删除</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: 2026-07-18 00:00 -->
+            <div class="rounded-lg p-4" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="flex flex-col sm:flex-row sm:items-start gap-3">
+                <div class="shrink-0 sm:w-36">
+                  <p class="whitespace-nowrap" style="font-size: 13px; font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums;">2026-07-18 00:00</p>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md whitespace-nowrap" style="font-size: 12px; font-weight: 500; color: var(--color-primary-700, #3730a3); background-color: var(--color-primary-100, #e0e7ff);">定时备份</span>
+                    <span class="truncate" style="font-size: 14px; color: var(--foreground);">每日自动备份</span>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); font-variant-numeric: tabular-nums;">2.3MB</span>
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">完整数据库</span>
+                  </div>
+                </div>
+                <div class="shrink-0 flex items-center gap-2">
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--primary-foreground); background-color: var(--state-warning, #d97706); cursor: pointer;">恢复</button>
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); cursor: pointer;">下载</button>
+                  <button class="px-2 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; color: var(--state-error, #dc2626); cursor: pointer;">删除</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: 2026-07-17 16:25 -->
+            <div class="rounded-lg p-4" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="flex flex-col sm:flex-row sm:items-start gap-3">
+                <div class="shrink-0 sm:w-36">
+                  <p class="whitespace-nowrap" style="font-size: 13px; font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums;">2026-07-17 16:25</p>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md whitespace-nowrap" style="font-size: 12px; font-weight: 500; color: var(--primary); background-color: var(--color-primary-50, #eef2ff);">自动备份</span>
+                    <span class="truncate" style="font-size: 14px; color: var(--foreground);">导入成绩后备份</span>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); font-variant-numeric: tabular-nums;">2.3MB</span>
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">包含456条换算记录</span>
+                  </div>
+                </div>
+                <div class="shrink-0 flex items-center gap-2">
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--primary-foreground); background-color: var(--state-warning, #d97706); cursor: pointer;">恢复</button>
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); cursor: pointer;">下载</button>
+                  <button class="px-2 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; color: var(--state-error, #dc2626); cursor: pointer;">删除</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 4: 2026-07-17 00:00 -->
+            <div class="rounded-lg p-4" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="flex flex-col sm:flex-row sm:items-start gap-3">
+                <div class="shrink-0 sm:w-36">
+                  <p class="whitespace-nowrap" style="font-size: 13px; font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums;">2026-07-17 00:00</p>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md whitespace-nowrap" style="font-size: 12px; font-weight: 500; color: var(--color-primary-700, #3730a3); background-color: var(--color-primary-100, #e0e7ff);">定时备份</span>
+                    <span class="truncate" style="font-size: 14px; color: var(--foreground);">每日自动备份</span>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); font-variant-numeric: tabular-nums;">2.2MB</span>
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">完整数据库</span>
+                  </div>
+                </div>
+                <div class="shrink-0 flex items-center gap-2">
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--primary-foreground); background-color: var(--state-warning, #d97706); cursor: pointer;">恢复</button>
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); cursor: pointer;">下载</button>
+                  <button class="px-2 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; color: var(--state-error, #dc2626); cursor: pointer;">删除</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 5: 2026-07-16 18:30 -->
+            <div class="rounded-lg p-4" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="flex flex-col sm:flex-row sm:items-start gap-3">
+                <div class="shrink-0 sm:w-36">
+                  <p class="whitespace-nowrap" style="font-size: 13px; font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums;">2026-07-16 18:30</p>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md whitespace-nowrap" style="font-size: 12px; font-weight: 500; color: var(--state-info, #2563eb); background-color: #eff6ff;">手动备份</span>
+                    <span class="truncate" style="font-size: 14px; color: var(--foreground);">手动创建</span>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span class="whitespace-nowrap" style="font-size: 13px; color: var(--muted-foreground); font-variant-numeric: tabular-nums;">2.2MB</span>
+                    <span class="truncate" style="font-size: 13px; color: var(--muted-foreground);">期末考试归档</span>
+                  </div>
+                </div>
+                <div class="shrink-0 flex items-center gap-2">
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--primary-foreground); background-color: var(--state-warning, #d97706); cursor: pointer;">恢复</button>
+                  <button class="px-3 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); cursor: pointer;">下载</button>
+                  <button class="px-2 py-1.5 rounded-md whitespace-nowrap" style="font-size: 13px; color: var(--state-error, #dc2626); cursor: pointer;">删除</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Note -->
+          <div class="flex items-start gap-2 mt-4 px-1">
+            <i data-lucide="alert-triangle" style="width: 16px; height: 16px; color: var(--state-warning, #d97706); margin-top: 1px; flex-shrink: 0;"></i>
+            <p class="line-clamp-2" style="font-size: 13px; color: var(--muted-foreground);">恢复操作将覆盖当前数据库，请在恢复前确认数据差异</p>
+          </div>
+        </div>
+
+        <!-- Spacer -->
+        <div style="height: 24px;"></div>
+
+        <!-- ======================== 5. Restore Preview Panel ======================== -->
+        <div class="rounded-lg p-5" style="background-color: var(--card); border: 1px solid var(--border);">
+          <h2 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 16px;">恢复预览</h2>
+
+          <div class="flex flex-col gap-3 mb-5">
+            <div class="flex items-center gap-3">
+              <span class="shrink-0 whitespace-nowrap" style="font-size: 14px; color: var(--muted-foreground); width: 80px;">备份时间</span>
+              <span class="truncate" style="font-size: 14px; color: var(--foreground); font-variant-numeric: tabular-nums;">2026-07-18 11:35</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="shrink-0 whitespace-nowrap" style="font-size: 14px; color: var(--muted-foreground); width: 80px;">备份数据</span>
+              <span class="truncate" style="font-size: 14px; color: var(--foreground);">1,286名学生, 15次考试记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="shrink-0 whitespace-nowrap" style="font-size: 14px; color: var(--muted-foreground); width: 80px;">当前数据</span>
+              <span class="truncate" style="font-size: 14px; color: var(--foreground);">1,286名学生, 16次考试记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="shrink-0 whitespace-nowrap" style="font-size: 14px; color: var(--muted-foreground); width: 80px;">差异</span>
+              <span class="truncate" style="font-size: 14px; font-weight: 600; color: var(--state-warning, #d97706);">当前多1次考试记录</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button class="px-5 py-2 rounded-lg whitespace-nowrap" style="font-size: 14px; font-weight: 600; color: #fff; background-color: var(--state-error, #dc2626); cursor: pointer; transition: opacity 0.15s;">
+              确认恢复
+            </button>
+            <button class="px-5 py-2 rounded-lg whitespace-nowrap" style="font-size: 14px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); cursor: pointer; transition: opacity 0.15s;">
+              取消
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+    </main>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

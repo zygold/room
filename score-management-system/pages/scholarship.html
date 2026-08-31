@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>奖学金评定</title>
+    <style id="theme-vars">
+/* Score Management System - Brand CSS */
+/* Professional, clean, data-dense administrative interface */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Primary - Indigo Blue */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
+  --color-primary-800: #312e81;
+  --color-primary-900: #1e1b4b;
+
+  /* Neutral Scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* State Colors */
+  --state-success: #16a34a;
+  --state-warning: #d97706;
+  --state-error: #dc2626;
+  --state-info: #2563eb;
+
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* Semantic Aliases */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4f46e5;
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #818cf8;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      .sortable-header { transition: color 0.15s ease; }
+      .sortable-header:hover { color: var(--primary) !important; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="h-screen overflow-hidden font-sans antialiased">
+    <main>
+
+<!-- Project Shell: Sidebar + Header + Content Slot -->
+<!-- App-shell layout for score management admin system -->
+
+<div data-viewport-mode="app-shell" class="flex h-screen overflow-hidden min-h-0" style="font-family: var(--font-body);">
+
+  <!-- ====== Left Sidebar (240px) ====== -->
+  <aside class="shrink-0 flex flex-col h-full" style="width: 240px; background-color: var(--color-neutral-800);">
+
+    <!-- Logo / System Name -->
+    <div class="flex items-center gap-3 px-5 py-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: var(--primary); border-radius: var(--radius-md);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5"/>
+        </svg>
+      </div>
+      <span class="truncate" style="color: #f8fafc; font-size: 15px; font-weight: 600; line-height: 1.2;">成绩管理系统</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-3" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+
+      <ul class="flex flex-col gap-1">
+
+        <!-- 系统仪表盘 -->
+        <li>
+          <a href="dashboard.html" data-dom-id="nav-dashboard"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统仪表盘</span>
+          </a>
+        </li>
+
+        <!-- 数据导入 -->
+        <li>
+          <a href="data-import.html" data-dom-id="nav-data-import"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导入</span>
+          </a>
+        </li>
+
+        <!-- 成绩管理 -->
+        <li>
+          <a href="score-management.html" data-dom-id="nav-score-management"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+              <line x1="8" y1="16" x2="14" y2="16"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">成绩管理</span>
+          </a>
+        </li>
+
+        <!-- 奖学金评定 -->
+        <li>
+          <a href="scholarship.html" data-dom-id="nav-scholarship" data-active="true"
+             class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+          </a>
+        </li>
+
+        <!-- 数据导出 -->
+        <li>
+          <a href="data-export.html" data-dom-id="nav-data-export"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导出</span>
+          </a>
+        </li>
+
+        <!-- 备份还原 -->
+        <li>
+          <a href="backup-restore.html" data-dom-id="nav-backup-restore"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/>
+              <path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">备份还原</span>
+          </a>
+        </li>
+
+        <!-- 系统设置 -->
+        <li>
+          <a href="system-settings.html" data-dom-id="nav-system-settings"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Bottom: User Info -->
+    <div class="shrink-0 flex items-center gap-3 px-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: rgba(79,70,229,0.25); border-radius: var(--radius-full);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="truncate" style="color: #f8fafc; font-size: 13px; font-weight: 500;">管理员</span>
+        <span class="truncate" style="color: #64748b; font-size: 12px;">admin@school.edu</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== Main Area (Sidebar + Header + Content) ====== -->
+  <div class="flex flex-col flex-1 min-h-0 min-w-0">
+
+    <!-- Top Header (56px) -->
+    <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
+      <!-- Left: Page Title -->
+      <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
+        奖学金评定
+      </h1>
+
+      <!-- Right: Actions -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Notification Bell -->
+        <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+
+        <!-- User Avatar -->
+        <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Scroll Region -->
+    <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+      <div class="p-6">
+
+        <!-- ====== Two-Column Layout ====== -->
+        <div class="flex flex-col lg:flex-row gap-6">
+
+          <!-- ====== LEFT COLUMN (60%) ====== -->
+          <div class="flex-1 min-w-0 lg:max-w-[60%] flex flex-col gap-6">
+
+            <!-- 1. Rule Configuration Panel -->
+            <div class="rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);">
+              <!-- Header -->
+              <div class="flex items-center justify-between gap-4 px-5 py-4" style="border-bottom: 1px solid var(--border);">
+                <h2 class="shrink-0 truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground);">评定规则配置</h2>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors" style="font-size: 13px; font-weight: 500; color: var(--foreground); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='transparent'">
+                    <i data-lucide="upload" style="width:14px;height:14px;"></i>
+                    上传方案文件
+                  </button>
+                  <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors" style="font-size: 13px; font-weight: 500; color: var(--foreground); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='transparent'">
+                    <i data-lucide="settings" style="width:14px;height:14px;"></i>
+                    自定义规则
+                  </button>
+                </div>
+              </div>
+              <!-- Active Rule Card -->
+              <div class="p-5">
+                <div class="flex flex-col gap-4">
+                  <!-- Rule Name -->
+                  <div class="flex items-center gap-2">
+                    <span class="shrink-0" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">规则名称:</span>
+                    <span class="truncate" style="font-size: 14px; font-weight: 600; color: var(--foreground);">2025-2026学年第一学期奖学金评定方案</span>
+                  </div>
+                  <!-- Filter Tags -->
+                  <div>
+                    <div class="mb-2" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">筛选条件</div>
+                    <div class="flex flex-nowrap overflow-x-auto gap-2">
+                      <span class="shrink-0 inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-lg" style="font-size: 12px; font-weight: 500; color: var(--primary); background-color: var(--color-primary-50);">同年级排名前10%</span>
+                      <span class="shrink-0 inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-lg" style="font-size: 12px; font-weight: 500; color: var(--primary); background-color: var(--color-primary-50);">同专业排名前5%</span>
+                      <span class="shrink-0 inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-lg" style="font-size: 12px; font-weight: 500; color: var(--primary); background-color: var(--color-primary-50);">英语>=60分</span>
+                      <span class="shrink-0 inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-lg" style="font-size: 12px; font-weight: 500; color: var(--primary); background-color: var(--color-primary-50);">数学>=96分</span>
+                      <span class="shrink-0 inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-lg" style="font-size: 12px; font-weight: 500; color: var(--primary); background-color: var(--color-primary-50);">平均分>=350分</span>
+                    </div>
+                  </div>
+                  <!-- Evaluation Scope -->
+                  <div>
+                    <div class="mb-2" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">评定范围</div>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="shrink-0 inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-lg" style="font-size: 12px; font-weight: 500; color: var(--foreground); background-color: var(--muted);">2025级全部专业</span>
+                      <span class="shrink-0 inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-lg" style="font-size: 12px; font-weight: 500; color: var(--foreground); background-color: var(--muted);">2026级全部专业</span>
+                    </div>
+                  </div>
+                  <!-- Class Type Filters -->
+                  <div>
+                    <div class="mb-2" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">班级类别</div>
+                    <div class="flex flex-wrap gap-3">
+                      <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                        <span class="flex items-center justify-center" style="width: 18px; height: 18px; border-radius: 4px; background-color: var(--primary);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        <span style="font-size: 13px; color: var(--foreground);">普高班</span>
+                      </label>
+                      <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                        <span class="flex items-center justify-center" style="width: 18px; height: 18px; border-radius: 4px; background-color: var(--primary);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        <span style="font-size: 13px; color: var(--foreground);">职普融通班</span>
+                      </label>
+                      <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                        <span class="flex items-center justify-center" style="width: 18px; height: 18px; border-radius: 4px; background-color: var(--primary);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        <span style="font-size: 13px; color: var(--foreground);">本方班</span>
+                      </label>
+                      <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                        <span class="flex items-center justify-center" style="width: 18px; height: 18px; border-radius: 4px; background-color: var(--primary);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        <span style="font-size: 13px; color: var(--foreground);">升学实验班</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Rule Description -->
+            <div id="rule-desc" class="rounded-lg p-4 hidden" style="background-color: var(--color-primary-50); border: 1px solid var(--color-primary-200);">
+              <h3 class="mb-2" style="font-size: 14px; font-weight: 600; color: var(--color-primary-800);" id="rule-title">评选规则</h3>
+              <ul class="list-disc pl-5 space-y-1" style="font-size: 13px; color: var(--color-primary-900);" id="rule-list">
+              </ul>
+            </div>
+
+            <!-- 3. Filter Bar -->
+            <div class="flex flex-wrap items-center gap-3">
+              <select id="screen-grade" class="shrink-0 px-3 py-2 rounded-lg outline-none" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); min-width: 120px;">
+                <option value="">全部年级</option>
+              </select>
+              <select id="screen-category" class="shrink-0 px-3 py-2 rounded-lg outline-none" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); min-width: 150px;">
+                <option value="">选择奖学金类别</option>
+                <option value="职普融通班">职普融通班</option>
+                <option value="本科方向班">本科方向班</option>
+                <option value="普通升学班">普通升学班</option>
+              </select>
+              <select id="screen-class" class="shrink-0 px-3 py-2 rounded-lg outline-none" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); min-width: 180px;">
+                <option value="">全部班级</option>
+              </select>
+              <select id="screen-exams" multiple class="shrink-0 px-3 py-2 rounded-lg outline-none" style="font-size: 13px; font-weight: 500; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); min-width: 260px; min-height: 40px;">
+              </select>
+              <button id="screen-btn" class="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 600; color: var(--primary-foreground); background-color: var(--primary);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                <i data-lucide="filter" style="width:14px;height:14px;"></i>
+                开始筛选
+              </button>
+              <span id="screen-msg" class="text-sm" style="color: var(--muted-foreground);"></span>
+            </div>
+
+            <!-- 3. Candidate List Table -->
+            <div class="rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="overflow-x-auto">
+                <table class="w-full" style="min-width: 680px; border-collapse: collapse; font-size: 13px;">
+                  <thead>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                      <th class="sortable-header px-4 py-3 text-left whitespace-nowrap" data-sort="student_name" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">姓名</th>
+                      <th class="sortable-header px-4 py-3 text-left whitespace-nowrap" data-sort="grade_name" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">年级</th>
+                      <th class="sortable-header px-4 py-3 text-left whitespace-nowrap" data-sort="major_name" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">专业</th>
+                      <th class="sortable-header px-4 py-3 text-left whitespace-nowrap" data-sort="class_type_name" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">班级类别</th>
+                      <th class="sortable-header px-4 py-3 text-left whitespace-nowrap" data-sort="class_name" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">班级</th>
+                      <th class="sortable-header px-4 py-3 text-center whitespace-nowrap" data-sort="language_avg" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">语数外平均</th>
+                      <th class="sortable-header px-4 py-3 text-center whitespace-nowrap" data-sort="professional_avg" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">专业平均</th>
+                      <th class="sortable-header px-4 py-3 text-center whitespace-nowrap" data-sort="grade_rank" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">年级排名</th>
+                      <th class="sortable-header px-4 py-3 text-center whitespace-nowrap" data-sort="major_rank" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">专业/班级排名</th>
+                      <th class="sortable-header px-4 py-3 text-center whitespace-nowrap" data-sort="award_level" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">获奖等级</th>
+                      <th class="sortable-header px-4 py-3 text-center whitespace-nowrap" data-sort="review_status" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground); cursor: pointer; user-select: none;">复核状态</th>
+                      <th class="px-4 py-3 text-center whitespace-nowrap" style="font-size: 12px; font-weight: 600; color: var(--muted-foreground);">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="candidate-tbody">
+                    <tr id="candidate-empty">
+                      <td colspan="12" class="px-4 py-8 text-center" style="color: var(--muted-foreground); font-size: 13px;">请选择条件并点击“开始筛选”</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ====== RIGHT COLUMN (40%) ====== -->
+          <div class="w-full lg:w-[40%] shrink-0 flex flex-col gap-6">
+
+            <!-- 4. Stats Summary Card -->
+            <div class="rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="px-5 py-4" style="border-bottom: 1px solid var(--border);">
+                <h2 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground);">评定统计</h2>
+              </div>
+              <div class="p-5">
+                <div class="grid grid-cols-2 gap-4">
+                  <!-- Total -->
+                  <div class="flex flex-col gap-1 rounded-lg p-3" style="background-color: var(--muted);">
+                    <span class="truncate" style="font-size: 12px; font-weight: 500; color: var(--muted-foreground);">候选总人数</span>
+                    <span id="stat-total" class="truncate" style="font-size: 24px; font-weight: 700; color: var(--foreground); font-variant-numeric: tabular-nums;">0<span class="ml-0.5" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">人</span></span>
+                  </div>
+                  <!-- Confirmed -->
+                  <div class="flex flex-col gap-1 rounded-lg p-3" style="background-color: rgba(22,163,74,0.06);">
+                    <span class="truncate" style="font-size: 12px; font-weight: 500; color: var(--muted-foreground);">已确认</span>
+                    <span id="stat-confirmed" class="truncate" style="font-size: 24px; font-weight: 700; color: var(--state-success); font-variant-numeric: tabular-nums;">0<span class="ml-0.5" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">人</span></span>
+                  </div>
+                  <!-- Pending -->
+                  <div class="flex flex-col gap-1 rounded-lg p-3" style="background-color: rgba(217,119,6,0.06);">
+                    <span class="truncate" style="font-size: 12px; font-weight: 500; color: var(--muted-foreground);">待复核</span>
+                    <span id="stat-pending" class="truncate" style="font-size: 24px; font-weight: 700; color: var(--state-warning); font-variant-numeric: tabular-nums;">0<span class="ml-0.5" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">人</span></span>
+                  </div>
+                  <!-- Unqualified -->
+                  <div class="flex flex-col gap-1 rounded-lg p-3" style="background-color: var(--muted);">
+                    <span class="truncate" style="font-size: 12px; font-weight: 500; color: var(--muted-foreground);">不合格</span>
+                    <span id="stat-rejected" class="truncate" style="font-size: 24px; font-weight: 700; color: var(--muted-foreground); font-variant-numeric: tabular-nums;">0<span class="ml-0.5" style="font-size: 13px; font-weight: 500; color: var(--muted-foreground);">人</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Quick Actions Card -->
+            <div class="rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="px-5 py-4" style="border-bottom: 1px solid var(--border);">
+                <h2 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground);">快捷操作</h2>
+              </div>
+              <div class="p-5 flex flex-col gap-3">
+                <button id="export-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors" style="font-size: 14px; font-weight: 600; color: var(--primary-foreground); background-color: var(--primary);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                  <i data-lucide="file-down" style="width:16px;height:16px;"></i>
+                  导出初选名单
+                </button>
+                <button id="batch-confirm-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors" style="font-size: 14px; font-weight: 500; color: var(--foreground); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='transparent'">
+                  <i data-lucide="check-check" style="width:16px;height:16px;"></i>
+                  批量标记已确认
+                </button>
+                <button id="manual-first-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors" style="font-size: 14px; font-weight: 500; color: var(--primary); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='var(--color-primary-50)'" onmouseout="this.style.backgroundColor='transparent'">
+                  <i data-lucide="award" style="width:16px;height:16px;"></i>
+                  手动特评一等奖
+                </button>
+                <button id="export-confirmed-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors" style="font-size: 14px; font-weight: 500; color: var(--state-success); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='rgba(22,163,74,0.08)'" onmouseout="this.style.backgroundColor='transparent'">
+                  <i data-lucide="file-check" style="width:16px;height:16px;"></i>
+                  导出正式名单
+                </button>
+                <button id="export-public-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors" style="font-size: 14px; font-weight: 500; color: var(--muted-foreground); border: 1px dashed var(--border);" onmouseover="this.style.borderColor='var(--muted-foreground)'" onmouseout="this.style.borderColor='var(--border)'">
+                  <i data-lucide="file-text" style="width:16px;height:16px;"></i>
+                  导出公示版(脱敏)
+                </button>
+                <p class="truncate" style="font-size: 12px; color: var(--muted-foreground);">导出文件将自动添加学校名称水印</p>
+              </div>
+            </div>
+
+            <!-- 6. Review Notes Card -->
+            <div class="rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);">
+              <div class="px-5 py-4" style="border-bottom: 1px solid var(--border);">
+                <h2 class="truncate" style="font-size: 15px; font-weight: 600; color: var(--foreground);">最近复核备注</h2>
+              </div>
+              <div class="p-5 flex flex-col gap-3">
+                <!-- Note 1 -->
+                <div class="flex flex-col gap-1 rounded-lg p-3" style="background-color: var(--muted);">
+                  <p class="truncate" style="font-size: 13px; color: var(--foreground); line-height: 1.5;">张明 - 语数外成绩均达标，专业排名第1，确认通过</p>
+                  <div class="flex items-center gap-2 shrink-0">
+                    <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">管理员</span>
+                    <span style="font-size: 12px; color: var(--border);">|</span>
+                    <span style="font-size: 12px; color: var(--muted-foreground);">07-18</span>
+                  </div>
+                </div>
+                <!-- Note 2 -->
+                <div class="flex flex-col gap-1 rounded-lg p-3" style="background-color: var(--muted);">
+                  <p class="truncate" style="font-size: 13px; color: var(--foreground); line-height: 1.5;">吴磊 - 需核实专业课成绩是否有缺考记录</p>
+                  <div class="flex items-center gap-2 shrink-0">
+                    <span class="truncate" style="font-size: 12px; color: var(--muted-foreground);">管理员</span>
+                    <span style="font-size: 12px; color: var(--border);">|</span>
+                    <span style="font-size: 12px; color: var(--muted-foreground);">07-17</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- ====== End Two-Column Layout ====== -->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 通用确认/输入弹窗（替代原生 confirm/prompt） -->
+<div id="generic-dialog" class="fixed inset-0 z-50 hidden" style="background-color: rgba(15,23,42,0.45);">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="rounded-lg shadow-xl w-full max-w-sm" style="background-color: var(--card); border: 1px solid var(--border);">
+      <div class="px-5 py-4">
+        <h3 id="generic-dialog-title" style="font-size: 15px; font-weight: 600; color: var(--foreground);">提示</h3>
+      </div>
+      <div class="px-5 pb-4">
+        <p id="generic-dialog-message" style="font-size: 13px; color: var(--foreground); line-height: 1.5;"></p>
+        <input id="generic-dialog-input" type="text" class="w-full mt-3 px-3 py-2 rounded-lg outline-none hidden" style="font-size: 13px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+      </div>
+      <div class="flex items-center justify-end gap-3 px-5 py-4" style="border-top: 1px solid var(--border);">
+        <button id="generic-dialog-cancel" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 500; color: var(--foreground); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='transparent'">取消</button>
+        <button id="generic-dialog-ok" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 600; color: var(--primary-foreground); background-color: var(--primary);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 手动特评一等奖弹窗 -->
+<div id="manual-first-modal" class="fixed inset-0 z-50 hidden" style="background-color: rgba(15,23,42,0.45);">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="rounded-lg shadow-xl w-full max-w-md" style="background-color: var(--card); border: 1px solid var(--border);">
+      <div class="flex items-center justify-between px-5 py-4" style="border-bottom: 1px solid var(--border);">
+        <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground);">手动特评一等奖</h3>
+        <button onclick="closeManualFirstModal()" style="color: var(--muted-foreground);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="p-5 flex flex-col gap-4">
+        <div>
+          <label style="display:block; font-size: 12px; font-weight: 500; color: var(--muted-foreground); margin-bottom: 6px;">考试</label>
+          <select id="manual-exam" class="w-full px-3 py-2 rounded-lg outline-none" style="font-size: 13px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+            <option value="">选择考试</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-size: 12px; font-weight: 500; color: var(--muted-foreground); margin-bottom: 6px;">班级</label>
+          <select id="manual-class" class="w-full px-3 py-2 rounded-lg outline-none" style="font-size: 13px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+            <option value="">选择班级</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-size: 12px; font-weight: 500; color: var(--muted-foreground); margin-bottom: 6px;">学生</label>
+          <select id="manual-student" class="w-full px-3 py-2 rounded-lg outline-none" style="font-size: 13px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border);">
+            <option value="">选择学生</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-size: 12px; font-weight: 500; color: var(--muted-foreground); margin-bottom: 6px;">备注</label>
+          <textarea id="manual-note" rows="2" class="w-full px-3 py-2 rounded-lg outline-none" style="font-size: 13px; color: var(--foreground); background-color: var(--card); border: 1px solid var(--border); resize: none;">手动特评一等奖</textarea>
+        </div>
+        <div id="manual-error" style="font-size: 12px; color: var(--state-error); min-height: 16px;"></div>
+      </div>
+      <div class="flex items-center justify-end gap-3 px-5 py-4" style="border-top: 1px solid var(--border);">
+        <button onclick="closeManualFirstModal()" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 500; color: var(--foreground); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='transparent'">取消</button>
+        <button onclick="submitManualFirstPrize()" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 600; color: var(--primary-foreground); background-color: var(--primary);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">确定特评</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </main>
+    <script>
+    (function() {
+      const API_BASE = '/api';
+      let allExams = [];
+      let allClasses = [];
+      let currentCandidates = [];
+      let currentExamId = null;
+      let currentClassId = null;
+      let sortState = { field: null, direction: 'asc' };
+
+      async function apiGet(path) {
+        const res = await fetch(API_BASE + path, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`${path} ${res.status}`);
+        return res.json();
+      }
+      async function apiPost(path, body) {
+        const res = await fetch(API_BASE + path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.detail || `${path} ${res.status}`);
+        return data;
+      }
+      async function apiPut(path, body) {
+        const res = await fetch(API_BASE + path, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.detail || `${path} ${res.status}`);
+        return data;
+      }
+
+      function setMsg(text, isError) {
+        const el = document.getElementById('screen-msg');
+        el.textContent = text;
+        el.style.color = isError ? 'var(--state-error)' : 'var(--muted-foreground)';
+      }
+
+      function showDialog(message, title, showInput, defaultValue) {
+        return new Promise((resolve) => {
+          const dialog = document.getElementById('generic-dialog');
+          const titleEl = document.getElementById('generic-dialog-title');
+          const msgEl = document.getElementById('generic-dialog-message');
+          const inputEl = document.getElementById('generic-dialog-input');
+          const okBtn = document.getElementById('generic-dialog-ok');
+          const cancelBtn = document.getElementById('generic-dialog-cancel');
+          titleEl.textContent = title || '提示';
+          msgEl.textContent = message;
+          if (showInput) {
+            inputEl.classList.remove('hidden');
+            inputEl.value = defaultValue || '';
+          } else {
+            inputEl.classList.add('hidden');
+            inputEl.value = '';
+          }
+          dialog.classList.remove('hidden');
+          const cleanup = () => {
+            dialog.classList.add('hidden');
+            okBtn.onclick = null;
+            cancelBtn.onclick = null;
+          };
+          okBtn.onclick = () => {
+            cleanup();
+            resolve(showInput ? inputEl.value : true);
+          };
+          cancelBtn.onclick = () => {
+            cleanup();
+            resolve(showInput ? null : false);
+          };
+        });
+      }
+      function showConfirm(message, title) { return showDialog(message, title || '请确认', false); }
+      function showPrompt(message, defaultValue, title) { return showDialog(message, title || '请输入', true, defaultValue); }
+
+      function setSelectOptions(select, items, valueKey, textKey, placeholder) {
+        select.innerHTML = '';
+        if (placeholder) {
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.textContent = placeholder;
+          select.appendChild(opt);
+        }
+        items.forEach(it => {
+          const opt = document.createElement('option');
+          opt.value = it[valueKey];
+          opt.textContent = it[textKey];
+          select.appendChild(opt);
+        });
+      }
+
+      function setMultiSelectOptions(select, items, valueKey, textKey) {
+        select.innerHTML = '';
+        items.forEach(it => {
+          const opt = document.createElement('option');
+          opt.value = it[valueKey];
+          opt.textContent = it[textKey];
+          select.appendChild(opt);
+        });
+      }
+
+      async function loadGrades() {
+        const grades = await apiGet('/grades');
+        setSelectOptions(document.getElementById('screen-grade'), grades, 'id', 'name', '选择年级');
+      }
+
+      async function loadExams() {
+        const exams = await apiGet('/scores/exams');
+        allExams = exams || [];
+        updateExamOptions();
+      }
+
+      async function loadClasses() {
+        const classes = await apiGet('/classes');
+        allClasses = classes || [];
+        updateClassOptions();
+      }
+
+      function updateClassOptions() {
+        const gradeId = document.getElementById('screen-grade').value;
+        const category = document.getElementById('screen-category').value;
+        const classSelect = document.getElementById('screen-class');
+        const selected = classSelect.value;
+        const typeIds = CATEGORY_MAP[category] || [];
+        let filtered = allClasses.filter(c => {
+          if (gradeId && String(c.grade_id) !== gradeId) return false;
+          if (typeIds.length && !typeIds.includes(c.class_type_id)) return false;
+          return true;
+        });
+        classSelect.innerHTML = '<option value="">全部班级</option>' + filtered.map(c =>
+          `<option value="${c.id}">${escapeHtml(c.name)}</option>`
+        ).join('');
+        if (selected && Array.from(classSelect.options).some(o => o.value === selected)) {
+          classSelect.value = selected;
+        }
+      }
+
+      function examDisplayName(e) {
+        const parts = [];
+        if (e.school_year) parts.push(e.school_year);
+        if (e.semester) parts.push(e.semester);
+        if (e.month) parts.push(`${e.month}月`);
+        parts.push(e.name);
+        parts.push(`(${e.exam_type})`);
+        return parts.join(' ');
+      }
+
+      function updateExamOptions() {
+        const gradeId = document.getElementById('screen-grade').value;
+        // 考试记录可能未设置 grade_id，这里优先按年级筛选；无匹配时显示全部考试
+        let filtered = allExams;
+        if (gradeId) {
+          const byGrade = allExams.filter(e => e.grade_id && String(e.grade_id) === gradeId);
+          if (byGrade.length) filtered = byGrade;
+        }
+        filtered = filtered.slice().sort((a, b) => b.id - a.id);
+        setMultiSelectOptions(
+          document.getElementById('screen-exams'),
+          filtered.map(e => ({ id: e.id, name: examDisplayName(e) })),
+          'id',
+          'name'
+        );
+      }
+
+      const RULES = {
+        '本科方向班': {
+          title: '本科方向班（特优高考班）评选规则',
+          items: [
+            '按学年度所有考试语数外三科平均分 + 专业学科平均分评选',
+            '一等奖：语数外年级前 3 名且专业成绩班级前 10 名，评选 3 人',
+            '二等奖：语数外年级 4-6 名且专业成绩班级前 15 名，评选 3 人',
+            '三等奖：语数外年级 7-9 名且专业成绩班级前 20 名，评选 3 人',
+            '班级保底：某班无学生获评一、二、三等奖，则该班语数外+专业综合第一名特评三等奖'
+          ]
+        },
+        '普通升学班': {
+          title: '普通升学班评选规则',
+          items: [
+            '按学年度所有考试语数外三科平均分 + 专业学科平均分评选',
+            '一等奖：语数外年级第 1 名且专业成绩同专业前 15 名',
+            '二等奖：语数外年级第 2 名且专业成绩同专业前 15 名',
+            '三等奖：语数外年级第 3 名且专业成绩同专业前 15 名',
+            '语数外达标但专业不达标时，由排名靠后的同学依次替补'
+          ]
+        },
+        '职普融通班': {
+          title: '职普融通班评选规则',
+          items: [
+            '高一学年度结束后，够条件转入普高却选择留校的学生均享受一等奖学金',
+            '一等奖人数 ≥ 3 时，不再设置二、三等奖',
+            '一等奖人数 < 3 时，按综合成绩补足 3 人名额（一、二、三等奖）',
+            '系统暂无法识别“够条件转入普高”学生，默认将全部参评学生视为符合条件'
+          ]
+        }
+      };
+
+      function updateRuleDesc() {
+        const category = document.getElementById('screen-category').value;
+        const panel = document.getElementById('rule-desc');
+        const title = document.getElementById('rule-title');
+        const list = document.getElementById('rule-list');
+        if (!category || !RULES[category]) {
+          panel.classList.add('hidden');
+          return;
+        }
+        const rule = RULES[category];
+        title.textContent = rule.title;
+        list.innerHTML = rule.items.map(i => `<li>${escapeHtml(i)}</li>`).join('');
+        panel.classList.remove('hidden');
+      }
+
+      function badgeStyle(level) {
+        if (level === '一等奖') return 'background-color: rgba(79,70,229,0.1); color: var(--primary);';
+        if (level === '二等奖') return 'background-color: rgba(37,99,235,0.1); color: var(--state-info);';
+        if (level === '三等奖') return 'background-color: rgba(100,116,139,0.15); color: var(--muted-foreground);';
+        return 'background-color: var(--muted); color: var(--foreground);';
+      }
+
+      function statusStyle(status) {
+        if (status === '已确认') return 'color: var(--state-success); background-color: rgba(22,163,74,0.1);';
+        if (status === '不合格') return 'color: var(--state-error); background-color: rgba(220,38,38,0.1);';
+        return 'color: var(--state-warning); background-color: rgba(217,119,6,0.1);';
+      }
+
+      function rankNumber(rankStr) {
+        if (rankStr == null || rankStr === '-') return null;
+        const m = String(rankStr).match(/^(\d+)/);
+        return m ? parseInt(m[1], 10) : null;
+      }
+
+      const AWARD_LEVEL_ORDER = {
+        '一等奖': 1,
+        '二等奖': 2,
+        '三等奖': 3,
+      };
+
+      function compareCandidates(a, b, field) {
+        let va = a[field];
+        let vb = b[field];
+        if (field === 'grade_rank' || field === 'major_rank') {
+          va = rankNumber(va);
+          vb = rankNumber(vb);
+        }
+        if (field === 'language_avg' || field === 'professional_avg') {
+          va = va != null ? parseFloat(va) : null;
+          vb = vb != null ? parseFloat(vb) : null;
+        }
+        if (field === 'award_level') {
+          va = AWARD_LEVEL_ORDER[va] != null ? AWARD_LEVEL_ORDER[va] : null;
+          vb = AWARD_LEVEL_ORDER[vb] != null ? AWARD_LEVEL_ORDER[vb] : null;
+        }
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (typeof va === 'number' && typeof vb === 'number') return va - vb;
+        return String(va).localeCompare(String(vb), 'zh-CN');
+      }
+
+      function applySort(items) {
+        if (!sortState.field) return items;
+        const sorted = items.slice().sort((a, b) => {
+          const cmp = compareCandidates(a, b, sortState.field);
+          return sortState.direction === 'asc' ? cmp : -cmp;
+        });
+        return sorted;
+      }
+
+      function updateSortIndicators() {
+        document.querySelectorAll('.sortable-header').forEach(th => {
+          const field = th.dataset.sort;
+          th.style.color = 'var(--muted-foreground)';
+          let icon = '';
+          if (sortState.field === field) {
+            th.style.color = 'var(--primary)';
+            icon = sortState.direction === 'asc' ? ' ↑' : ' ↓';
+          }
+          // Remove existing indicator and append new one
+          const baseText = th.dataset.baseText || th.textContent.replace(/ [↑↓]$/, '');
+          if (!th.dataset.baseText) th.dataset.baseText = baseText;
+          th.textContent = baseText + icon;
+        });
+      }
+
+      function handleSortClick(field) {
+        if (sortState.field === field) {
+          sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortState.field = field;
+          sortState.direction = 'asc';
+        }
+        updateSortIndicators();
+        renderCandidates(currentCandidates);
+      }
+
+      function renderCandidates(items) {
+        items = applySort(items || []);
+        currentCandidates = items;
+        const tbody = document.getElementById('candidate-tbody');
+        tbody.innerHTML = '';
+        if (!items || items.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="12" class="px-4 py-8 text-center" style="color: var(--muted-foreground); font-size: 13px;">暂无候选记录</td></tr>';
+          lucide.createIcons();
+          return;
+        }
+        items.forEach(it => {
+          const tr = document.createElement('tr');
+          tr.style.borderBottom = '1px solid var(--border)';
+          const status = it.review_status || '待复核';
+          const actionButtons = []
+            .concat(status === '待复核' ? `<button class="px-2 py-1 rounded transition-colors" style="font-size: 12px; color: var(--state-success); font-weight: 500;" onmouseover="this.style.backgroundColor='rgba(22,163,74,0.1)'" onmouseout="this.style.backgroundColor='transparent'" onclick="reviewCandidate(${it.id}, '已确认')">确认</button>` : '')
+            .concat(status === '待复核' ? `<button class="px-2 py-1 rounded transition-colors" style="font-size: 12px; color: var(--state-error);" onmouseover="this.style.backgroundColor='rgba(220,38,38,0.1)'" onmouseout="this.style.backgroundColor='transparent'" onclick="reviewCandidate(${it.id}, '不合格')">不合格</button>` : '')
+            .concat(`<button class="px-2 py-1 rounded transition-colors" style="font-size: 12px; color: var(--primary); font-weight: 600;" onmouseover="this.style.backgroundColor='var(--color-primary-100)'" onmouseout="this.style.backgroundColor='transparent'" onclick="specialFirstPrize(${it.id})">特评一等奖</button>`)
+            .concat(status !== '待复核' ? `<button class="px-2 py-1 rounded transition-colors" style="font-size: 12px; color: var(--muted-foreground);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='transparent'" onclick="reviewCandidate(${it.id}, '待复核')">重置</button>` : '')
+            .join('');
+          tr.innerHTML = `
+            <td class="px-4 py-3 whitespace-nowrap" style="font-weight: 600; color: var(--foreground);">${escapeHtml(it.student_name || '')}</td>
+            <td class="px-4 py-3 whitespace-nowrap" style="color: var(--muted-foreground);">${escapeHtml(it.grade_name || '')}</td>
+            <td class="px-4 py-3 whitespace-nowrap" style="color: var(--foreground);">${escapeHtml(it.major_name || '')}</td>
+            <td class="px-4 py-3 whitespace-nowrap"><span class="inline-flex items-center px-2 py-0.5 rounded-md" style="font-size: 12px; font-weight: 500; ${badgeStyle(it.class_type_name)}">${escapeHtml(it.class_type_name || '')}</span></td>
+            <td class="px-4 py-3 whitespace-nowrap" style="color: var(--muted-foreground);">${escapeHtml(it.class_name || '')}</td>
+            <td class="px-4 py-3 text-center whitespace-nowrap" style="font-weight: 600; color: var(--foreground);">${it.language_avg != null ? it.language_avg : '-'}</td>
+            <td class="px-4 py-3 text-center whitespace-nowrap" style="color: var(--foreground);">${it.professional_avg != null ? it.professional_avg : '-'}</td>
+            <td class="px-4 py-3 text-center whitespace-nowrap" style="font-weight: 600; color: var(--primary);">${escapeHtml(it.grade_rank || '-')}</td>
+            <td class="px-4 py-3 text-center whitespace-nowrap" style="color: var(--foreground);">${escapeHtml(it.major_rank || '-')}</td>
+            <td class="px-4 py-3 text-center whitespace-nowrap"><span class="inline-flex items-center px-2 py-0.5 rounded-md" style="font-size: 12px; font-weight: 500; ${badgeStyle(it.award_level)}">${escapeHtml(it.award_level || '')}</span></td>
+            <td class="px-4 py-3 text-center whitespace-nowrap"><span class="inline-flex items-center px-2 py-0.5 rounded-md" style="font-size: 12px; font-weight: 500; ${statusStyle(status)}">${status}</span></td>
+            <td class="px-4 py-3 text-center whitespace-nowrap"><div class="flex items-center justify-center gap-2">${actionButtons}</div></td>
+          `;
+          tbody.appendChild(tr);
+        });
+        lucide.createIcons();
+      }
+
+      function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+      }
+
+      window.reviewCandidate = async function(id, status) {
+        try {
+          const note = status === '不合格' ? (await showPrompt('请输入不合格原因（可选）', '', '不合格原因')) || '' : '';
+          await apiPut(`/scholarship/candidates/${id}/review`, { review_status: status, review_note: note });
+          await loadCandidates();
+          await loadStats();
+        } catch (e) {
+          showDialog('复核失败：' + e.message, '错误');
+        }
+      };
+
+      window.specialFirstPrize = async function(id) {
+        if (!(await showConfirm('确定将该学生手动特评为一等奖并确认通过？'))) return;
+        try {
+          await apiPut(`/scholarship/candidates/${id}/special-first-prize`, {});
+          await loadCandidates();
+          await loadStats();
+        } catch (e) {
+          showDialog('特评失败：' + e.message, '错误');
+        }
+      };
+
+      async function loadCandidates() {
+        const params = new URLSearchParams();
+        if (currentExamId) params.set('exam_id', currentExamId);
+        if (currentClassId) params.set('class_id', currentClassId);
+        params.set('page', '1');
+        params.set('page_size', '200');
+        const data = await apiGet(`/scholarship/candidates?${params.toString()}`);
+        renderCandidates(data.items || []);
+      }
+
+      async function loadStats() {
+        const stats = await apiGet('/scholarship/stats');
+        document.getElementById('stat-total').childNodes[0].textContent = stats.total || 0;
+        document.getElementById('stat-confirmed').childNodes[0].textContent = stats.confirmed || 0;
+        document.getElementById('stat-pending').childNodes[0].textContent = stats.pending || 0;
+        document.getElementById('stat-rejected').childNodes[0].textContent = stats.rejected || 0;
+      }
+
+      const CATEGORY_MAP = {
+        '职普融通班': [2],
+        '本科方向班': [3],
+        '普通升学班': [1],
+      };
+
+      async function runScreen() {
+        const gradeEl = document.getElementById('screen-grade');
+        const categoryEl = document.getElementById('screen-category');
+        const classEl = document.getElementById('screen-class');
+        const examsEl = document.getElementById('screen-exams');
+        const gradeId = gradeEl.value;
+        const category = categoryEl.value;
+        const classId = classEl.value;
+        const examIds = Array.from(examsEl.selectedOptions).map(o => Number(o.value));
+        if (!gradeId) return setMsg('请先选择年级', true);
+        if (!category) return setMsg('请选择奖学金类别', true);
+        if (examIds.length === 0) return setMsg('请至少选择一次考试', true);
+        const classTypeIds = CATEGORY_MAP[category];
+        if (!classTypeIds) return setMsg('不支持的奖学金类别', true);
+
+        setMsg('正在筛选...');
+        try {
+          const result = await apiPost('/scholarship/run-screen', {
+            grade_id: Number(gradeId),
+            class_type_ids: classTypeIds,
+            exam_ids: examIds,
+            category: category,
+            name: '',
+            class_id: classId ? Number(classId) : null,
+          });
+          currentExamId = examIds[0];
+          currentClassId = classId ? Number(classId) : null;
+          setMsg(`筛选完成，候选 ${result.candidates || 0} 人`);
+          await loadCandidates();
+          await loadStats();
+        } catch (e) {
+          setMsg('筛选失败：' + e.message, true);
+        }
+      }
+
+      async function exportCSV() {
+        if (!currentCandidates.length) return showDialog('暂无数据可导出', '提示');
+        const headers = ['姓名','年级','专业','班级类别','班级','语数外平均','专业平均','年级排名','专业/班级排名','获奖等级','复核状态'];
+        const rows = currentCandidates.map(it => [
+          it.student_name, it.grade_name, it.major_name, it.class_type_name, it.class_name,
+          it.language_avg, it.professional_avg, it.grade_rank, it.major_rank, it.award_level, it.review_status
+        ]);
+        const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `奖学金候选名单_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      async function exportConfirmed() {
+        try {
+          const data = await apiGet('/scholarship/candidates?review_status=已确认&page=1&page_size=10000');
+          const items = data.items || [];
+          if (!items.length) return showDialog('暂无已确认记录可导出', '提示');
+          const title = '眉山市电子职业技术学校 奖学金正式名单';
+          const meta = `生成时间：${new Date().toLocaleString('zh-CN')}`;
+          const headers = ['姓名','年级','专业','班级类别','班级','语数外平均','专业平均','年级排名','专业/班级排名','获奖等级','复核状态'];
+          const rows = items.map(it => [
+            it.student_name, it.grade_name, it.major_name, it.class_type_name, it.class_name,
+            it.language_avg, it.professional_avg, it.grade_rank, it.major_rank, it.award_level, it.review_status
+          ]);
+          const csv = [title, meta, headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+          const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `奖学金正式名单_${new Date().toISOString().slice(0,10)}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        } catch (e) {
+          showDialog('导出正式名单失败：' + e.message, '错误');
+        }
+      }
+
+      async function exportPublic() {
+        try {
+          const data = await apiGet('/scholarship/candidates?review_status=已确认&page=1&page_size=10000');
+          const items = data.items || [];
+          if (!items.length) return showDialog('暂无已确认记录可导出', '提示');
+
+          function maskName(name) {
+            if (!name) return '';
+            const s = String(name).trim();
+            if (s.length <= 1) return s;
+            if (s.length === 2) return s[0] + '*';
+            return s[0] + '*'.repeat(s.length - 2) + s.slice(-1);
+          }
+
+          const title = '眉山市电子职业技术学校 奖学金公示名单（脱敏）';
+          const meta = `生成时间：${new Date().toLocaleString('zh-CN')}；本公示名单已对姓名进行脱敏处理`;
+          // Public version: omit major_name and review_status; mask student_name.
+          const headers = ['姓名','年级','班级类别','班级','语数外平均','专业平均','年级排名','专业/班级排名','获奖等级'];
+          const rows = items.map(it => [
+            maskName(it.student_name), it.grade_name, it.class_type_name, it.class_name,
+            it.language_avg, it.professional_avg, it.grade_rank, it.major_rank, it.award_level
+          ]);
+          const csv = [title, meta, headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+          const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `奖学金公示名单_${new Date().toISOString().slice(0,10)}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        } catch (e) {
+          showDialog('导出公示版失败：' + e.message, '错误');
+        }
+      }
+
+      async function batchConfirm() {
+        const pendingIds = currentCandidates.filter(c => c.review_status === '待复核').map(c => c.id);
+        if (!pendingIds.length) return showDialog('没有待复核记录', '提示');
+        if (!(await showConfirm(`确认将 ${pendingIds.length} 条待复核记录标记为已确认？`))) return;
+        try {
+          await apiPost('/scholarship/candidates/batch-confirm', { ids: pendingIds });
+          await loadCandidates();
+          await loadStats();
+        } catch (e) {
+          showDialog('批量确认失败：' + e.message, '错误');
+        }
+      }
+
+      function openManualFirstModal() {
+        const modal = document.getElementById('manual-first-modal');
+        modal.classList.remove('hidden');
+        loadManualModalOptions();
+      }
+
+      window.closeManualFirstModal = function() {
+        document.getElementById('manual-first-modal').classList.add('hidden');
+        document.getElementById('manual-error').textContent = '';
+      };
+
+      async function loadManualModalOptions() {
+        const examSelect = document.getElementById('manual-exam');
+        const classSelect = document.getElementById('manual-class');
+        examSelect.innerHTML = '<option value="">选择考试</option>' +
+          allExams.slice().sort((a,b)=>b.id-a.id).map(e => `<option value="${e.id}">${escapeHtml(examDisplayName(e))}</option>`).join('');
+        classSelect.innerHTML = '<option value="">选择班级</option>' +
+          allClasses.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+        document.getElementById('manual-student').innerHTML = '<option value="">选择学生</option>';
+      }
+
+      async function loadManualStudents() {
+        const classId = document.getElementById('manual-class').value;
+        const studentSelect = document.getElementById('manual-student');
+        studentSelect.innerHTML = '<option value="">选择学生</option>';
+        if (!classId) return;
+        try {
+          const students = await apiGet(`/students?class_id=${classId}`);
+          studentSelect.innerHTML = '<option value="">选择学生</option>' +
+            students.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
+        } catch (e) {
+          console.error('加载学生失败', e);
+        }
+      }
+
+      window.submitManualFirstPrize = async function() {
+        const examId = document.getElementById('manual-exam').value;
+        const classId = document.getElementById('manual-class').value;
+        const studentId = document.getElementById('manual-student').value;
+        const note = document.getElementById('manual-note').value;
+        const errorEl = document.getElementById('manual-error');
+        errorEl.textContent = '';
+        if (!examId || !classId || !studentId) {
+          errorEl.textContent = '请选择考试、班级和学生';
+          return;
+        }
+        try {
+          await apiPost('/scholarship/manual-first-prize', {
+            student_id: Number(studentId),
+            exam_id: Number(examId),
+            class_id: Number(classId),
+            note: note || '手动特评一等奖',
+          });
+          closeManualFirstModal();
+          // refresh candidates for the selected exam
+          currentExamId = Number(examId);
+          await loadCandidates();
+          await loadStats();
+        } catch (e) {
+          errorEl.textContent = '特评失败：' + e.message;
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          await loadGrades();
+          await loadExams();
+          await loadClasses();
+          await loadStats();
+        } catch (e) {
+          setMsg('初始化失败：' + e.message, true);
+        }
+        document.getElementById('screen-grade').addEventListener('change', () => { updateExamOptions(); updateClassOptions(); });
+        document.getElementById('screen-category').addEventListener('change', () => { updateClassOptions(); updateRuleDesc(); });
+        document.getElementById('screen-class').addEventListener('change', () => {});
+        document.getElementById('screen-btn').addEventListener('click', runScreen);
+        document.getElementById('export-btn').addEventListener('click', exportCSV);
+        document.getElementById('export-confirmed-btn').addEventListener('click', exportConfirmed);
+        document.getElementById('export-public-btn').addEventListener('click', exportPublic);
+        document.getElementById('batch-confirm-btn').addEventListener('click', batchConfirm);
+        document.getElementById('manual-first-btn').addEventListener('click', openManualFirstModal);
+        document.getElementById('manual-class').addEventListener('change', loadManualStudents);
+
+        document.querySelectorAll('.sortable-header').forEach(th => {
+          th.addEventListener('click', () => handleSortClick(th.dataset.sort));
+        });
+        updateSortIndicators();
+      });
+    })();
+    lucide.createIcons();
+    </script>
+</body>
+</html>

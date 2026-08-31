@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>成绩管理</title>
+    <style id="theme-vars">
+/* Score Management System - Brand CSS */
+/* Professional, clean, data-dense administrative interface */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Primary - Indigo Blue */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
+  --color-primary-800: #312e81;
+  --color-primary-900: #1e1b4b;
+
+  /* Neutral Scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* State Colors */
+  --state-success: #16a34a;
+  --state-warning: #d97706;
+  --state-error: #dc2626;
+  --state-info: #2563eb;
+
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* Semantic Aliases */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4f46e5;
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #818cf8;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      .sortable-header {
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.15s ease;
+      }
+      .sortable-header:hover {
+        color: var(--foreground) !important;
+      }
+      .sortable-header::after {
+        content: '⇅';
+        display: inline-block;
+        margin-left: 4px;
+        font-size: 11px;
+        opacity: 0.35;
+        vertical-align: middle;
+      }
+      .sortable-header.sort-asc::after {
+        content: '↑';
+        opacity: 1;
+        color: var(--primary);
+      }
+      .sortable-header.sort-desc::after {
+        content: '↓';
+        opacity: 1;
+        color: var(--primary);
+      }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="h-screen overflow-hidden font-sans antialiased">
+    <main>
+<!-- Project Shell: Sidebar + Header + Content Slot -->
+<!-- App-shell layout for score management admin system -->
+
+<div data-viewport-mode="app-shell" class="flex h-screen overflow-hidden min-h-0" style="font-family: var(--font-body);">
+
+  <!-- ====== Left Sidebar (240px) ====== -->
+  <aside class="shrink-0 flex flex-col h-full" style="width: 240px; background-color: var(--color-neutral-800);">
+
+    <!-- Logo / System Name -->
+    <div class="flex items-center gap-3 px-5 py-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: var(--primary); border-radius: var(--radius-md);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5"/>
+        </svg>
+      </div>
+      <span class="truncate" style="color: #f8fafc; font-size: 15px; font-weight: 600; line-height: 1.2;">成绩管理系统</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-3" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+
+      <ul class="flex flex-col gap-1">
+
+        <!-- 系统仪表盘 -->
+        <li>
+          <a href="dashboard.html" data-dom-id="nav-dashboard"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统仪表盘</span>
+          </a>
+        </li>
+
+        <!-- 数据导入 -->
+        <li>
+          <a href="data-import.html" data-dom-id="nav-data-import"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导入</span>
+          </a>
+        </li>
+
+        <!-- 成绩管理 -->
+        <li>
+          <a href="score-management.html" data-dom-id="nav-score-management" data-active="true"
+             class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+              <line x1="8" y1="16" x2="14" y2="16"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">成绩管理</span>
+          </a>
+        </li>
+
+        <!-- 奖学金评定 -->
+        <li>
+          <a href="scholarship.html" data-dom-id="nav-scholarship"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+          </a>
+        </li>
+
+        <!-- 数据导出 -->
+        <li>
+          <a href="data-export.html" data-dom-id="nav-data-export"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导出</span>
+          </a>
+        </li>
+
+        <!-- 备份还原 -->
+        <li>
+          <a href="backup-restore.html" data-dom-id="nav-backup-restore"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/>
+              <path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">备份还原</span>
+          </a>
+        </li>
+
+        <!-- 系统设置 -->
+        <li>
+          <a href="system-settings.html" data-dom-id="nav-system-settings"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Bottom: User Info -->
+    <div class="shrink-0 flex items-center gap-3 px-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: rgba(79,70,229,0.25); border-radius: var(--radius-full);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="truncate" style="color: #f8fafc; font-size: 13px; font-weight: 500;">管理员</span>
+        <span class="truncate" style="color: #64748b; font-size: 12px;">admin@school.edu</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== Main Area (Sidebar + Header + Content) ====== -->
+  <div class="flex flex-col flex-1 min-h-0 min-w-0">
+
+    <!-- Top Header (56px) -->
+    <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
+      <!-- Left: Page Title -->
+      <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
+        成绩管理
+      </h1>
+
+      <!-- Right: Actions -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Notification Bell -->
+        <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+
+        <!-- User Avatar -->
+        <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Scroll Region -->
+    <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+      <div class="p-6">
+
+        <!-- ===== 1. Filter Bar ===== -->
+        <div class="flex flex-col gap-4 mb-6">
+          <!-- Filters Row -->
+          <div class="flex flex-wrap items-center gap-3">
+            <!-- 年级 -->
+            <select id="filter-grade" class="shrink-0 px-3 py-2 rounded-lg text-sm outline-none transition-colors" style="height: 36px; min-width: 120px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+              <option value="">全部年级</option>
+            </select>
+
+            <!-- 专业 -->
+            <select id="filter-major" class="shrink-0 px-3 py-2 rounded-lg text-sm outline-none transition-colors" style="height: 36px; min-width: 140px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+              <option value="">全部专业</option>
+            </select>
+
+            <!-- 班级类别 -->
+            <select id="filter-class-type" class="shrink-0 px-3 py-2 rounded-lg text-sm outline-none transition-colors" style="height: 36px; min-width: 120px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+              <option value="">全部类别</option>
+            </select>
+
+            <!-- 班级 -->
+            <select id="filter-class" class="shrink-0 px-3 py-2 rounded-lg text-sm outline-none transition-colors" style="height: 36px; min-width: 160px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+              <option value="">全部班级</option>
+            </select>
+
+            <!-- 考试类型 -->
+            <select id="filter-exam-type" class="shrink-0 px-3 py-2 rounded-lg text-sm outline-none transition-colors" style="height: 36px; min-width: 110px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+              <option value="">全部类型</option>
+              <option value="月考">月考</option>
+              <option value="期中考试">期中考试</option>
+              <option value="期末考试">期末考试</option>
+            </select>
+
+            <!-- 考试 -->
+            <select id="filter-exam" class="shrink-0 px-3 py-2 rounded-lg text-sm outline-none transition-colors" style="height: 36px; min-width: 200px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+              <option value="">全部考试</option>
+            </select>
+
+            <!-- 月份 -->
+            <select id="filter-month" class="shrink-0 px-3 py-2 rounded-lg text-sm outline-none transition-colors" style="height: 36px; min-width: 90px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+              <option value="">全部月份</option>
+              <option value="1">1月</option>
+              <option value="2">2月</option>
+              <option value="3">3月</option>
+              <option value="4">4月</option>
+              <option value="5">5月</option>
+              <option value="6">6月</option>
+              <option value="7">7月</option>
+              <option value="8">8月</option>
+              <option value="9">9月</option>
+              <option value="10">10月</option>
+              <option value="11">11月</option>
+              <option value="12">12月</option>
+            </select>
+
+            <!-- Search -->
+            <div class="relative flex-1 min-w-[180px] max-w-[320px]">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 shrink-0 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted-foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input id="filter-keyword" type="text" placeholder="搜索学生姓名..." class="w-full pl-9 pr-3 py-2 rounded-lg text-sm outline-none transition-colors" style="height: 36px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+            </div>
+
+            <!-- 筛选按钮 -->
+            <button id="filter-btn" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors" style="height: 36px; background-color: var(--primary); color: var(--primary-foreground); font-size: 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+              筛选
+            </button>
+
+            <!-- Spacer -->
+            <div class="flex-1"></div>
+
+            <!-- Action Buttons -->
+            <button id="convert-btn" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors" style="height: 36px; background-color: var(--primary); color: var(--primary-foreground); font-size: 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="17 1 21 5 17 9"/>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                <polyline points="7 23 3 19 7 15"/>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+              </svg>
+              分值换算
+            </button>
+            <button id="export-btn" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors" style="height: 36px; background-color: transparent; color: var(--foreground); border: 1px solid var(--border); font-size: 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              批量导出
+            </button>
+            <label class="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm cursor-pointer" style="height: 36px; border: 1px solid var(--border); color: var(--foreground);">
+              <input type="checkbox" id="export-converted-checkbox" class="rounded" style="accent-color: var(--primary);">
+              <span>导出换算列</span>
+            </label>
+            <label class="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm cursor-pointer" style="height: 36px; border: 1px solid var(--border); color: var(--foreground);">
+              <input type="checkbox" id="show-professional-details-checkbox" class="rounded" style="accent-color: var(--primary);">
+              <span>显示专业课明细</span>
+            </label>
+            <button id="batch-delete-btn" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors" style="height: 36px; background-color: var(--state-error); color: #fff; font-size: 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              批量删除
+            </button>
+            <button id="delete-exam-btn" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors" style="height: 36px; background-color: var(--state-error); color: #fff; font-size: 14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+              删除整场考试
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== 2. Subject Score Standard Reference Card ===== -->
+        <div id="subject-standards-bar" class="flex flex-wrap items-center gap-2 px-4 py-2.5 mb-4 rounded-lg" style="background-color: var(--muted);">
+          <span class="shrink-0 text-xs font-medium whitespace-nowrap" style="color: var(--muted-foreground);">分值标准:</span>
+          <span id="std-chinese" class="inline-flex items-center gap-1 whitespace-nowrap px-2.5 py-1 rounded-md text-xs" style="background-color: var(--card); color: var(--foreground); font-weight: 500;">语文 -/-分</span>
+          <span id="std-math" class="inline-flex items-center gap-1 whitespace-nowrap px-2.5 py-1 rounded-md text-xs" style="background-color: var(--card); color: var(--foreground); font-weight: 500;">数学 -/-分</span>
+          <span id="std-english" class="inline-flex items-center gap-1 whitespace-nowrap px-2.5 py-1 rounded-md text-xs" style="background-color: var(--card); color: var(--foreground); font-weight: 500;">英语 -/-分</span>
+          <span id="std-professional" class="inline-flex items-center gap-1 whitespace-nowrap px-2.5 py-1 rounded-md text-xs" style="background-color: var(--card); color: var(--foreground); font-weight: 500;">专业课 自定义</span>
+        </div>
+
+        <!-- ===== 3. Selection Info Bar ===== -->
+        <div id="selection-info-bar" class="hidden flex items-center gap-2 px-4 py-2 mb-2 rounded-lg text-sm" style="background-color: var(--primary-50); color: var(--primary); border: 1px solid var(--primary-200);">
+          <span id="selection-info-text"></span>
+          <button id="select-all-matching-btn" class="font-medium underline hover:no-underline" style="color: var(--primary-700);">选择所有符合当前筛选条件的记录</button>
+          <button id="cancel-select-all-matching-btn" class="hidden font-medium underline hover:no-underline" style="color: var(--primary-700);">取消全选</button>
+        </div>
+
+        <!-- ===== 4. Professional Details Hint ===== -->
+        <div id="professional-details-hint" class="hidden flex items-center gap-2 px-4 py-2 mb-2 rounded-lg text-sm" style="background-color: var(--primary-50); color: var(--primary); border: 1px solid var(--primary-200);">
+          <span>已开启专业课明细显示，但当前成绩数据未保存各科明细。如需查看明细，请重新导入对应成绩文件。</span>
+        </div>
+
+        <!-- ===== 5. Score Data Table ===== -->
+        <div class="rounded-lg overflow-hidden" style="background-color: var(--card); border: 1px solid var(--border);">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm" style="min-width: 900px; font-size: 14px;">
+              <thead>
+                <tr id="score-header-row" style="background-color: var(--muted);">
+                  <th class="px-4 py-3 text-center font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 44px;">
+                    <input type="checkbox" id="select-all-checkbox" class="cursor-pointer" style="width: 16px; height: 16px;">
+                  </th>
+                  <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="name" style="color: var(--muted-foreground); min-width: 80px;">姓名</th>
+                  <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="student_no" style="color: var(--muted-foreground); min-width: 100px;">学号</th>
+                  <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="grade_name" style="color: var(--muted-foreground); min-width: 72px;">年级</th>
+                  <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="major_name" style="color: var(--muted-foreground); min-width: 100px;">专业</th>
+                  <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="class_type_name" style="color: var(--muted-foreground); min-width: 90px;">班级类别</th>
+                  <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="class_name" style="color: var(--muted-foreground); min-width: 140px;">班级</th>
+                  <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="exam_name" style="color: var(--muted-foreground); min-width: 180px;">考试</th>
+                  <th id="th-chinese" class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="chinese_score" style="color: var(--muted-foreground); min-width: 80px;">语文(-)</th>
+                  <th id="th-math" class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="math_score" style="color: var(--muted-foreground); min-width: 80px;">数学(-)</th>
+                  <th id="th-english" class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="english_score" style="color: var(--muted-foreground); min-width: 72px;">英语(-)</th>
+                  <th class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="professional_score" style="color: var(--muted-foreground); min-width: 72px;">专业课</th>
+                  <th class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="total_score" style="color: var(--muted-foreground); min-width: 64px;">总分</th>
+                  <th class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="is_converted" style="color: var(--muted-foreground); min-width: 80px;">状态</th>
+                </tr>
+              </thead>
+              <tbody id="score-tbody" style="color: var(--foreground);">
+                <tr><td colspan="14" class="px-4 py-6 text-center" style="color: var(--muted-foreground);">加载中...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== 4. Pagination ===== -->
+        <div id="pagination-container" class="flex items-center justify-between mt-4">
+          <div class="flex items-center gap-3">
+            <span id="pagination-info" class="text-sm whitespace-nowrap" style="color: var(--muted-foreground); font-size: 14px;">共 0 条记录</span>
+            <div class="flex items-center gap-2">
+              <label for="page-size-select" class="text-sm whitespace-nowrap" style="color: var(--muted-foreground);">每页显示</label>
+              <select id="page-size-select" class="px-2 py-1 rounded-lg text-sm outline-none transition-colors" style="height: 28px; min-width: 70px; background-color: var(--card); color: var(--foreground); border: 1px solid var(--border); font-size: 13px;">
+                <option value="100" selected>100 条</option>
+                <option value="500">500 条</option>
+                <option value="1000">1000 条</option>
+                <option value="5000">5000 条</option>
+                <option value="10000">10000 条</option>
+              </select>
+            </div>
+          </div>
+          <div id="pagination-pages" class="flex items-center gap-1"></div>
+        </div>
+
+        <!-- ===== 5. Score Conversion Log Panel (Collapsible) ===== -->
+        <div class="mt-6 rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);">
+          <button class="w-full flex items-center justify-between px-5 py-3.5 text-left transition-colors" style="border-bottom: 1px solid var(--border);">
+            <span class="text-sm font-semibold" style="color: var(--foreground); font-size: 14px;">分值换算记录</span>
+            <svg class="shrink-0 transition-transform" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted-foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm" style="font-size: 14px;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <th class="px-5 py-2.5 text-left font-medium whitespace-nowrap" style="color: var(--muted-foreground);">时间</th>
+                  <th class="px-5 py-2.5 text-left font-medium whitespace-nowrap" style="color: var(--muted-foreground);">操作</th>
+                  <th class="px-5 py-2.5 text-left font-medium" style="color: var(--muted-foreground);">说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td class="px-5 py-3 whitespace-nowrap" style="color: var(--muted-foreground); font-variant-numeric: tabular-nums;">2026-07-18 11:30</td>
+                  <td class="px-5 py-3 whitespace-nowrap">
+                    <span class="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded-md text-xs font-medium" style="background-color: rgba(37,99,235,0.1); color: var(--state-info);">批量换算</span>
+                  </td>
+                  <td class="px-5 py-3 truncate" style="color: var(--foreground);">2026级期中成绩 124条(100→150标准)</td>
+                </tr>
+                <tr>
+                  <td class="px-5 py-3 whitespace-nowrap" style="color: var(--muted-foreground); font-variant-numeric: tabular-nums;">2026-07-17 16:20</td>
+                  <td class="px-5 py-3 whitespace-nowrap">
+                    <span class="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded-md text-xs font-medium" style="background-color: rgba(37,99,235,0.1); color: var(--state-info);">批量换算</span>
+                  </td>
+                  <td class="px-5 py-3 truncate" style="color: var(--foreground);">2025级期末成绩 456条(150→150无需换算)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 批量删除确认弹窗 -->
+<div id="delete-confirm-modal" class="fixed inset-0 z-50 hidden" style="background-color: rgba(15,23,42,0.45);">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="rounded-lg shadow-xl w-full max-w-sm" style="background-color: var(--card); border: 1px solid var(--border);">
+      <div class="px-5 py-4" style="border-bottom: 1px solid var(--border);">
+        <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground);">请确认</h3>
+      </div>
+      <div class="p-5">
+        <p id="delete-confirm-msg" style="font-size: 14px; color: var(--foreground); line-height: 1.6;"></p>
+      </div>
+      <div class="flex items-center justify-end gap-3 px-5 py-4" style="border-top: 1px solid var(--border);">
+        <button id="delete-cancel-btn" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 500; color: var(--foreground); border: 1px solid var(--border);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='transparent'">取消</button>
+        <button id="delete-ok-btn" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 600; color: #fff; background-color: var(--state-error);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 提示弹窗 -->
+<div id="alert-modal" class="fixed inset-0 z-50 hidden" style="background-color: rgba(15,23,42,0.45);">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="rounded-lg shadow-xl w-full max-w-sm" style="background-color: var(--card); border: 1px solid var(--border);">
+      <div class="p-5">
+        <p id="alert-modal-msg" style="font-size: 14px; color: var(--foreground); line-height: 1.6;"></p>
+      </div>
+      <div class="flex items-center justify-end px-5 py-4" style="border-top: 1px solid var(--border);">
+        <button id="alert-ok-btn" class="px-4 py-2 rounded-lg transition-colors" style="font-size: 13px; font-weight: 600; color: var(--primary-foreground); background-color: var(--primary);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">知道了</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </main>
+    <script>
+    (function() {
+      const API_BASE = '/api';
+      let currentPage = 1;
+      let currentPageSize = 100;
+      let currentTotal = 0;
+      let selectedIds = new Set();
+      let selectAllMatching = false;
+      let sortField = null;
+      let sortOrder = 'desc';
+      let classList = [];
+      let showProfessionalDetails = false;
+      let professionalDetailColumns = [];
+
+      const filterGrade = document.getElementById('filter-grade');
+      const filterMajor = document.getElementById('filter-major');
+      const filterClassType = document.getElementById('filter-class-type');
+      const filterClass = document.getElementById('filter-class');
+      const filterExamType = document.getElementById('filter-exam-type');
+      const filterExam = document.getElementById('filter-exam');
+      const filterMonth = document.getElementById('filter-month');
+      const filterKeyword = document.getElementById('filter-keyword');
+      const filterBtn = document.getElementById('filter-btn');
+      const scoreTbody = document.getElementById('score-tbody');
+      const professionalDetailsHint = document.getElementById('professional-details-hint');
+      const paginationInfo = document.getElementById('pagination-info');
+      const paginationPages = document.getElementById('pagination-pages');
+      const pageSizeSelect = document.getElementById('page-size-select');
+      const selectionInfoBar = document.getElementById('selection-info-bar');
+      const selectionInfoText = document.getElementById('selection-info-text');
+      const selectAllMatchingBtn = document.getElementById('select-all-matching-btn');
+      const cancelSelectAllMatchingBtn = document.getElementById('cancel-select-all-matching-btn');
+      const scoreHeaderRow = document.getElementById('score-header-row');
+      const showProfessionalDetailsCheckbox = document.getElementById('show-professional-details-checkbox');
+
+      function parseError(data) {
+        if (typeof data === 'string') return data;
+        if (!data) return '';
+        if (data.detail) {
+          if (typeof data.detail === 'string') return data.detail;
+          if (data.detail.message) return data.detail.message;
+          if (Array.isArray(data.detail)) return data.detail.map(d => typeof d === 'string' ? d : (d.msg || JSON.stringify(d))).join('；');
+          return JSON.stringify(data.detail);
+        }
+        return data.message || JSON.stringify(data);
+      }
+
+      function escapeHtml(text) {
+        if (text == null) return '';
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+      }
+
+      async function apiGet(path) {
+        const res = await fetch(API_BASE + path);
+        if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
+        return res.json();
+      }
+
+      async function apiPost(path, body) {
+        const res = await fetch(API_BASE + path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
+        return res.json();
+      }
+
+      async function apiDelete(path, body) {
+        const res = await fetch(API_BASE + path, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
+        return res.json();
+      }
+
+      async function apiDeleteQuery(path) {
+        const res = await fetch(API_BASE + path, { method: 'DELETE' });
+        if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
+        return res.json();
+      }
+
+      function setSelectOptions(select, items, valueField, textField, defaultText) {
+        const oldVal = select.value;
+        select.innerHTML = `<option value="">${defaultText}</option>`;
+        items.forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item[valueField];
+          opt.textContent = item[textField];
+          select.appendChild(opt);
+        });
+        // 如果旧值仍在选项中则保留，否则重置
+        const exists = Array.from(select.options).some(o => o.value === oldVal);
+        select.value = exists ? oldVal : '';
+      }
+
+      async function loadGrades() {
+        const grades = await apiGet('/grades');
+        setSelectOptions(filterGrade, grades, 'id', 'name', '全部年级');
+      }
+
+      async function loadMajors() {
+        // 专业下拉框显示全部专业，不按年级过滤，保持筛选面板稳定
+        const majors = await apiGet('/majors');
+        setSelectOptions(filterMajor, majors, 'id', 'name', '全部专业');
+      }
+
+      async function loadClassTypes() {
+        // 类别下拉框显示全部类别，不按年级/专业过滤
+        const types = await apiGet('/class-types');
+        setSelectOptions(filterClassType, types, 'id', 'name', '全部类别');
+      }
+
+      async function loadSubjectStandards() {
+        try {
+          const standards = await apiGet('/subject-standards');
+          const fixedMap = {};
+          const byMajor = {};
+          (standards || []).forEach(s => {
+            if (s.is_fixed) {
+              fixedMap[s.subject_name] = s;
+            } else if (s.major_id != null) {
+              byMajor[s.major_id] = s;
+            }
+          });
+
+          const updateStd = (subject, elId, thId, std) => {
+            const max = std ? std.max_score : '-';
+            const pass = std ? std.pass_score : '-';
+            const el = document.getElementById(elId);
+            if (el) el.textContent = `${subject} ${max}/${pass}分`;
+            const th = document.getElementById(thId);
+            if (th) th.textContent = `${subject}(${max})`;
+          };
+
+          updateStd('语文', 'std-chinese', 'th-chinese', fixedMap['语文']);
+          updateStd('数学', 'std-math', 'th-math', fixedMap['数学']);
+          updateStd('英语', 'std-english', 'th-english', fixedMap['英语']);
+
+          // Resolve professional standard from current filter (major > class > default).
+          let profStd = null;
+          const majorId = filterMajor.value;
+          if (majorId) {
+            profStd = byMajor[Number(majorId)];
+          }
+          if (!profStd && filterClass.value) {
+            const cls = classList.find(c => String(c.id) === filterClass.value);
+            if (cls && cls.major_id) {
+              profStd = byMajor[cls.major_id];
+            }
+          }
+          const profEl = document.getElementById('std-professional');
+          const profTh = document.querySelector('th[data-sort="professional_score"]');
+          if (profStd) {
+            if (profEl) profEl.textContent = `专业课 ${profStd.max_score}/${profStd.pass_score}分`;
+            if (profTh) profTh.textContent = `专业课(${profStd.max_score})`;
+          }
+        } catch (e) {
+          console.error('加载分值标准失败', e);
+        }
+      }
+
+      async function loadExams() {
+        const exams = await apiGet('/scores/exams');
+        const selectedExamId = filterExam.value;
+        filterExam.innerHTML = '<option value="">全部考试</option>' + (exams || []).map(e => {
+          const display = escapeHtml(buildExamDisplay(e.school_year, e.semester, e.month, e.name, e.exam_type));
+          return `<option value="${e.id}">${display}</option>`;
+        }).join('');
+        if (selectedExamId) filterExam.value = selectedExamId;
+      }
+
+      async function loadClasses() {
+        const gradeId = filterGrade.value;
+        const majorId = filterMajor.value;
+        const classTypeId = filterClassType.value;
+        let url = '/classes';
+        const params = [];
+        if (gradeId) params.push('grade_id=' + gradeId);
+        if (majorId) params.push('major_id=' + majorId);
+        if (classTypeId) params.push('class_type_id=' + classTypeId);
+        if (params.length) url += '?' + params.join('&');
+        classList = await apiGet(url) || [];
+        setSelectOptions(filterClass, classList, 'id', 'name', '全部班级');
+      }
+
+      function buildScoreQuery() {
+        const params = [];
+        if (filterGrade.value) params.push('grade_id=' + filterGrade.value);
+        if (filterMajor.value) params.push('major_id=' + filterMajor.value);
+        if (filterClassType.value) params.push('class_type_id=' + filterClassType.value);
+        if (filterClass.value) params.push('class_id=' + filterClass.value);
+        if (filterExamType.value) params.push('exam_type=' + encodeURIComponent(filterExamType.value));
+        if (filterExam.value) params.push('exam_id=' + filterExam.value);
+        if (filterMonth.value) params.push('month=' + filterMonth.value);
+        if (filterKeyword.value.trim()) params.push('keyword=' + encodeURIComponent(filterKeyword.value.trim()));
+        if (sortField) {
+          params.push('sort_field=' + encodeURIComponent(sortField));
+          params.push('sort_order=' + sortOrder);
+        }
+        params.push('page=' + currentPage);
+        params.push('page_size=' + currentPageSize);
+        return '/scores?' + params.join('&');
+      }
+
+      function formatScore(score) {
+        if (score === null || score === undefined || score === '') return '-';
+        const num = Number(score);
+        if (Number.isNaN(num)) return '-';
+        if (Number.isInteger(num)) return String(num);
+        return num.toFixed(1);
+      }
+
+      function renderStatus(item) {
+        if (item.is_converted) {
+          return `<span class="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded-md text-xs font-medium" style="background-color: rgba(22,163,74,0.1); color: var(--state-success);">已换算</span>`;
+        }
+        return `<span class="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded-md text-xs font-medium" style="background-color: rgba(217,119,6,0.1); color: var(--state-warning);">原始</span>`;
+      }
+
+      function renderClassTypeBadge(name) {
+        return `<span class="inline-flex items-center px-2 py-0.5 rounded-md" style="font-size: 12px; font-weight: 500; background-color: rgba(79,70,229,0.1); color: var(--primary);">${escapeHtml(name)}</span>`;
+      }
+
+      function buildExamDisplay(schoolYear, semester, month, examName, examType) {
+        const name = (examName || '').trim();
+        if (!name) return '-';
+        const norm = (s) => String(s || '').replace(/[\s\-]/g, '');
+        const normName = norm(name);
+        const parts = [];
+
+        const sy = (schoolYear || '').trim();
+        if (sy && !normName.includes(norm(sy))) parts.push(sy);
+
+        const sem = (semester || '').trim();
+        if (sem && !normName.includes(norm(sem))) parts.push(sem);
+
+        const monthText = month ? `${month}月` : '';
+        if (monthText && !normName.includes(norm(monthText))) parts.push(monthText);
+
+        parts.push(name);
+
+        const type = (examType || '').trim();
+        if (type && !normName.includes(norm(type))) parts.push(`(${type})`);
+
+        return parts.join(' ') || '-';
+      }
+
+      function renderExam(item) {
+        return buildExamDisplay(item.school_year, item.semester, item.month, item.exam_name, item.exam_type);
+      }
+
+      const BASE_COLUMN_COUNT = 14;
+
+      function updateProfessionalHeader(maxScore) {
+        const profTh = document.querySelector('th[data-sort="professional_score"]');
+        const profStdEl = document.getElementById('std-professional');
+        if (maxScore > 0) {
+          if (profTh) profTh.textContent = `专业课(${maxScore})`;
+          if (profStdEl) profStdEl.textContent = `专业课 ${maxScore}/-分`;
+        }
+      }
+
+      function buildBaseHeaderRowHTML() {
+        return {
+          before: `
+            <th class="px-4 py-3 text-center font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 44px;">
+              <input type="checkbox" id="select-all-checkbox" class="cursor-pointer" style="width: 16px; height: 16px;">
+            </th>
+            <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="name" style="color: var(--muted-foreground); min-width: 80px;">姓名</th>
+            <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="student_no" style="color: var(--muted-foreground); min-width: 100px;">学号</th>
+            <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="grade_name" style="color: var(--muted-foreground); min-width: 72px;">年级</th>
+            <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="major_name" style="color: var(--muted-foreground); min-width: 100px;">专业</th>
+            <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="class_type_name" style="color: var(--muted-foreground); min-width: 90px;">班级类别</th>
+            <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="class_name" style="color: var(--muted-foreground); min-width: 140px;">班级</th>
+            <th class="sortable-header px-4 py-3 text-left font-medium whitespace-nowrap" data-sort="exam_name" style="color: var(--muted-foreground); min-width: 180px;">考试</th>
+            <th id="th-chinese" class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="chinese_score" style="color: var(--muted-foreground); min-width: 80px;">语文(-)</th>
+            <th id="th-math" class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="math_score" style="color: var(--muted-foreground); min-width: 80px;">数学(-)</th>
+            <th id="th-english" class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="english_score" style="color: var(--muted-foreground); min-width: 72px;">英语(-)</th>
+            <th class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="professional_score" style="color: var(--muted-foreground); min-width: 72px;">专业课</th>
+          `,
+          after: `
+            <th class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="total_score" style="color: var(--muted-foreground); min-width: 64px;">总分</th>
+            <th class="sortable-header px-4 py-3 text-center font-medium whitespace-nowrap" data-sort="is_converted" style="color: var(--muted-foreground); min-width: 80px;">状态</th>
+          `
+        };
+      }
+
+      function renderScoreHeader() {
+        const parts = buildBaseHeaderRowHTML();
+        let html = parts.before;
+        if (showProfessionalDetails && professionalDetailColumns.length) {
+          professionalDetailColumns.forEach(name => {
+            html += `<th class="px-4 py-3 text-center font-medium whitespace-nowrap" style="color: var(--muted-foreground); min-width: 80px;">${escapeHtml(name)}</th>`;
+          });
+        }
+        html += parts.after;
+        scoreHeaderRow.innerHTML = html;
+      }
+
+      async function loadScores() {
+        scoreTbody.innerHTML = `<tr><td colspan="${BASE_COLUMN_COUNT}" class="px-4 py-6 text-center" style="color: var(--muted-foreground);">加载中...</td></tr>`;
+        try {
+          const data = await apiGet(buildScoreQuery());
+          currentTotal = data.total || 0;
+          const items = data.items || [];
+
+          let detailsMap = {};
+          professionalDetailColumns = [];
+          if (showProfessionalDetails && items.length) {
+            const scoreIds = items.map(i => i.id);
+            detailsMap = await apiPost('/scores/subject-details', { score_ids: scoreIds });
+            const columnSet = new Set();
+            Object.values(detailsMap).forEach(list => {
+              (list || []).forEach(d => columnSet.add(d.subject_name));
+            });
+            professionalDetailColumns = Array.from(columnSet).sort();
+          }
+
+          // Determine professional max score from returned records
+          let pageProfMax = 0;
+          items.forEach(item => {
+            const v = Number(item.professional_max_score);
+            if (!Number.isNaN(v) && v > pageProfMax) pageProfMax = v;
+          });
+
+          const totalCols = BASE_COLUMN_COUNT + professionalDetailColumns.length;
+          renderScoreHeader();
+          updateProfessionalHeader(pageProfMax);
+          loadSubjectStandards();
+          updateSortIndicators();
+
+          if (showProfessionalDetails && items.length && !professionalDetailColumns.length) {
+            professionalDetailsHint.classList.remove('hidden');
+          } else {
+            professionalDetailsHint.classList.add('hidden');
+          }
+
+          if (items.length === 0) {
+            scoreTbody.innerHTML = `<tr><td colspan="${totalCols}" class="px-4 py-6 text-center" style="color: var(--muted-foreground);">暂无数据</td></tr>`;
+            updateSelectionUI();
+          } else {
+            scoreTbody.innerHTML = items.map((item, idx) => {
+              const bg = idx % 2 === 0 ? 'var(--card)' : 'var(--muted)';
+              const border = idx % 2 === 0 ? 'border-bottom: 1px solid var(--border);' : '';
+              const checked = (selectAllMatching || selectedIds.has(item.id)) ? 'checked' : '';
+              let detailCells = '';
+              if (showProfessionalDetails && professionalDetailColumns.length) {
+                const details = detailsMap[item.id] || [];
+                const detailMap = {};
+                details.forEach(d => { detailMap[d.subject_name] = d; });
+                professionalDetailColumns.forEach(name => {
+                  const d = detailMap[name];
+                  const score = d ? formatScore(d.original_score) : '-';
+                  detailCells += `<td class="px-4 py-3 text-center whitespace-nowrap" style="font-variant-numeric: tabular-nums;">${score}</td>`;
+                });
+              }
+              return `<tr style="background-color: ${bg}; ${border}">
+                <td class="px-4 py-3 text-center whitespace-nowrap">
+                  <input type="checkbox" class="row-checkbox cursor-pointer" data-id="${item.id}" ${checked} style="width: 16px; height: 16px;">
+                </td>
+                <td class="px-4 py-3 truncate font-medium" style="color: var(--foreground);">${escapeHtml(item.student_name || '')}</td>
+                <td class="px-4 py-3 truncate whitespace-nowrap" style="color: var(--muted-foreground); font-variant-numeric: tabular-nums;">${escapeHtml(item.student_no || '')}</td>
+                <td class="px-4 py-3 truncate whitespace-nowrap" style="color: var(--muted-foreground);">${escapeHtml(item.grade_name || '')}</td>
+                <td class="px-4 py-3 truncate" style="color: var(--muted-foreground);">${escapeHtml(item.major_name || '')}</td>
+                <td class="px-4 py-3 truncate whitespace-nowrap">${renderClassTypeBadge(item.class_type_name)}</td>
+                <td class="px-4 py-3 truncate whitespace-nowrap" style="color: var(--muted-foreground);">${escapeHtml(item.class_name || '')}</td>
+                <td class="px-4 py-3 truncate whitespace-nowrap" style="color: var(--foreground);">${escapeHtml(renderExam(item))}</td>
+                <td class="px-4 py-3 text-center whitespace-nowrap" style="font-variant-numeric: tabular-nums;">${formatScore(item.chinese_score)}</td>
+                <td class="px-4 py-3 text-center whitespace-nowrap" style="font-variant-numeric: tabular-nums;">${formatScore(item.math_score)}</td>
+                <td class="px-4 py-3 text-center whitespace-nowrap" style="font-variant-numeric: tabular-nums;">${formatScore(item.english_score)}</td>
+                <td class="px-4 py-3 text-center whitespace-nowrap" style="font-variant-numeric: tabular-nums;">${formatScore(item.professional_score)}</td>
+                ${detailCells}
+                <td class="px-4 py-3 text-center whitespace-nowrap font-semibold" style="font-variant-numeric: tabular-nums;">${formatScore(item.total_score)}</td>
+                <td class="px-4 py-3 text-center">${renderStatus(item)}</td>
+              </tr>`;
+            }).join('');
+          }
+          renderPagination();
+          updateSelectionUI();
+        } catch (err) {
+          professionalDetailColumns = [];
+          renderScoreHeader();
+          loadSubjectStandards();
+          professionalDetailsHint.classList.add('hidden');
+          scoreTbody.innerHTML = `<tr><td colspan="${BASE_COLUMN_COUNT}" class="px-4 py-6 text-center" style="color: var(--state-error);">加载失败：${escapeHtml(err.message)}</td></tr>`;
+          updateSelectionUI();
+        }
+      }
+
+      function renderPagination() {
+        const totalPages = Math.ceil(currentTotal / currentPageSize) || 1;
+        paginationInfo.textContent = `共 ${currentTotal} 条记录，每页 ${currentPageSize} 条`;
+        let html = '';
+        // 上一页
+        html += `<button onclick="window.scoreApp.goToPage(${currentPage - 1})" class="flex items-center justify-center rounded-lg transition-colors" style="width: 32px; height: 32px; color: var(--muted-foreground); border: 1px solid var(--border); background-color: var(--card);" aria-label="上一页" ${currentPage <= 1 ? 'disabled style="opacity:0.5;"' : ''}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>`;
+
+        const maxVisible = 5;
+        let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let end = Math.min(totalPages, start + maxVisible - 1);
+        if (end - start + 1 < maxVisible) start = Math.max(1, end - maxVisible + 1);
+
+        if (start > 1) html += `<button onclick="window.scoreApp.goToPage(1)" class="flex items-center justify-center rounded-lg text-sm transition-colors" style="width: 32px; height: 32px; color: var(--foreground); border: 1px solid var(--border); background-color: var(--card); font-size: 14px;">1</button>`;
+        if (start > 2) html += `<span class="flex items-center justify-center text-sm" style="width: 32px; height: 32px; color: var(--muted-foreground); font-size: 14px;">...</span>`;
+
+        for (let i = start; i <= end; i++) {
+          if (i === currentPage) {
+            html += `<button class="flex items-center justify-center rounded-lg text-sm font-medium transition-colors" style="width: 32px; height: 32px; background-color: var(--primary); color: var(--primary-foreground); font-size: 14px;">${i}</button>`;
+          } else {
+            html += `<button onclick="window.scoreApp.goToPage(${i})" class="flex items-center justify-center rounded-lg text-sm transition-colors" style="width: 32px; height: 32px; color: var(--foreground); border: 1px solid var(--border); background-color: var(--card); font-size: 14px;">${i}</button>`;
+          }
+        }
+
+        if (end < totalPages - 1) html += `<span class="flex items-center justify-center text-sm" style="width: 32px; height: 32px; color: var(--muted-foreground); font-size: 14px;">...</span>`;
+        if (end < totalPages) html += `<button onclick="window.scoreApp.goToPage(${totalPages})" class="flex items-center justify-center rounded-lg text-sm transition-colors" style="width: 32px; height: 32px; color: var(--foreground); border: 1px solid var(--border); background-color: var(--card); font-size: 14px;">${totalPages}</button>`;
+
+        // 下一页
+        html += `<button onclick="window.scoreApp.goToPage(${currentPage + 1})" class="flex items-center justify-center rounded-lg transition-colors" style="width: 32px; height: 32px; color: var(--muted-foreground); border: 1px solid var(--border); background-color: var(--card);" aria-label="下一页" ${currentPage >= totalPages ? 'disabled style="opacity:0.5;"' : ''}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>`;
+
+        paginationPages.innerHTML = html;
+      }
+
+      function goToPage(page) {
+        const totalPages = Math.ceil(currentTotal / currentPageSize) || 1;
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        loadScores();
+      }
+
+      function applyFilters() {
+        currentPage = 1;
+        selectAllMatching = false;
+        selectedIds.clear();
+        loadScores();
+      }
+
+      function updateSortIndicators() {
+        document.querySelectorAll('.sortable-header').forEach(th => {
+          th.classList.remove('sort-asc', 'sort-desc');
+          if (th.dataset.sort === sortField) {
+            th.classList.add(sortOrder === 'asc' ? 'sort-asc' : 'sort-desc');
+          }
+        });
+      }
+
+      function handleSortClick(field) {
+        if (sortField === field) {
+          sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortField = field;
+          sortOrder = 'desc';
+        }
+        updateSortIndicators();
+        currentPage = 1;
+        loadScores();
+      }
+
+      function updateSelectionUI() {
+        const rows = scoreTbody.querySelectorAll('.row-checkbox');
+        const selectAll = document.getElementById('select-all-checkbox');
+        const btn = document.getElementById('batch-delete-btn');
+        const visibleCount = rows.length;
+        const checkedVisibleCount = Array.from(rows).filter(cb => cb.checked).length;
+
+        // Update batch delete button label
+        const displayCount = selectAllMatching ? currentTotal : selectedIds.size;
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            <line x1="10" y1="11" x2="10" y2="17"/>
+            <line x1="14" y1="11" x2="14" y2="17"/>
+          </svg>
+          批量删除${displayCount ? ` (${displayCount})` : ''}`;
+
+        // Update select-all checkbox state
+        if (!visibleCount) {
+          selectAll.checked = false;
+          selectAll.indeterminate = false;
+        } else if (selectAllMatching) {
+          selectAll.checked = true;
+          selectAll.indeterminate = false;
+        } else {
+          selectAll.checked = checkedVisibleCount === visibleCount;
+          selectAll.indeterminate = checkedVisibleCount > 0 && checkedVisibleCount < visibleCount;
+        }
+
+        // Show/hide selection info bar
+        const hasSelection = selectAllMatching || selectedIds.size > 0;
+        if (hasSelection && currentTotal > visibleCount && !selectAllMatching) {
+          selectionInfoBar.classList.remove('hidden');
+          selectionInfoText.textContent = `已选择本页 ${checkedVisibleCount} 条记录，`;
+          selectAllMatchingBtn.classList.remove('hidden');
+          cancelSelectAllMatchingBtn.classList.add('hidden');
+        } else if (selectAllMatching) {
+          selectionInfoBar.classList.remove('hidden');
+          selectionInfoText.textContent = `已选择所有符合当前筛选条件的 ${currentTotal} 条记录，`;
+          selectAllMatchingBtn.classList.add('hidden');
+          cancelSelectAllMatchingBtn.classList.remove('hidden');
+        } else {
+          selectionInfoBar.classList.add('hidden');
+        }
+      }
+
+      scoreTbody.addEventListener('change', (e) => {
+        if (!e.target.classList.contains('row-checkbox')) return;
+        const id = Number(e.target.dataset.id);
+        if (selectAllMatching) {
+          // Exit select-all-matching mode and keep currently checked visible rows
+          selectAllMatching = false;
+          selectedIds.clear();
+          scoreTbody.querySelectorAll('.row-checkbox').forEach(cb => {
+            if (cb.checked) selectedIds.add(Number(cb.dataset.id));
+          });
+        } else {
+          if (e.target.checked) selectedIds.add(id);
+          else selectedIds.delete(id);
+        }
+        updateSelectionUI();
+      });
+
+      scoreHeaderRow.addEventListener('change', (e) => {
+        if (e.target && e.target.id === 'select-all-checkbox') {
+          selectAllMatching = false;
+          const rows = scoreTbody.querySelectorAll('.row-checkbox');
+          rows.forEach(cb => {
+            cb.checked = e.target.checked;
+            const id = Number(cb.dataset.id);
+            if (e.target.checked) selectedIds.add(id);
+            else selectedIds.delete(id);
+          });
+          updateSelectionUI();
+        }
+      });
+
+      selectAllMatchingBtn.addEventListener('click', () => {
+        selectAllMatching = true;
+        selectedIds.clear();
+        scoreTbody.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = true; });
+        updateSelectionUI();
+      });
+
+      cancelSelectAllMatchingBtn.addEventListener('click', () => {
+        selectAllMatching = false;
+        selectedIds.clear();
+        scoreTbody.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = false; });
+        updateSelectionUI();
+      });
+
+      function buildDeleteFilterQuery() {
+        const params = [];
+        if (filterGrade.value) params.push('grade_id=' + filterGrade.value);
+        if (filterMajor.value) params.push('major_id=' + filterMajor.value);
+        if (filterClassType.value) params.push('class_type_id=' + filterClassType.value);
+        if (filterClass.value) params.push('class_id=' + filterClass.value);
+        if (filterExamType.value) params.push('exam_type=' + encodeURIComponent(filterExamType.value));
+        if (filterExam.value) params.push('exam_id=' + filterExam.value);
+        if (filterMonth.value) params.push('month=' + filterMonth.value);
+        if (filterKeyword.value.trim()) params.push('keyword=' + encodeURIComponent(filterKeyword.value.trim()));
+        return '/scores/batch-by-filter' + (params.length ? '?' + params.join('&') : '');
+      }
+
+      const deleteModal = document.getElementById('delete-confirm-modal');
+      const deleteMsg = document.getElementById('delete-confirm-msg');
+      const alertModal = document.getElementById('alert-modal');
+      const alertMsg = document.getElementById('alert-modal-msg');
+      let deleteConfirmCallback = null;
+
+      function showAlert(msg) {
+        alertMsg.textContent = msg;
+        alertModal.classList.remove('hidden');
+      }
+
+      function showDeleteConfirm(msg, onConfirm) {
+        deleteMsg.textContent = msg;
+        deleteConfirmCallback = onConfirm;
+        deleteModal.classList.remove('hidden');
+      }
+
+      document.getElementById('delete-cancel-btn').addEventListener('click', () => {
+        deleteModal.classList.add('hidden');
+        deleteConfirmCallback = null;
+      });
+
+      document.getElementById('delete-ok-btn').addEventListener('click', async () => {
+        deleteModal.classList.add('hidden');
+        if (typeof deleteConfirmCallback === 'function') {
+          const cb = deleteConfirmCallback;
+          deleteConfirmCallback = null;
+          await cb();
+        }
+      });
+
+      document.getElementById('alert-ok-btn').addEventListener('click', () => {
+        alertModal.classList.add('hidden');
+      });
+
+      async function deleteWholeExam() {
+        const examId = filterExam.value;
+        if (!examId) {
+          showAlert('请先选择要删除的考试');
+          return;
+        }
+        const examText = filterExam.options[filterExam.selectedIndex].text;
+        showDeleteConfirm(`确定删除整场考试“${examText}”吗？该考试下的所有成绩、奖学金记录将被一并删除，不可恢复。`, async () => {
+          try {
+            await apiDelete('/scores/exams/' + examId);
+            selectedIds.clear();
+            selectAllMatching = false;
+            updateSelectionUI();
+            await loadExams();
+            filterExam.value = '';
+            await loadScores();
+          } catch (e) {
+            showAlert('删除失败：' + e.message);
+          }
+        });
+      }
+
+      function buildExportFilterCondition() {
+        const cond = {};
+        if (filterGrade.value) cond.grade_id = Number(filterGrade.value);
+        if (filterMajor.value) cond.major_id = Number(filterMajor.value);
+        if (filterClassType.value) cond.class_type_id = Number(filterClassType.value);
+        if (filterClass.value) cond.class_id = Number(filterClass.value);
+        if (filterExamType.value) cond.exam_type = filterExamType.value;
+        if (filterExam.value) cond.exam_id = Number(filterExam.value);
+        if (filterMonth.value) cond.month = Number(filterMonth.value);
+        if (filterKeyword.value.trim()) cond.keyword = filterKeyword.value.trim();
+        if (selectAllMatching) {
+          cond.select_all_matching = true;
+        } else if (selectedIds.size) {
+          cond.selected_ids = Array.from(selectedIds);
+        }
+        return cond;
+      }
+
+      async function batchDeleteScores() {
+        if (selectAllMatching) {
+          showDeleteConfirm(`确定删除当前筛选结果中的 ${currentTotal} 条成绩吗？删除后不可恢复。`, async () => {
+            try {
+              await apiDeleteQuery(buildDeleteFilterQuery());
+              selectAllMatching = false;
+              selectedIds.clear();
+              updateSelectionUI();
+              await loadScores();
+            } catch (e) {
+              showAlert('删除失败：' + e.message);
+            }
+          });
+          return;
+        }
+        if (!selectedIds.size) {
+          showAlert('请先勾选要删除的成绩');
+          return;
+        }
+        showDeleteConfirm(`确定删除选中的 ${selectedIds.size} 条成绩吗？删除后不可恢复。`, async () => {
+          try {
+            await apiDelete('/scores/batch', { ids: Array.from(selectedIds) });
+            selectedIds.clear();
+            updateSelectionUI();
+            await loadScores();
+          } catch (e) {
+            showAlert('删除失败：' + e.message);
+          }
+        });
+      }
+
+      async function convertScores() {
+        const examId = filterExam.value;
+        if (!examId) {
+          showAlert('请先选择一场考试，再执行分值换算');
+          return;
+        }
+        const examText = filterExam.options[filterExam.selectedIndex].text;
+        showDeleteConfirm(`确定对考试“${examText}”执行分值换算吗？换算后不可撤销。`, async () => {
+          const btn = document.getElementById('convert-btn');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10"/></svg> 换算中...`;
+          btn.disabled = true;
+          try {
+            await apiPost('/scores/convert', { exam_id: Number(examId), score_ids: null, original_max: {} });
+            showAlert('分值换算完成');
+            await loadScores();
+            await loadConversionLog();
+          } catch (e) {
+            showAlert('分值换算失败：' + e.message);
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        });
+      }
+
+      async function handleBatchExport() {
+        const exportBtn = document.getElementById('export-btn');
+        const originalText = exportBtn.innerHTML;
+        exportBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10"/></svg> 导出中...`;
+        exportBtn.disabled = true;
+        try {
+          const cond = buildExportFilterCondition();
+          if (!cond.keyword && !cond.grade_id && !cond.major_id && !cond.class_type_id && !cond.class_id && !cond.exam_type && !cond.exam_id && !cond.month && !cond.selected_ids && !cond.select_all_matching) {
+            showAlert('请先设置筛选条件或勾选要导出的成绩');
+            return;
+          }
+          const includeConverted = document.getElementById('export-converted-checkbox').checked;
+          const result = await apiPost('/export/generate', {
+            export_type: 'scores',
+            filter_condition: cond,
+            format: 'xlsx',
+            options: { include_converted: includeConverted },
+          });
+          const a = document.createElement('a');
+          a.href = API_BASE + '/export/download/' + result.id;
+          a.download = result.file_name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        } catch (e) {
+          showAlert('导出失败：' + e.message);
+        } finally {
+          exportBtn.innerHTML = originalText;
+          exportBtn.disabled = false;
+        }
+      }
+
+      // 事件绑定：仅班级下拉框随筛选条件联动，专业和类别显示全部选项
+      filterGrade.addEventListener('change', async () => {
+        await loadClasses();
+        applyFilters();
+      });
+      filterMajor.addEventListener('change', async () => {
+        await loadClasses();
+        await loadSubjectStandards();
+        applyFilters();
+      });
+      filterClassType.addEventListener('change', async () => {
+        await loadClasses();
+        await loadSubjectStandards();
+        applyFilters();
+      });
+      filterClass.addEventListener('change', async () => {
+        await loadSubjectStandards();
+        applyFilters();
+      });
+      filterExamType.addEventListener('change', () => {
+        filterExam.value = '';
+        applyFilters();
+      });
+      filterExam.addEventListener('change', applyFilters);
+      filterMonth.addEventListener('change', applyFilters);
+      filterKeyword.addEventListener('keydown', (e) => { if (e.key === 'Enter') applyFilters(); });
+      filterBtn.addEventListener('click', applyFilters);
+
+      scoreHeaderRow.addEventListener('click', (e) => {
+        const th = e.target.closest('.sortable-header');
+        if (th && th.dataset.sort) handleSortClick(th.dataset.sort);
+      });
+
+      pageSizeSelect.addEventListener('change', () => {
+        currentPageSize = Number(pageSizeSelect.value) || 100;
+        currentPage = 1;
+        selectedIds.clear();
+        selectAllMatching = false;
+        updateSelectionUI();
+        loadScores();
+      });
+      document.getElementById('batch-delete-btn').addEventListener('click', batchDeleteScores);
+      document.getElementById('export-btn').addEventListener('click', handleBatchExport);
+      document.getElementById('convert-btn').addEventListener('click', convertScores);
+      document.getElementById('delete-exam-btn').addEventListener('click', deleteWholeExam);
+      showProfessionalDetailsCheckbox.addEventListener('change', (e) => {
+        showProfessionalDetails = e.target.checked;
+        currentPage = 1;
+        loadScores();
+      });
+
+      // 暴露给全局，供分页按钮调用
+      window.scoreApp = { goToPage, applyFilters };
+
+      // 初始化
+      async function init() {
+        pageSizeSelect.value = currentPageSize;
+        await loadGrades();
+        await loadMajors();
+        await loadClassTypes();
+        await loadClasses();
+        await loadSubjectStandards();
+        await loadExams();
+        await loadScores();
+        lucide.createIcons();
+      }
+      init();
+    })();
+    </script>
+</body>
+</html>

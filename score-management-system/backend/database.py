@@ -274,6 +274,48 @@ CREATE TABLE IF NOT EXISTS settings (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL
 );
+
+-- 教师档案表（课表任课教师）
+CREATE TABLE IF NOT EXISTS teachers (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    name          TEXT UNIQUE NOT NULL,
+    subject_group TEXT,
+    created_at    TEXT NOT NULL
+);
+
+-- 课表映射表：班级×科目×教师，合班标记
+CREATE TABLE IF NOT EXISTS timetable_mappings (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    class_id             INTEGER REFERENCES classes(id) ON DELETE CASCADE,
+    class_name           TEXT NOT NULL,
+    subject_name         TEXT NOT NULL,
+    teacher_id           INTEGER REFERENCES teachers(id) ON DELETE CASCADE,
+    teacher_name         TEXT NOT NULL,
+    is_combined          INTEGER NOT NULL DEFAULT 0,
+    combined_class_names TEXT,
+    school_year          TEXT,
+    semester             TEXT,
+    source_slot          TEXT,
+    created_at           TEXT NOT NULL,
+    UNIQUE(class_id, subject_name, teacher_id, school_year, semester)
+);
+CREATE INDEX IF NOT EXISTS idx_ttm_class   ON timetable_mappings(class_id, school_year, semester);
+CREATE INDEX IF NOT EXISTS idx_ttm_teacher ON timetable_mappings(teacher_id, school_year, semester);
+
+-- 课表导入批次表
+CREATE TABLE IF NOT EXISTS timetable_imports (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    class_file_name    TEXT NOT NULL,
+    teacher_file_name  TEXT NOT NULL,
+    class_file_path    TEXT,
+    teacher_file_path  TEXT,
+    school_year        TEXT,
+    semester           TEXT,
+    status             TEXT NOT NULL DEFAULT '待确认',
+    saved_count        INTEGER NOT NULL DEFAULT 0,
+    unmatched_classes  TEXT,
+    created_at         TEXT NOT NULL
+);
 """
 
 DEFAULT_DATA_SQL = """

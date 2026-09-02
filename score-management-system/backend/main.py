@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import ALLOWED_ORIGINS, BASE_DIR
 from database import init_db
-from routers import settings, import_scores, scores, scholarship, export_data, backup, dashboard, logs, timetable
+from routers import settings, import_scores, scores, scholarship, export_data, backup, dashboard, logs, timetable, stats
 
 app = FastAPI(title="成绩管理系统", version="1.0.0")
 
@@ -35,6 +35,7 @@ app.include_router(export_data.router, prefix="/api/export", tags=["数据导出
 app.include_router(backup.router, prefix="/api/backup", tags=["备份还原"])
 app.include_router(timetable.router, prefix="/api/timetable", tags=["课表管理"])
 app.include_router(logs.router, prefix="/api/logs", tags=["操作日志"])
+app.include_router(stats.router, prefix="/api/stats", tags=["统计分析"])
 
 
 @app.on_event("startup")

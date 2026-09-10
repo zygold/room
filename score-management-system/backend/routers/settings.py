@@ -339,3 +339,13 @@ def get_system_info():
         "db_path": str(DB_PATH),
         "db_size": f"{size / 1024 / 1024:.2f}MB",
     }
+
+
+@router.get("/settings/school-years")
+def list_school_years():
+    return ["2024-2025", "2025-2026", "2026-2027", "2027-2028"]
+
+
+@router.get("/settings/semesters")
+def list_semesters():
+    return ["第一学期", "第二学期"]

@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>课表管理</title>
+    <style id="theme-vars">
+/* Score Management System - Brand CSS */
+/* Professional, clean, data-dense administrative interface */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Primary - Indigo Blue */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
+  --color-primary-800: #312e81;
+  --color-primary-900: #1e1b4b;
+
+  /* Neutral Scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* State Colors */
+  --state-success: #16a34a;
+  --state-warning: #d97706;
+  --state-error: #dc2626;
+  --state-info: #2563eb;
+
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* Semantic Aliases */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4f46e5;
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #818cf8;
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+      .tab-btn.active {
+        color: var(--primary);
+        border-bottom: 2px solid var(--primary);
+      }
+      .tab-btn {
+        color: var(--muted-foreground);
+        border-bottom: 2px solid transparent;
+      }
+      .tab-panel.hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+<!-- Project Shell: Sidebar + Header + Content Slot -->
+<!-- App-shell layout for score management admin system -->
+
+<div data-viewport-mode="app-shell" class="flex h-screen overflow-hidden min-h-0" style="font-family: var(--font-body);">
+
+  <!-- ====== Left Sidebar (240px) ====== -->
+  <aside class="shrink-0 flex flex-col h-full" style="width: 240px; background-color: var(--color-neutral-800);">
+
+    <!-- Logo / System Name -->
+    <div class="flex items-center gap-3 px-5 py-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: var(--primary); border-radius: var(--radius-md);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5"/>
+        </svg>
+      </div>
+      <span class="truncate" style="color: #f8fafc; font-size: 15px; font-weight: 600; line-height: 1.2;">成绩管理系统</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-3" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+
+      <ul class="flex flex-col gap-1">
+
+        <!-- 系统仪表盘 -->
+        <li>
+          <a href="dashboard.html" data-dom-id="nav-dashboard"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统仪表盘</span>
+          </a>
+        </li>
+
+        <!-- 数据导入 -->
+        <li>
+          <a href="data-import.html" data-dom-id="nav-data-import"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导入</span>
+          </a>
+        </li>
+
+        <!-- 课表管理 (ACTIVE) -->
+        <li>
+          <a href="timetable.html" data-dom-id="nav-timetable" data-active="true"
+             class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">课表管理</span>
+          </a>
+        </li>
+
+        <!-- 成绩管理 -->
+        <li>
+          <a href="score-management.html" data-dom-id="nav-score-management"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+              <line x1="8" y1="16" x2="14" y2="16"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">成绩管理</span>
+          </a>
+        </li>
+
+        <!-- 奖学金评定 -->
+        <li>
+          <a href="scholarship.html" data-dom-id="nav-scholarship"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+          </a>
+        </li>
+
+        <!-- 数据导出 -->
+        <li>
+          <a href="data-export.html" data-dom-id="nav-data-export"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导出</span>
+          </a>
+        </li>
+
+        <!-- 备份还原 -->
+        <li>
+          <a href="backup-restore.html" data-dom-id="nav-backup-restore"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/>
+              <path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">备份还原</span>
+          </a>
+        </li>
+
+        <!-- 系统设置 -->
+        <li>
+          <a href="system-settings.html" data-dom-id="nav-system-settings"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Bottom: User Info -->
+    <div class="shrink-0 flex items-center gap-3 px-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: rgba(79,70,229,0.25); border-radius: var(--radius-full);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="truncate" style="color: #f8fafc; font-size: 13px; font-weight: 500;">管理员</span>
+        <span class="truncate" style="color: #64748b; font-size: 12px;">admin@school.edu</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== Main Area (Sidebar + Header + Content) ====== -->
+  <div class="flex flex-col flex-1 min-h-0 min-w-0">
+
+    <!-- Top Header (56px) -->
+    <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
+      <!-- Left: Page Title -->
+      <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
+        课表管理
+      </h1>
+
+      <!-- Right: Actions -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Notification Bell -->
+        <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+
+        <!-- User Avatar -->
+        <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Scroll Region -->
+    <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+      <div class="p-6 space-y-6" style="max-width: 1280px;">
+
+        <!-- Page Header -->
+        <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border);">
+          <h2 style="font-size: 18px; font-weight: 600; color: var(--foreground);">课表管理</h2>
+          <p class="mt-1" style="font-size: 13px; color: var(--muted-foreground);">上传班级课表与教师课表，建立班级 × 科目 × 教师映射</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="rounded-lg border" style="background-color: var(--card); border-color: var(--border);">
+          <div class="flex items-center border-b" style="border-color: var(--border);">
+            <button data-tab="import" class="tab-btn active px-5 py-3 text-sm font-medium transition-colors">导入课表</button>
+            <button data-tab="mappings" class="tab-btn px-5 py-3 text-sm font-medium transition-colors">任课教师一览</button>
+            <button data-tab="overview" class="tab-btn px-5 py-3 text-sm font-medium transition-colors">教师科目概览</button>
+          </div>
+
+          <!-- Tab 1: 导入课表 -->
+          <div id="tab-import" class="tab-panel p-6 space-y-6">
+            <!-- Upload Parameters -->
+            <div>
+              <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 16px;">导入参数</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label style="font-size: 13px; color: var(--muted-foreground);">学年 <span style="color: var(--state-error);">*</span></label>
+                  <select id="school-year" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                    <option value="2023-2024">2023-2024</option>
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2025-2026" selected>2025-2026</option>
+                    <option value="2026-2027">2026-2027</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 13px; color: var(--muted-foreground);">学期 <span style="color: var(--state-error);">*</span></label>
+                  <select id="semester" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                    <option value="第一学期" selected>第一学期</option>
+                    <option value="第二学期">第二学期</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dual File Upload -->
+            <div>
+              <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground); margin-bottom: 16px;">上传课表文件</h3>
+              <input type="file" id="class-file-input" accept=".xlsx,.xls" style="display:none">
+              <input type="file" id="teacher-file-input" accept=".xlsx,.xls" style="display:none">
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Class timetable -->
+                <div id="class-upload-zone" class="flex flex-col items-center justify-center rounded-lg border-2 border-dashed py-10 px-6 transition-colors cursor-pointer" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50);">
+                  <svg class="shrink-0 mb-4" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <p class="mb-1" style="font-size: 15px; font-weight: 500; color: var(--foreground);">班级课表</p>
+                  <p style="font-size: 13px; color: var(--muted-foreground);">点击或拖拽选择 .xlsx/.xls 文件</p>
+                  <p id="class-file-name" class="mt-2" style="font-size: 13px; color: var(--primary); font-weight: 500;"></p>
+                </div>
+
+                <!-- Teacher timetable -->
+                <div id="teacher-upload-zone" class="flex flex-col items-center justify-center rounded-lg border-2 border-dashed py-10 px-6 transition-colors cursor-pointer" style="border-color: var(--color-primary-200); background-color: var(--color-primary-50);">
+                  <svg class="shrink-0 mb-4" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" x2="8" y1="13" y2="13"/>
+                    <line x1="16" x2="8" y1="17" y2="17"/>
+                    <line x1="10" x2="8" y1="9" y2="9"/>
+                  </svg>
+                  <p class="mb-1" style="font-size: 15px; font-weight: 500; color: var(--foreground);">教师课表</p>
+                  <p style="font-size: 13px; color: var(--muted-foreground);">点击或拖拽选择 .xlsx/.xls 文件</p>
+                  <p id="teacher-file-name" class="mt-2" style="font-size: 13px; color: var(--primary); font-weight: 500;"></p>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-3 mt-6">
+                <p id="upload-status" class="text-sm" style="color: var(--muted-foreground);"></p>
+                <div class="flex items-center gap-2">
+                  <button id="btn-clear" class="px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: transparent; color: var(--state-error); border: 1px solid var(--state-error);">清除本学期</button>
+                  <button id="btn-upload" class="px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--primary); color: var(--primary-foreground);">上传课表</button>
+                  <button id="btn-preview" class="px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--primary); color: var(--primary-foreground);" disabled>解析预览</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div id="preview-section" class="hidden rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border);">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <h3 style="font-size: 15px; font-weight: 600; color: var(--foreground);">解析预览</h3>
+                <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--foreground);">
+                  <span>映射总数：<strong id="preview-total">0</strong></span>
+                  <span>未匹配班级：<strong id="preview-unmatched" style="color: var(--state-error);">0</strong></span>
+                  <span>冲突数：<strong id="preview-conflicts">0</strong></span>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto mb-4">
+                <table class="w-full text-sm" style="border: 1px solid var(--border);">
+                  <thead>
+                    <tr style="background-color: var(--muted);">
+                      <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">班级</th>
+                      <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">科目</th>
+                      <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教师</th>
+                      <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">合班标记</th>
+                      <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">来源节次</th>
+                    </tr>
+                  </thead>
+                  <tbody id="preview-table-body">
+                    <tr style="border-top: 1px solid var(--border);">
+                      <td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">请先上传并解析课表文件</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div id="unmatched-section" class="hidden rounded-md p-3 mb-4" style="background-color: rgba(220,38,38,0.08);">
+                <p class="text-sm font-medium" style="color: var(--state-error);">以下班级/教师未匹配到系统记录：</p>
+                <ul id="unmatched-list" class="text-sm mt-1 list-disc list-inside" style="color: var(--state-error);"></ul>
+              </div>
+
+              <div id="conflicts-section" class="hidden rounded-md p-3 mb-4" style="background-color: rgba(217,119,6,0.08);">
+                <p class="text-sm font-medium" style="color: var(--state-warning);">以下课表存在班级/教师不一致冲突：</p>
+                <ul id="conflicts-list" class="text-sm mt-1 list-disc list-inside" style="color: var(--state-warning);"></ul>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t" style="border-color: var(--border);">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="overwrite-checkbox" class="rounded" style="width: 16px; height: 16px;">
+                  <span style="font-size: 13px; color: var(--foreground);">覆盖已有数据（该学期已入库的课表映射将被替换）</span>
+                </label>
+                <button id="btn-confirm" class="px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--state-success); color: #ffffff;" disabled>确认入库</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: 任课教师一览 -->
+          <div id="tab-mappings" class="tab-panel hidden p-6 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label style="font-size: 13px; color: var(--muted-foreground);">学年</label>
+                  <select id="mappings-school-year" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                    <option value="2023-2024">2023-2024</option>
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2025-2026" selected>2025-2026</option>
+                    <option value="2026-2027">2026-2027</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 13px; color: var(--muted-foreground);">学期</label>
+                  <select id="mappings-semester" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                    <option value="第一学期" selected>第一学期</option>
+                    <option value="第二学期">第二学期</option>
+                  </select>
+                </div>
+              </div>
+              <button id="mappings-query-btn" class="px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--primary); color: var(--primary-foreground);">查询</button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table id="mappings-table" class="w-full text-sm" style="border: 1px solid var(--border);">
+                <thead>
+                  <tr style="background-color: var(--muted);">
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">班级</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">科目</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教师</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">合班</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">来源节次</th>
+                  </tr>
+                </thead>
+                <tbody id="mappings-table-body">
+                  <tr style="border-top: 1px solid var(--border);">
+                    <td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">请选择学年/学期后点击查询</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="mappings-pagination" class="hidden flex items-center justify-between">
+              <span id="mappings-page-info" class="text-sm" style="color: var(--muted-foreground);"></span>
+              <div class="flex items-center gap-2">
+                <button id="mappings-prev-btn" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors" style="background-color: var(--muted); color: var(--foreground);" disabled>上一页</button>
+                <button id="mappings-next-btn" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors" style="background-color: var(--muted); color: var(--foreground);" disabled>下一页</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: 教师科目概览 -->
+          <div id="tab-overview" class="tab-panel hidden p-6 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label style="font-size: 13px; color: var(--muted-foreground);">学年</label>
+                  <select id="overview-school-year" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                    <option value="2023-2024">2023-2024</option>
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2025-2026" selected>2025-2026</option>
+                    <option value="2026-2027">2026-2027</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 13px; color: var(--muted-foreground);">学期</label>
+                  <select id="overview-semester" class="w-full rounded-md border px-3 py-2 mt-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;">
+                    <option value="第一学期" selected>第一学期</option>
+                    <option value="第二学期">第二学期</option>
+                  </select>
+                </div>
+              </div>
+              <button id="overview-query-btn" class="px-4 py-2 rounded-md text-sm font-medium transition-colors" style="background-color: var(--primary); color: var(--primary-foreground);">查询</button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table id="overview-table" class="w-full text-sm" style="border: 1px solid var(--border);">
+                <thead>
+                  <tr style="background-color: var(--muted);">
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教师</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">科目</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教学班数量</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教学班列表</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">是否含合班</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-table-body">
+                  <tr style="border-top: 1px solid var(--border);">
+                    <td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">请选择学年/学期后点击查询</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Generic Confirm Modal -->
+    <div id="generic-confirm-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:60; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 360px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 id="generic-confirm-title" style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 0.75rem;">确认操作</h3>
+        <p id="generic-confirm-message" style="font-size: 14px; color: var(--foreground); line-height: 1.5; white-space:pre-wrap;"></p>
+        <div class="flex items-center justify-end gap-3 mt-6">
+          <button id="generic-confirm-cancel" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: transparent; color: var(--foreground); border: 1px solid var(--border);">取消</button>
+          <button id="generic-confirm-ok" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--state-error); color: #fff;">确认</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generic Message Modal -->
+    <div id="generic-message-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:60; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 420px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 id="generic-message-title" style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 0.75rem;">提示</h3>
+        <p id="generic-message-body" style="font-size: 14px; color: var(--foreground); line-height: 1.5; white-space:pre-wrap;"></p>
+        <div class="flex items-center justify-end mt-6">
+          <button id="generic-message-ok" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--primary); color: var(--primary-foreground);">知道了</button>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <script>
+      const API_BASE = '/api';
+      let currentImportId = null;
+      let mappingsData = [];
+      let mappingsPage = 1;
+      const MAPPINGS_PAGE_SIZE = 50;
+
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+
+      const schoolYearSelect = document.getElementById('school-year');
+      const semesterSelect = document.getElementById('semester');
+      const classFileInput = document.getElementById('class-file-input');
+      const teacherFileInput = document.getElementById('teacher-file-input');
+      const classUploadZone = document.getElementById('class-upload-zone');
+      const teacherUploadZone = document.getElementById('teacher-upload-zone');
+      const classFileName = document.getElementById('class-file-name');
+      const teacherFileName = document.getElementById('teacher-file-name');
+      const btnUpload = document.getElementById('btn-upload');
+      const btnPreview = document.getElementById('btn-preview');
+      const btnConfirm = document.getElementById('btn-confirm');
+      const btnClear = document.getElementById('btn-clear');
+      const overwriteCheckbox = document.getElementById('overwrite-checkbox');
+      const uploadStatus = document.getElementById('upload-status');
+      const previewSection = document.getElementById('preview-section');
+      const previewTotal = document.getElementById('preview-total');
+      const previewUnmatched = document.getElementById('preview-unmatched');
+      const previewConflicts = document.getElementById('preview-conflicts');
+      const previewTableBody = document.getElementById('preview-table-body');
+      const unmatchedSection = document.getElementById('unmatched-section');
+      const unmatchedList = document.getElementById('unmatched-list');
+      const conflictsSection = document.getElementById('conflicts-section');
+      const conflictsList = document.getElementById('conflicts-list');
+
+      const mappingsSchoolYear = document.getElementById('mappings-school-year');
+      const mappingsSemester = document.getElementById('mappings-semester');
+      const mappingsQueryBtn = document.getElementById('mappings-query-btn');
+      const mappingsTableBody = document.getElementById('mappings-table-body');
+      const mappingsPagination = document.getElementById('mappings-pagination');
+      const mappingsPageInfo = document.getElementById('mappings-page-info');
+      const mappingsPrevBtn = document.getElementById('mappings-prev-btn');
+      const mappingsNextBtn = document.getElementById('mappings-next-btn');
+
+      const overviewSchoolYear = document.getElementById('overview-school-year');
+      const overviewSemester = document.getElementById('overview-semester');
+      const overviewQueryBtn = document.getElementById('overview-query-btn');
+      const overviewTableBody = document.getElementById('overview-table-body');
+
+      function escapeHtml(text) {
+        if (text === null || text === undefined) return '';
+        return String(text)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      async function apiCall(method, path, body) {
+        const options = { method, headers: {} };
+        if (body) {
+          if (body instanceof FormData) {
+            options.body = body;
+          } else {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+          }
+        }
+        const res = await fetch(API_BASE + path, options);
+        if (!res.ok) {
+          let detail = res.statusText;
+          try {
+            const data = await res.json();
+            detail = data.detail || data.message || JSON.stringify(data);
+          } catch (_) {}
+          throw new Error(detail);
+        }
+        if (res.status === 204) return null;
+        return res.json();
+      }
+
+      function apiGet(path) { return apiCall('GET', path); }
+      function apiPost(path, body) { return apiCall('POST', path, body); }
+      function apiDelete(path) { return apiCall('DELETE', path); }
+
+      function showCustomConfirm(title, message) {
+        return new Promise((resolve) => {
+          const modal = document.getElementById('generic-confirm-modal');
+          const okBtn = document.getElementById('generic-confirm-ok');
+          const cancelBtn = document.getElementById('generic-confirm-cancel');
+          document.getElementById('generic-confirm-title').textContent = title;
+          document.getElementById('generic-confirm-message').textContent = message;
+          modal.style.display = 'flex';
+          function cleanup() {
+            modal.style.display = 'none';
+            okBtn.onclick = null;
+            cancelBtn.onclick = null;
+          }
+          okBtn.onclick = () => { cleanup(); resolve(true); };
+          cancelBtn.onclick = () => { cleanup(); resolve(false); };
+        });
+      }
+
+      function showCustomMessage(title, message) {
+        return new Promise((resolve) => {
+          const modal = document.getElementById('generic-message-modal');
+          const okBtn = document.getElementById('generic-message-ok');
+          document.getElementById('generic-message-title').textContent = title;
+          document.getElementById('generic-message-body').textContent = message;
+          modal.style.display = 'flex';
+          okBtn.onclick = () => { modal.style.display = 'none'; okBtn.onclick = null; resolve(); };
+        });
+      }
+
+      function setUploadStatus(msg, color) {
+        uploadStatus.textContent = msg;
+        uploadStatus.style.color = color || 'var(--muted-foreground)';
+      }
+      function setStatus(msg, color) { setUploadStatus(msg, color); }
+
+      // ===== Tab switching =====
+      function switchTab(tabName) {
+        tabBtns.forEach(btn => {
+          if (btn.dataset.tab === tabName) btn.classList.add('active');
+          else btn.classList.remove('active');
+        });
+        tabPanels.forEach(panel => {
+          if (panel.id === 'tab-' + tabName) panel.classList.remove('hidden');
+          else panel.classList.add('hidden');
+        });
+      }
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+
+      // ===== Upload zone helpers =====
+      function handleZoneClick(zone, input) {
+        zone.addEventListener('click', () => input.click());
+      }
+
+      function handleFileChange(input, labelEl) {
+        input.addEventListener('change', () => {
+          if (input.files && input.files[0]) {
+            labelEl.textContent = input.files[0].name;
+          } else {
+            labelEl.textContent = '';
+          }
+          // 文件变更后，已有的导入批次失效，需要重新上传
+          currentImportId = null;
+          updateActionButtons();
+        });
+      }
+
+      function setupDragDrop(zone, input) {
+        zone.addEventListener('dragover', e => {
+          e.preventDefault();
+          zone.style.borderColor = 'var(--primary)';
+          zone.style.backgroundColor = 'var(--color-primary-100)';
+        });
+        zone.addEventListener('dragleave', () => {
+          zone.style.borderColor = 'var(--color-primary-200)';
+          zone.style.backgroundColor = 'var(--color-primary-50)';
+        });
+        zone.addEventListener('drop', e => {
+          e.preventDefault();
+          zone.style.borderColor = 'var(--color-primary-200)';
+          zone.style.backgroundColor = 'var(--color-primary-50)';
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+          }
+        });
+      }
+
+      function setButtonState(btn, enabled) {
+        btn.disabled = !enabled;
+        btn.style.opacity = enabled ? '1' : '0.5';
+        btn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+      }
+
+      function updateActionButtons() {
+        const hasFiles = classFileInput.files[0] && teacherFileInput.files[0];
+        setButtonState(btnUpload, hasFiles);
+        // 解析预览需要先完成上传
+        setButtonState(btnPreview, hasFiles && currentImportId !== null);
+      }
+
+      handleZoneClick(classUploadZone, classFileInput);
+      handleZoneClick(teacherUploadZone, teacherFileInput);
+      handleFileChange(classFileInput, classFileName);
+      handleFileChange(teacherFileInput, teacherFileName);
+      setupDragDrop(classUploadZone, classFileInput);
+      setupDragDrop(teacherUploadZone, teacherFileInput);
+
+      // ===== Tab 1: Import =====
+      async function doUpload() {
+        const schoolYear = schoolYearSelect.value;
+        const semester = semesterSelect.value;
+        if (!schoolYear || !semester) {
+          await showCustomMessage('提示', '请先选择学年和学期');
+          return;
+        }
+        const classFile = classFileInput.files[0];
+        const teacherFile = teacherFileInput.files[0];
+        if (!classFile || !teacherFile) {
+          await showCustomMessage('提示', '请同时选择班级课表和教师课表文件');
+          return;
+        }
+
+        setStatus('正在上传课表文件，请稍候...', 'var(--state-info)');
+        setButtonState(btnUpload, false);
+        setButtonState(btnPreview, false);
+
+        const form = new FormData();
+        form.append('class_file', classFile);
+        form.append('teacher_file', teacherFile);
+        form.append('school_year', schoolYear);
+        form.append('semester', semester);
+
+        try {
+          const result = await apiPost('/timetable/upload', form);
+          currentImportId = result.id;
+          setStatus(`上传成功（导入批次 #${result.id}）：${escapeHtml(result.class_file_name)} / ${escapeHtml(result.teacher_file_name)}`, 'var(--state-success)');
+          updateActionButtons();
+        } catch (e) {
+          setStatus('上传失败：' + e.message, 'var(--state-error)');
+          updateActionButtons();
+        }
+      }
+
+      async function doPreview() {
+        if (!currentImportId) {
+          await showCustomMessage('提示', '请先上传课表文件');
+          return;
+        }
+        setStatus('正在解析课表，请稍候...', 'var(--state-info)');
+        setButtonState(btnPreview, false);
+        try {
+          await loadPreview(currentImportId);
+          setStatus('解析完成，请核对映射明细后确认入库', 'var(--state-success)');
+        } catch (e) {
+          setStatus('解析预览失败：' + e.message, 'var(--state-error)');
+          updateActionButtons();
+        }
+      }
+
+      async function loadPreview(importId) {
+        const data = await apiPost(`/timetable/preview/${importId}`);
+        previewSection.classList.remove('hidden');
+        previewTotal.textContent = data.total || 0;
+        previewUnmatched.textContent = (data.unmatched || []).length;
+        previewConflicts.textContent = (data.conflicts || []).length;
+
+        const mappings = data.mappings || [];
+        if (mappings.length === 0) {
+          previewTableBody.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">未解析到有效映射</td></tr>`;
+        } else {
+          previewTableBody.innerHTML = mappings.map(m => `
+            <tr style="border-top: 1px solid var(--border);">
+              <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml(m.class_name)}</td>
+              <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml(m.subject_name)}</td>
+              <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml(m.teacher_name)}</td>
+              <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${renderCombinedBadge(m.is_combined, m.combined_class_names)}</td>
+              <td class="px-4 py-3">${escapeHtml(m.slot || '')}</td>
+            </tr>
+          `).join('');
+        }
+
+        const unmatched = data.unmatched || [];
+        if (unmatched.length > 0) {
+          unmatchedSection.classList.remove('hidden');
+          unmatchedList.innerHTML = unmatched.map(u => `<li>${escapeHtml(u)}</li>`).join('');
+        } else {
+          unmatchedSection.classList.add('hidden');
+          unmatchedList.innerHTML = '';
+        }
+
+        const conflicts = data.conflicts || [];
+        if (conflicts.length > 0) {
+          conflictsSection.classList.remove('hidden');
+          conflictsList.innerHTML = conflicts.map(c => `<li>${escapeHtml(typeof c === 'string' ? c : JSON.stringify(c))}</li>`).join('');
+        } else {
+          conflictsSection.classList.add('hidden');
+          conflictsList.innerHTML = '';
+        }
+
+        const canConfirm = mappings.length > 0;
+        setButtonState(btnConfirm, canConfirm);
+      }
+
+      function renderCombinedBadge(isCombined, combinedNames) {
+        if (!isCombined) return '<span style="color: var(--muted-foreground);">-</span>';
+        const names = combinedNames
+          ? String(combinedNames).replace(/["\\[\\]]/g, '').split(',').filter(Boolean).join('、')
+          : '';
+        return `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium" style="background-color: #fef3c7; color: #92400e;" title="合班：${escapeHtml(names)}">合班</span>`;
+      }
+
+      async function doConfirm() {
+        if (!currentImportId) {
+          await showCustomMessage('提示', '没有可确认的导入批次');
+          return;
+        }
+        setStatus('正在确认入库，请稍候...', 'var(--state-info)');
+        setButtonState(btnConfirm, false);
+        try {
+          const replace = overwriteCheckbox && overwriteCheckbox.checked;
+          const result = await apiPost(`/timetable/confirm/${currentImportId}`, { replace: replace });
+          setStatus(`确认入库成功：保存 ${result.saved || 0} 条映射，未匹配 ${(result.unmatched || []).length} 个班级`, 'var(--state-success)');
+          await showCustomMessage('导入成功', `确认入库成功：保存 ${result.saved || 0} 条映射，未匹配 ${(result.unmatched || []).length} 个班级`);
+          previewSection.classList.add('hidden');
+          currentImportId = null;
+          classFileInput.value = '';
+          teacherFileInput.value = '';
+          classFileName.textContent = '';
+          teacherFileName.textContent = '';
+          updateActionButtons();
+          // Sync selects and refresh other tabs
+          mappingsSchoolYear.value = schoolYearSelect.value;
+          mappingsSemester.value = semesterSelect.value;
+          overviewSchoolYear.value = schoolYearSelect.value;
+          overviewSemester.value = semesterSelect.value;
+          await Promise.all([loadMappings(), loadOverview()]);
+        } catch (e) {
+          setStatus('确认入库失败：' + e.message, 'var(--state-error)');
+          await showCustomMessage('导入失败', '确认入库失败：' + e.message);
+          updateActionButtons();
+        }
+      }
+
+      async function doClear() {
+        const schoolYear = schoolYearSelect.value;
+        const semester = semesterSelect.value;
+        if (!schoolYear || !semester) {
+          await showCustomMessage('提示', '请先选择学年和学期');
+          return;
+        }
+        const confirmed = await showCustomConfirm('确认清除', `确定要清除 ${schoolYear} ${semester} 的所有课表映射吗？此操作不可恢复。`);
+        if (!confirmed) {
+          return;
+        }
+        try {
+          const result = await apiDelete(`/timetable/mappings?school_year=${encodeURIComponent(schoolYear)}&semester=${encodeURIComponent(semester)}`);
+          await showCustomMessage('清除成功', `已清除 ${result.deleted || 0} 条映射`);
+          mappingsSchoolYear.value = schoolYear;
+          mappingsSemester.value = semester;
+          overviewSchoolYear.value = schoolYear;
+          overviewSemester.value = semester;
+          await Promise.all([loadMappings(), loadOverview()]);
+        } catch (e) {
+          await showCustomMessage('清除失败', '清除失败：' + e.message);
+        }
+      }
+
+      // ===== Tab 2: Mappings =====
+      async function loadMappings() {
+        const schoolYear = mappingsSchoolYear.value;
+        const semester = mappingsSemester.value;
+        mappingsPage = 1;
+        mappingsTableBody.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">加载中...</td></tr>`;
+        mappingsPagination.classList.add('hidden');
+        try {
+          const data = await apiGet(`/timetable/mappings?school_year=${encodeURIComponent(schoolYear)}&semester=${encodeURIComponent(semester)}`);
+          mappingsData = Array.isArray(data) ? data : (data.items || []);
+          renderMappingsPage();
+        } catch (e) {
+          mappingsTableBody.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="5" style="color: var(--state-error); text-align: center;">加载失败：${escapeHtml(e.message)}</td></tr>`;
+        }
+      }
+
+      function renderMappingsPage() {
+        const total = mappingsData.length;
+        const totalPages = Math.max(1, Math.ceil(total / MAPPINGS_PAGE_SIZE));
+        if (mappingsPage > totalPages) mappingsPage = totalPages;
+        if (mappingsPage < 1) mappingsPage = 1;
+        const start = (mappingsPage - 1) * MAPPINGS_PAGE_SIZE;
+        const pageItems = mappingsData.slice(start, start + MAPPINGS_PAGE_SIZE);
+
+        if (total === 0) {
+          mappingsTableBody.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">暂无数据</td></tr>`;
+          mappingsPagination.classList.add('hidden');
+          return;
+        }
+
+        mappingsTableBody.innerHTML = pageItems.map(m => `
+          <tr style="border-top: 1px solid var(--border);">
+            <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml(m.class_name)}</td>
+            <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml(m.subject_name)}</td>
+            <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml(m.teacher_name)}</td>
+            <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${renderCombinedBadge(m.is_combined, m.combined_class_names)}</td>
+            <td class="px-4 py-3">${escapeHtml(m.source_slot || '')}</td>
+          </tr>
+        `).join('');
+
+        mappingsPagination.classList.remove('hidden');
+        mappingsPageInfo.textContent = `第 ${mappingsPage}/${totalPages} 页，共 ${total} 条`;
+        mappingsPrevBtn.disabled = mappingsPage <= 1;
+        mappingsNextBtn.disabled = mappingsPage >= totalPages;
+        mappingsPrevBtn.style.opacity = mappingsPage <= 1 ? '0.5' : '1';
+        mappingsNextBtn.style.opacity = mappingsPage >= totalPages ? '0.5' : '1';
+      }
+
+      mappingsPrevBtn.addEventListener('click', () => { mappingsPage--; renderMappingsPage(); });
+      mappingsNextBtn.addEventListener('click', () => { mappingsPage++; renderMappingsPage(); });
+
+      // ===== Tab 3: Overview =====
+      async function loadOverview() {
+        const schoolYear = overviewSchoolYear.value;
+        const semester = overviewSemester.value;
+        overviewTableBody.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">加载中...</td></tr>`;
+        try {
+          const data = await apiGet(`/timetable/overview?school_year=${encodeURIComponent(schoolYear)}&semester=${encodeURIComponent(semester)}`);
+          const items = Array.isArray(data) ? data : (data.items || []);
+          if (items.length === 0) {
+            overviewTableBody.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">暂无数据</td></tr>`;
+            return;
+          }
+          overviewTableBody.innerHTML = items.map(o => `
+            <tr style="border-top: 1px solid var(--border);">
+              <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml(o.teacher_name)}</td>
+              <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml(o.subject_name)}</td>
+              <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${o.class_count || 0}</td>
+              <td class="px-4 py-3" style="border-right: 1px solid var(--border);">${escapeHtml((o.classes || []).join('、'))}</td>
+              <td class="px-4 py-3">${o.is_combined ? '<span style="color: var(--state-warning); font-weight: 500;">是</span>' : '<span style="color: var(--muted-foreground);">否</span>'}</td>
+            </tr>
+          `).join('');
+        } catch (e) {
+          overviewTableBody.innerHTML = `<tr style="border-top: 1px solid var(--border);"><td class="px-4 py-3" colspan="5" style="color: var(--state-error); text-align: center;">加载失败：${escapeHtml(e.message)}</td></tr>`;
+        }
+      }
+
+      // ===== 学年/学期选项：从系统设置接口动态加载（接口不可用时保留页面内置选项） =====
+      async function loadSchoolYearSemesterOptions() {
+        try {
+          const [years, semesters] = await Promise.all([
+            apiGet('/settings/school-years'),
+            apiGet('/settings/semesters'),
+          ]);
+          const yearSelects = [schoolYearSelect, mappingsSchoolYear, overviewSchoolYear];
+          if (Array.isArray(years) && years.length) {
+            yearSelects.forEach(sel => {
+              const current = sel.value;
+              sel.innerHTML = years
+                .map(y => `<option value="${escapeHtml(y)}"${y === current ? ' selected' : ''}>${escapeHtml(y)}</option>`)
+                .join('');
+            });
+          }
+          const semesterSelects = [semesterSelect, mappingsSemester, overviewSemester];
+          if (Array.isArray(semesters) && semesters.length) {
+            semesterSelects.forEach(sel => {
+              const current = sel.value;
+              sel.innerHTML = semesters
+                .map(s => `<option value="${escapeHtml(s)}"${s === current ? ' selected' : ''}>${escapeHtml(s)}</option>`)
+                .join('');
+            });
+          }
+        } catch (_) {
+          // 学年/学期接口不可用时，保留页面内置选项
+        }
+      }
+
+      // ===== Event bindings =====
+      btnUpload.addEventListener('click', doUpload);
+      btnPreview.addEventListener('click', doPreview);
+      btnConfirm.addEventListener('click', doConfirm);
+      btnClear.addEventListener('click', doClear);
+      mappingsQueryBtn.addEventListener('click', loadMappings);
+      overviewQueryBtn.addEventListener('click', loadOverview);
+
+      // Auto-load overview when school year/semester changes in import tab
+      schoolYearSelect.addEventListener('change', () => {
+        overviewSchoolYear.value = schoolYearSelect.value;
+        loadOverview();
+      });
+      semesterSelect.addEventListener('change', () => {
+        overviewSemester.value = semesterSelect.value;
+        loadOverview();
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+        updateActionButtons();
+        // Sync overview selectors with import tab and load initial data
+        overviewSchoolYear.value = schoolYearSelect.value;
+        overviewSemester.value = semesterSelect.value;
+        loadSchoolYearSemesterOptions().then(() => {
+          overviewSchoolYear.value = schoolYearSelect.value;
+          overviewSemester.value = semesterSelect.value;
+          loadOverview();
+        });
+      });
+    </script>
+</body>
+</html>

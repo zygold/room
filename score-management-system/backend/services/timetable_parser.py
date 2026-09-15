@@ -140,6 +140,51 @@ def _split_cell(cell, teacher_names=None, subject_names=None):
     return subject_part, teacher_part
 
 
+def _conflict_subject(raw_subject, teacher_names=None, subject_names=None):
+    """返回 True 表示 raw_subject 疑似教师名（应被替换/跳过）。
+
+    判定：命中 teacher_names 白名单，但不命中 subject_names 也不含常见科目关键词。
+    """
+    if teacher_names and _looks_like_teacher(raw_subject, teacher_names):
+        if subject_names and _looks_like_subject(raw_subject, subject_names):
+            return False
+        std = normalize_name(raw_subject)
+        for kw in _COMMON_SUBJECTS:
+            if kw and kw in std:
+                return False
+        return True
+    return False
+
+
+def _fix_sheet_conflicts(raw_triples, teacher_names=None, subject_names=None):
+    """对单个 Sheet 的 raw 三元组做"班主任名被当成科目"的推断修正。
+
+    扫描：若某条目的 subject 部分疑似教师名（_conflict_subject=True），
+    则看同 Sheet 内、同一教师名在其他条目中出现次数最多的真实科目，
+    用它替换异常条目；若无法推断则整条跳过。
+    """
+    if not raw_triples:
+        return []
+    tch_subject_freq = {}
+    for cls, subj, tch in raw_triples:
+        if _conflict_subject(subj, teacher_names, subject_names):
+            continue
+        if not tch:
+            continue
+        bucket = tch_subject_freq.setdefault(tch, {})
+        bucket[subj] = bucket.get(subj, 0) + 1
+    out = []
+    for cls, subj, tch in raw_triples:
+        if not _conflict_subject(subj, teacher_names, subject_names):
+            out.append((cls, subj, tch))
+            continue
+        freq = tch_subject_freq.get(tch, {})
+        if freq:
+            best = max(freq.items(), key=lambda kv: kv[1])[0]
+            out.append((cls, best, tch))
+    return out
+
+
 # ---------------------------------------------------------------------------
 # 主解析函数
 # ---------------------------------------------------------------------------
@@ -160,11 +205,13 @@ def parse_class_timetable(content: bytes, teacher_names=None, subject_names=None
         start = next((i for i, r in enumerate(rows) if _is_weekday_header(r)), None)
         if start is None:
             continue
+        raw = []
         for ri in range(start + 1, len(rows)):
             for cell in rows[ri]:
                 hit = _split_cell(cell, teacher_names, subject_names)
                 if hit and hit[0] and hit[1]:
-                    triples.append((_class_title(sn), hit[0], hit[1]))
+                    raw.append((_class_title(sn), hit[0], hit[1]))
+        triples.extend(_fix_sheet_conflicts(raw, teacher_names, subject_names))
     return triples
 
 
@@ -177,11 +224,21 @@ def parse_class_timetable_detailed(content: bytes, teacher_names=None, subject_n
         start = next((i for i, r in enumerate(rows) if _is_weekday_header(r)), None)
         if start is None:
             continue
+        raw = []
         for ri in range(start + 1, len(rows)):
             for ci, cell in enumerate(rows[ri]):
                 hit = _split_cell(cell, teacher_names, subject_names)
                 if hit and hit[0] and hit[1]:
-                    out.append((_class_title(sn), hit[0], hit[1], f"{ri}:{ci}"))
+                    raw.append((_class_title(sn), hit[0], hit[1], f"{ri}:{ci}"))
+        cls = raw[0][0] if raw else _class_title(sn)
+        fixed = _fix_sheet_conflicts([r[:3] for r in raw], teacher_names, subject_names)
+        slot_map = {(r[0], r[1], r[2]): r[3] for r in raw}
+        for c, s, t in fixed:
+            slot = slot_map.get((c, s, t))
+            if slot is None:
+                slot = next((v for (cc, ss, tt), v in slot_map.items()
+                             if cc == c and tt == t), "?")
+            out.append((cls, s, t, slot))
     return out
 
 

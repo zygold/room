@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>统计分析</title>
+    <style id="theme-vars">
+/* Score Management System - Brand CSS */
+/* Professional, clean, data-dense administrative interface */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Primary - Indigo Blue */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #4338ca;
+  --color-primary-700: #3730a3;
+  --color-primary-800: #312e81;
+  --color-primary-900: #1e1b4b;
+
+  /* Neutral Scale */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* State Colors */
+  --state-success: #16a34a;
+  --state-warning: #d97706;
+  --state-error: #dc2626;
+  --state-info: #2563eb;
+
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+
+  /* Semantic Aliases */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #4f46e5;
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #818cf8;
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+  }
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--background); }
+      .text-background { color: var(--background); }
+      .border-background { border-color: var(--background); }
+      .ring-background { --tw-ring-color: var(--background); }
+      .bg-foreground { background-color: var(--foreground); }
+      .text-foreground { color: var(--foreground); }
+      .border-foreground { border-color: var(--foreground); }
+      .ring-foreground { --tw-ring-color: var(--foreground); }
+      .bg-card { background-color: var(--card); }
+      .text-card { color: var(--card); }
+      .border-card { border-color: var(--card); }
+      .ring-card { --tw-ring-color: var(--card); }
+      .bg-card-foreground { background-color: var(--card-foreground); }
+      .text-card-foreground { color: var(--card-foreground); }
+      .border-card-foreground { border-color: var(--card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--card-foreground); }
+      .bg-popover { background-color: var(--popover); }
+      .text-popover { color: var(--popover); }
+      .border-popover { border-color: var(--popover); }
+      .ring-popover { --tw-ring-color: var(--popover); }
+      .bg-popover-foreground { background-color: var(--popover-foreground); }
+      .text-popover-foreground { color: var(--popover-foreground); }
+      .border-popover-foreground { border-color: var(--popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--popover-foreground); }
+      .bg-primary { background-color: var(--primary); }
+      .text-primary { color: var(--primary); }
+      .border-primary { border-color: var(--primary); }
+      .ring-primary { --tw-ring-color: var(--primary); }
+      .bg-primary-foreground { background-color: var(--primary-foreground); }
+      .text-primary-foreground { color: var(--primary-foreground); }
+      .border-primary-foreground { border-color: var(--primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--primary-foreground); }
+      .bg-muted { background-color: var(--muted); }
+      .text-muted { color: var(--muted); }
+      .border-muted { border-color: var(--muted); }
+      .ring-muted { --tw-ring-color: var(--muted); }
+      .bg-muted-foreground { background-color: var(--muted-foreground); }
+      .text-muted-foreground { color: var(--muted-foreground); }
+      .border-muted-foreground { border-color: var(--muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--muted-foreground); }
+      .bg-border { background-color: var(--border); }
+      .text-border { color: var(--border); }
+      .border-border { border-color: var(--border); }
+      .ring-border { --tw-ring-color: var(--border); }
+      .bg-input { background-color: var(--input); }
+      .text-input { color: var(--input); }
+      .border-input { border-color: var(--input); }
+      .ring-input { --tw-ring-color: var(--input); }
+      .bg-ring { background-color: var(--ring); }
+      .text-ring { color: var(--ring); }
+      .border-ring { border-color: var(--ring); }
+      .ring-ring { --tw-ring-color: var(--ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+      .tab-btn.active {
+        color: var(--primary);
+        border-bottom: 2px solid var(--primary);
+      }
+      .tab-btn {
+        color: var(--muted-foreground);
+        border-bottom: 2px solid transparent;
+      }
+      .tab-panel.hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+<!-- Project Shell: Sidebar + Header + Content Slot -->
+<!-- App-shell layout for score management admin system -->
+
+<div data-viewport-mode="app-shell" class="flex h-screen overflow-hidden min-h-0" style="font-family: var(--font-body);">
+
+  <!-- ====== Left Sidebar (240px) ====== -->
+  <aside class="shrink-0 flex flex-col h-full" style="width: 240px; background-color: var(--color-neutral-800);">
+
+    <!-- Logo / System Name -->
+    <div class="flex items-center gap-3 px-5 py-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 32px; height: 32px; background-color: var(--primary); border-radius: var(--radius-md);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5"/>
+        </svg>
+      </div>
+      <span class="truncate" style="color: #f8fafc; font-size: 15px; font-weight: 600; line-height: 1.2;">成绩管理系统</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 min-h-0 overflow-y-auto px-3 py-3" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+
+      <ul class="flex flex-col gap-1">
+
+        <!-- 系统仪表盘 -->
+        <li>
+          <a href="dashboard.html" data-dom-id="nav-dashboard"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统仪表盘</span>
+          </a>
+        </li>
+
+        <!-- 数据导入 -->
+        <li>
+          <a href="data-import.html" data-dom-id="nav-data-import"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导入</span>
+          </a>
+        </li>
+
+        <!-- 课表管理 (ACTIVE) -->
+        <li>
+          <a href="timetable.html" data-dom-id="nav-timetable" data-active="true"
+             class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">课表管理</span>
+          </a>
+        </li>
+
+        <!-- 成绩管理 -->
+        <li>
+          <a href="score-management.html" data-dom-id="nav-score-management"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+              <line x1="8" y1="16" x2="14" y2="16"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">成绩管理</span>
+          </a>
+        </li>
+
+        <!-- 奖学金评定 -->
+        <li>
+          <a href="scholarship.html" data-dom-id="nav-scholarship"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+          </a>
+        </li>
+
+        <!-- 数据导出 -->
+        <li>
+          <a href="data-export.html" data-dom-id="nav-data-export"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">数据导出</span>
+          </a>
+        </li>
+
+        <!-- 备份还原 -->
+        <li>
+          <a href="backup-restore.html" data-dom-id="nav-backup-restore"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/>
+              <path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">备份还原</span>
+          </a>
+        </li>
+
+        <!-- 系统设置 -->
+        <li>
+          <a href="system-settings.html" data-dom-id="nav-system-settings"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Bottom: User Info -->
+    <div class="shrink-0 flex items-center gap-3 px-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
+      <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: rgba(79,70,229,0.25); border-radius: var(--radius-full);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="truncate" style="color: #f8fafc; font-size: 13px; font-weight: 500;">管理员</span>
+        <span class="truncate" style="color: #64748b; font-size: 12px;">admin@school.edu</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== Main Area (Sidebar + Header + Content) ====== -->
+  <div class="flex flex-col flex-1 min-h-0 min-w-0">
+
+    <!-- Top Header (56px) -->
+    <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
+      <!-- Left: Page Title -->
+      <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
+        课表管理
+      </h1>
+
+      <!-- Right: Actions -->
+      <div class="flex items-center gap-3 shrink-0">
+        <!-- Notification Bell -->
+        <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+
+        <!-- User Avatar -->
+        <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Scroll Region -->
+    <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+<div class="p-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-semibold" style="color: var(--color-neutral-900);">统计分析</h1>
+      <p class="text-sm mt-1" style="color: var(--color-neutral-500);">组合统计 · 班级全科及格 · 逐科及格线 · 总分阈值 · CSV 导出</p>
+    </div>
+    <button id="btn-export" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium"
+            style="background: var(--color-primary-600); color: white;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      导出 CSV
+    </button>
+  </div>
+
+  <!-- 筛选面板 -->
+  <div class="rounded-xl p-5 mb-5" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
+    <h2 class="text-sm font-semibold mb-4" style="color: var(--color-neutral-700);">筛选条件</h2>
+    <div class="grid grid-cols-12 gap-4 items-end">
+      <div class="col-span-3">
+        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">考试</label>
+        <select id="exam-select" class="w-full px-3 py-2 rounded-lg text-sm"
+                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);">
+          <option value="">加载中...</option>
+        </select>
+      </div>
+      <div class="col-span-2">
+        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">学年</label>
+        <select id="sy-select" class="w-full px-3 py-2 rounded-lg text-sm"
+                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);">
+          <option value="">自动</option>
+        </select>
+      </div>
+      <div class="col-span-2">
+        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">学期</label>
+        <select id="sem-select" class="w-full px-3 py-2 rounded-lg text-sm"
+                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);">
+          <option value="">自动</option>
+          <option value="第一学期">第一学期</option>
+          <option value="第二学期">第二学期</option>
+        </select>
+      </div>
+      <div class="col-span-2">
+        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">总分≥</label>
+        <input id="total-line" type="number" min="0" step="0.5" placeholder="留空"
+               class="w-full px-3 py-2 rounded-lg text-sm"
+               style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);">
+      </div>
+      <div class="col-span-3 flex gap-2">
+        <button id="btn-run" class="px-5 py-2 rounded-lg text-sm font-medium whitespace-nowrap"
+                style="background: var(--color-primary-600); color: white;">查询统计</button>
+        <button id="btn-reset" class="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
+                style="background: var(--color-neutral-100); color: var(--color-neutral-700); border: 1px solid var(--color-neutral-200);">重置</button>
+      </div>
+    </div>
+    <div class="mt-4 pt-4" style="border-top: 1px dashed var(--color-neutral-200);">
+      <div class="flex items-center justify-between mb-2">
+        <label class="text-xs font-medium" style="color: var(--color-neutral-600);">勾选科目 + 逐科及格线（可选）</label>
+        <button id="btn-check-all" class="text-xs px-2 py-1 rounded"
+                style="color: var(--color-primary-600); border: 1px solid var(--color-primary-200);">全选/反选</button>
+      </div>
+      <div id="subject-grid" class="flex flex-wrap gap-2"></div>
+    </div>
+  </div>
+
+  <!-- 结果表格 -->
+  <div class="rounded-xl overflow-hidden" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
+    <div class="flex items-center justify-between px-5 py-3"
+         style="background: var(--color-neutral-50); border-bottom: 1px solid var(--color-neutral-200);">
+      <h2 class="text-sm font-semibold" style="color: var(--color-neutral-700);">班级组合统计 <span id="row-count" class="text-xs font-normal ml-2" style="color: var(--color-neutral-500);"></span></h2>
+      <div id="status-msg" class="text-xs" style="color: var(--color-neutral-500);">等待查询</div>
+    </div>
+    <div class="overflow-x-auto" style="max-height: 640px;">
+      <table id="result-table" class="w-full text-sm">
+        <thead id="result-thead" class="sticky top-0" style="background: var(--color-neutral-100); z-index: 1;">
+          <tr id="thead-row"></tr>
+        </thead>
+        <tbody id="result-tbody"></tbody>
+      </table>
+    </div>
+    <div id="empty-hint" class="hidden text-center py-16 text-sm" style="color: var(--color-neutral-400);">
+      请选择考试后点击"查询统计"
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+    <!-- Generic Confirm Modal -->
+    <div id="generic-confirm-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:60; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 360px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 id="generic-confirm-title" style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 0.75rem;">确认操作</h3>
+        <p id="generic-confirm-message" style="font-size: 14px; color: var(--foreground); line-height: 1.5; white-space:pre-wrap;"></p>
+        <div class="flex items-center justify-end gap-3 mt-6">
+          <button id="generic-confirm-cancel" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: transparent; color: var(--foreground); border: 1px solid var(--border);">取消</button>
+          <button id="generic-confirm-ok" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--state-error); color: #fff;">确认</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generic Message Modal -->
+    <div id="generic-message-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:60; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 420px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 id="generic-message-title" style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 0.75rem;">提示</h3>
+        <p id="generic-message-body" style="font-size: 14px; color: var(--foreground); line-height: 1.5; white-space:pre-wrap;"></p>
+        <div class="flex items-center justify-end mt-6">
+          <button id="generic-message-ok" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--primary); color: var(--primary-foreground);">知道了</button>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <script>
+(function(){
+  const API="/api";
+  const state={examId:null,subjects:[],items:[],headers:[]};
+  const $=(id)=>document.getElementById(id);
+  const fmt=(x,d=1)=>x==null||isNaN(x)?"-":Number(x).toFixed(d);
+
+  async function loadExams(){
+    try{
+      const r=await fetch(API+"/stats/exams");
+      const data=await r.json();
+      const sel=$("exam-select"); sel.innerHTML="";
+      if(!data.length){sel.innerHTML='<option value="">暂无考试</option>';return;}
+      data.forEach(ex=>{
+        const opt=document.createElement("option");
+        opt.value=ex.id;
+        opt.textContent=`${ex.school_year||""} ${ex.semester||""} ${ex.name}`.trim();
+        opt.dataset.year=ex.school_year||"";
+        opt.dataset.sem=ex.semester||"";
+        sel.appendChild(opt);
+      });
+      const sySet=[...new Set(data.map(e=>e.school_year).filter(Boolean))].sort();
+      $("sy-select").innerHTML='<option value="">自动</option>'+sySet.map(y=>`<option value="${y}">${y}</option>`).join("");
+      sel.addEventListener("change",onExamChange);
+      onExamChange();
+    }catch(e){$("exam-select").innerHTML='<option value="">加载失败</option>';}
+  }
+
+  function onExamChange(){
+    const sel=$("exam-select"); const opt=sel.options[sel.selectedIndex];
+    state.examId=opt?parseInt(opt.value)||null:null;
+    if(state.examId&&opt){
+      if(opt.dataset.year)$("sy-select").value=opt.dataset.year;
+      loadSubjects();
+    }else{$("subject-grid").innerHTML='<div class="text-xs" style="color:var(--color-neutral-400);">请先选考试</div>';}
+  }
+
+  async function loadSubjects(){
+    try{
+      const r=await fetch(API+"/stats/subjects?exam_id="+state.examId);
+      const data=await r.json();
+      const subs=data.subjects||{}; state.subjects=subs;
+      const grid=$("subject-grid"); grid.innerHTML="";
+      Object.entries(subs).forEach(([name,info],idx)=>{
+        const label=document.createElement("label");
+        label.className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer";
+        label.style.cssText="background:var(--color-neutral-50); border:1px solid var(--color-neutral-200);";
+        const ps=info&&info.pass_score?info.pass_score:"";
+        label.innerHTML=`<input type="checkbox" data-subj="${name}" ${idx<4?"checked":""} style="accent-color:var(--color-primary-600);">
+          <span class="text-sm" style="color:var(--color-neutral-700);">${name}</span>
+          <span class="text-xs" style="color:var(--color-neutral-400);">及格</span>
+          <input type="number" data-line="${name}" min="0" max="200" step="0.5" value="${ps}"
+                 class="w-14 px-1 py-0.5 text-xs rounded"
+                 style="background:white; border:1px solid var(--color-neutral-200); color:var(--color-neutral-800);">`;
+        grid.appendChild(label);
+      });
+    }catch(e){$("subject-grid").innerHTML='<div class="text-xs" style="color:var(--color-neutral-400);">加载失败</div>';}
+  }
+
+  async function runQuery(){
+    if(!state.examId){$("status-msg").textContent="请选考试";return;}
+    const checks=document.querySelectorAll("#subject-grid input[type=checkbox]:checked");
+    const subjectIds=[...checks].map(c=>c.dataset.subj);
+    if(!subjectIds.length){$("status-msg").textContent="请至少勾选一个科目";return;}
+    const passLines={};
+    document.querySelectorAll("#subject-grid input[data-line]").forEach(inp=>{if(inp.value.trim())passLines[inp.dataset.line]=parseFloat(inp.value);});
+    const tlr=$("total-line").value.trim();
+    const body={exam_id:state.examId,subject_ids:subjectIds,pass_lines:passLines,
+      total_pass_line:tlr?parseFloat(tlr):0,school_year:$("sy-select").value||null,semester:$("sem-select").value||null};
+    $("status-msg").textContent="查询中...";
+    try{
+      const r=await fetch(API+"/stats/combined",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+      if(!r.ok)throw new Error((await r.json()).detail||r.status);
+      const data=await r.json();
+      state.items=data.items||[]; state.headers=subjectIds;
+      renderTable();
+      $("status-msg").textContent=`共 ${state.items.length} 个班级`;
+    }catch(e){$("status-msg").textContent="查询失败: "+e.message;}
+  }
+
+  function renderTable(){
+    const th=$("thead-row"),tb=$("result-tbody"); th.innerHTML=""; tb.innerHTML="";
+    if(!state.items.length){$("empty-hint").classList.remove("hidden");$("row-count").textContent="";return;}
+    $("empty-hint").classList.add("hidden");
+    $("row-count").textContent=`· ${state.items.length} 个班级`;
+    const hdr=["班级","班主任"];
+    state.headers.forEach(s=>{hdr.push(s+"教师");hdr.push(s+"及格/参考");});
+    hdr.push("总分及格","总分人均");
+    hdr.forEach(h=>{const x=document.createElement("th");x.textContent=h;x.className="px-3 py-2 text-left text-xs font-semibold";x.style.cssText="color:var(--color-neutral-600); white-space:nowrap;";th.appendChild(x);});
+    state.items.forEach(item=>{
+      const tr=document.createElement("tr"); tr.style.cssText="border-bottom:1px solid var(--color-neutral-100);";
+      const cells=[item.class_name||"",item.homeroom_teacher||""];
+      state.headers.forEach(s=>{const ss=item.subject_stats[s]||{};cells.push(ss.teacher||"");cells.push(`${ss.及格??"-"}/${ss.参考??"-"}`);});
+      const t=item.total||{};cells.push(t["总分及格"]??"-");cells.push(fmt(t["总分人均"]??null));
+      cells.forEach((c,i)=>{const td=document.createElement("td");td.textContent=c;td.className="px-3 py-2";if(i===0)td.style.fontWeight="500";tr.appendChild(td);});
+      tb.appendChild(tr);
+    });
+  }
+
+  function exportCsv(){
+    if(!state.items.length){alert("没有数据可导出");return;}
+    const hdr=["班级","班主任"];
+    state.headers.forEach(s=>{hdr.push(s+"教师");hdr.push(s+"及格/参考");});
+    hdr.push("总分及格","总分人均");
+    const rows=[hdr.join(",")];
+    state.items.forEach(item=>{
+      const row=[item.class_name||"",item.homeroom_teacher||""];
+      state.headers.forEach(s=>{const ss=item.subject_stats[s]||{};row.push(ss.teacher||"");row.push(`${ss.及格??""}/${ss.参考??""}`);});
+      const t=item.total||{};row.push(t["总分及格"]??"");row.push(t["总分人均"]==null?"":fmt(t["总分人均"],1));
+      rows.push(row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(","));
+    });
+    const csv="\\ufeff"+rows.join("\\n");
+    const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;
+    const en=$("exam-select").selectedOptions[0]?.textContent.trim()||"统计";
+    a.download=`${en}_组合统计_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+  }
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    loadExams();
+    $("btn-run").addEventListener("click",runQuery);
+    $("btn-reset").addEventListener("click",()=>{$("total-line").value="";document.querySelectorAll("#subject-grid input[type=number]").forEach(i=>i.value="");state.items=[];state.headers=[];renderTable();$("status-msg").textContent="已重置";});
+    $("btn-export").addEventListener("click",exportCsv);
+    $("btn-check-all").addEventListener("click",()=>{const b=document.querySelectorAll("#subject-grid input[type=checkbox]");const u=[...b].some(x=>!x.checked);b.forEach(x=>x.checked=u);});
+  });
+})();
+</script>
+</body>
+</html>

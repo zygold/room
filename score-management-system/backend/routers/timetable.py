@@ -256,12 +256,48 @@ def confirm_timetable(import_id: int, payload: Optional[ConfirmTimetable] = None
             (saved, json.dumps(result["unmatched"], ensure_ascii=False), import_id),
         )
 
+        # 4) 班主任自动提取（从课表表头"班主任：XXX" 或 班会课程）
+        ht_updated = 0
+        try:
+            ht_map = timetable_parser.extract_head_teachers(
+                class_content,
+                teacher_names=timetable_parser.teacher_names(teacher_content),
+            )
+            # 检查 classes 表是否已有 head_teacher 字段（兼容旧 DB）
+            col_names = [
+                r[1] for r in conn.execute("PRAGMA table_info(classes)").fetchall()
+            ]
+            has_ht_col = "head_teacher" in col_names
+            for cls_name, ht_name in ht_map.items():
+                cur2 = conn.execute(
+                    "SELECT id FROM classes WHERE name=?", (cls_name,)
+                )
+                cls_row = cur2.fetchone()
+                if cls_row:
+                    if has_ht_col:
+                        conn.execute(
+                            "UPDATE classes SET head_teacher=? WHERE id=?",
+                            (ht_name, cls_row[0]),
+                        )
+                    conn.execute(
+                        "UPDATE students SET homeroom_teacher=? WHERE class_id=?",
+                        (ht_name, cls_row[0]),
+                    )
+                    ht_updated += 1
+            if ht_updated:
+                conn.commit()
+        except Exception:
+            # 班主任提取失败不应阻塞主流程（课表映射已入库）
+            pass
+
     log_operation(
         "课表确认入库",
         f"导入批次 {import_id} 学年 {school_year} 学期 {semester}，"
-        f"保存 {saved} 条映射，未匹配 {len(result['unmatched'])} 个班级",
+        f"保存 {saved} 条映射，未匹配 {len(result['unmatched'])} 个班级，"
+        f"自动设置班主任 {ht_updated} 个",
     )
-    return {"import_id": import_id, "saved": saved, "unmatched": result["unmatched"]}
+    return {"import_id": import_id, "saved": saved, "unmatched": result["unmatched"],
+            "head_teachers_set": ht_updated}
 
 
 @router.get("/mappings")

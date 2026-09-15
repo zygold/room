@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS classes (
     major_id INTEGER NOT NULL,
     class_type_id INTEGER NOT NULL,
     student_count INTEGER DEFAULT 0,
+    head_teacher TEXT,
     FOREIGN KEY (grade_id) REFERENCES grades(id),
     FOREIGN KEY (major_id) REFERENCES majors(id),
     FOREIGN KEY (class_type_id) REFERENCES class_types(id)

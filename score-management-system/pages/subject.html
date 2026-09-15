@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>统计分析</title>
+    <title>逐科统计</title>
     <style id="theme-vars">
 /* Score Management System - Brand CSS */
 /* Professional, clean, data-dense administrative interface */
@@ -265,6 +265,20 @@
             <span class="truncate" style="font-size: 14px; font-weight: 500;">课表管理</span>
           </a>
         </li>
+        <!-- 统计分析 -->
+        <li>
+          <a href="stats.html" data-dom-id="nav-stats" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors" style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg>
+            <span class="nav-label text-sm font-medium leading-5">统计分析</span>
+          </a>
+        </li>
+        <!-- 逐科统计 (ACTIVE) -->
+        <li>
+          <a href="subject.html" data-dom-id="nav-subject-stat" class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors" style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-6"/></svg>
+            <span class="nav-label text-sm font-semibold leading-5">逐科统计</span>
+          </a>
+        </li>
 
         <!-- 成绩管理 -->
         <li>
@@ -366,127 +380,103 @@
       <!-- Right: Actions -->
       <div class="flex items-center gap-3 shrink-0">
         <!-- Notification Bell -->
-        <button class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: var(--radius-md); color: var(--muted-foreground);" aria-label="通知">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-          </svg>
-        </button>
-
-        <!-- User Avatar -->
-        <div class="shrink-0 flex items-center justify-center" style="width: 34px; height: 34px; background-color: var(--primary); border-radius: var(--radius-full);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Content Scroll Region -->
-    <div data-scroll-region="primary" class="flex-1 min-h-0 overflow-y-auto" style="background-color: var(--background);">
+ 
 <div class="p-6">
-  <!-- Page Header -->
   <div class="flex items-center justify-between mb-6">
     <div>
-      <h1 class="text-2xl font-semibold" style="color: var(--color-neutral-900);">统计分析</h1>
-      <p class="text-sm mt-1" style="color: var(--color-neutral-500);">组合统计 · 班级全科及格 · 逐科及格线 · 总分阈值 · CSV 导出</p>
+      <h1 class="text-2xl font-semibold" style="color: var(--color-neutral-900);">逐科统计</h1>
+      <p class="text-sm mt-1" style="color: var(--color-neutral-500);">全校成绩分布直方图 · 班级及格率对比 · 逐科及格线可调</p>
     </div>
-    <button id="btn-export" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium"
-            style="background: var(--color-primary-600); color: white;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      导出 CSV
-    </button>
   </div>
 
-  <!-- 筛选面板 -->
+  <!-- 筛选 -->
   <div class="rounded-xl p-5 mb-5" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
     <h2 class="text-sm font-semibold mb-4" style="color: var(--color-neutral-700);">筛选条件</h2>
     <div class="grid grid-cols-12 gap-4 items-end">
       <div class="col-span-3">
         <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">考试</label>
         <select id="exam-select" class="w-full px-3 py-2 rounded-lg text-sm"
-                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);">
-          <option value="">加载中...</option>
-        </select>
+                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);"></select>
+      </div>
+      <div class="col-span-3">
+        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">科目</label>
+        <select id="subject-select" class="w-full px-3 py-2 rounded-lg text-sm"
+                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);"></select>
       </div>
       <div class="col-span-2">
-        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">学年</label>
-        <select id="sy-select" class="w-full px-3 py-2 rounded-lg text-sm"
-                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);">
-          <option value="">自动</option>
-        </select>
-      </div>
-      <div class="col-span-2">
-        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">学期</label>
-        <select id="sem-select" class="w-full px-3 py-2 rounded-lg text-sm"
-                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);">
-          <option value="">自动</option>
-          <option value="第一学期">第一学期</option>
-          <option value="第二学期">第二学期</option>
-        </select>
-      </div>
-      <div class="col-span-2">
-        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">总分≥</label>
-        <input id="total-line" type="number" min="0" step="0.5" placeholder="留空"
+        <label class="block text-xs font-medium mb-1" style="color: var(--color-neutral-600);">及格线</label>
+        <input id="pass-line" type="number" min="0" step="0.5" placeholder="默认"
                class="w-full px-3 py-2 rounded-lg text-sm"
                style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);">
       </div>
-      <div class="col-span-3 flex gap-2">
+      <div class="col-span-4 flex gap-2">
         <button id="btn-run" class="px-5 py-2 rounded-lg text-sm font-medium whitespace-nowrap"
-                style="background: var(--color-primary-600); color: white;">查询统计</button>
+                style="background: var(--color-primary-600); color: white;">查询分布</button>
         <button id="btn-reset" class="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
                 style="background: var(--color-neutral-100); color: var(--color-neutral-700); border: 1px solid var(--color-neutral-200);">重置</button>
+        <button id="btn-export" class="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
+                style="background: var(--color-neutral-100); color: var(--color-neutral-700); border: 1px solid var(--color-neutral-200);">导出 CSV</button>
       </div>
-    </div>
-    <div class="mt-4 pt-4" style="border-top: 1px dashed var(--color-neutral-200);">
-      <div class="flex items-center justify-between mb-2">
-        <label class="text-xs font-medium" style="color: var(--color-neutral-600);">勾选科目 + 逐科及格线（可选）</label>
-        <button id="btn-check-all" class="text-xs px-2 py-1 rounded"
-                style="color: var(--color-primary-600); border: 1px solid var(--color-primary-200);">全选/反选</button>
-      </div>
-      <div id="subject-grid" class="flex flex-wrap gap-2"></div>
     </div>
   </div>
-  <!-- KPI strip + 图表 -->
-  <div id="chart-section" class="hidden mb-5">
-    <!-- KPI strip -->
-    <div id="kpi-strip" class="grid grid-cols-5 gap-3 mb-4"></div>
-    <!-- 图表 2 栏 -->
-    <div class="grid grid-cols-2 gap-4">
+
+  <!-- KPI + 图表 -->
+  <div id="result-section" class="hidden">
+    <div id="kpi-strip" class="grid grid-cols-6 gap-3 mb-4"></div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
       <div class="rounded-xl p-4" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
-        <div class="text-xs font-semibold mb-2" style="color: var(--color-neutral-700);">班级总分及格率（降序）</div>
+        <div class="text-xs font-semibold mb-2" style="color: var(--color-neutral-700);">全校成绩分布直方图</div>
+        <div id="chart-histogram" style="height: 340px;"></div>
+      </div>
+      <div class="rounded-xl p-4" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
+        <div class="text-xs font-semibold mb-2" style="color: var(--color-neutral-700);">班级及格率（降序）</div>
         <div id="chart-class-pass" style="height: 340px;"></div>
       </div>
-      <div class="rounded-xl p-4" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
-        <div class="text-xs font-semibold mb-2" style="color: var(--color-neutral-700);">逐科及格率（全校平均）</div>
-        <div id="chart-subject-pass" style="height: 340px;"></div>
+    </div>
+    <!-- 班级表格 -->
+    <div class="rounded-xl overflow-hidden" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
+      <div class="px-5 py-3 flex items-center justify-between"
+           style="background: var(--color-neutral-50); border-bottom: 1px solid var(--color-neutral-200);">
+        <h2 class="text-sm font-semibold" style="color: var(--color-neutral-700);">班级对比</h2>
+        <div id="status-msg" class="text-xs" style="color: var(--color-neutral-500);"></div>
       </div>
-    </div>
-  </div>
-
-
-  <!-- 结果表格 -->
-  <div class="rounded-xl overflow-hidden" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
-    <div class="flex items-center justify-between px-5 py-3"
-         style="background: var(--color-neutral-50); border-bottom: 1px solid var(--color-neutral-200);">
-      <h2 class="text-sm font-semibold" style="color: var(--color-neutral-700);">班级组合统计 <span id="row-count" class="text-xs font-normal ml-2" style="color: var(--color-neutral-500);"></span></h2>
-      <div id="status-msg" class="text-xs" style="color: var(--color-neutral-500);">等待查询</div>
-    </div>
-    <div class="overflow-x-auto" style="max-height: 640px;">
-      <table id="result-table" class="w-full text-sm">
-        <thead id="result-thead" class="sticky top-0" style="background: var(--color-neutral-100); z-index: 1;">
-          <tr id="thead-row"></tr>
-        </thead>
-        <tbody id="result-tbody"></tbody>
-      </table>
-    </div>
-    <div id="empty-hint" class="hidden text-center py-16 text-sm" style="color: var(--color-neutral-400);">
-      请选择考试后点击"查询统计"
+      <div class="overflow-x-auto" style="max-height: 480px;">
+        <table id="result-table" class="w-full text-sm">
+          <thead class="sticky top-0" style="background: var(--color-neutral-100); z-index: 1;">
+            <tr>
+              <th class="px-3 py-2 text-left text-xs font-semibold" style="color:var(--color-neutral-600);">班级</th>
+              <th class="px-3 py-2 text-left text-xs font-semibold" style="color:var(--color-neutral-600);">班主任</th>
+              <th class="px-3 py-2 text-right text-xs font-semibold" style="color:var(--color-neutral-600);">参考</th>
+              <th class="px-3 py-2 text-right text-xs font-semibold" style="color:var(--color-neutral-600);">及格</th>
+              <th class="px-3 py-2 text-right text-xs font-semibold" style="color:var(--color-neutral-600);">及格率</th>
+              <th class="px-3 py-2 text-right text-xs font-semibold" style="color:var(--color-neutral-600);">平均分</th>
+            </tr>
+          </thead>
+          <tbody id="result-tbody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
+ font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教师</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">科目</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教学班数量</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教学班列表</th>
+                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">是否含合班</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-table-body">
+                  <tr style="border-top: 1px solid var(--border);">
+                    <td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">请选择学年/学期后点击查询</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
+      </div>
+    </div>
   </div>
 </div>
 
@@ -516,27 +506,24 @@
     </main>
 
     <script>
+(function(){
+  const API="/api";
+  const $=(id)=>document.getElementById(id);
+  const PRIMARY='#4338ca', SUCCESS='#16a34a', WARNING='#d97706', ERROR='#dc2626';
+  const state={examId:null, subject:null, fullScore:null, passScore:null, data:null, charts:{}};
+
   // ---- Auth interceptor ----
   const _origFetch = window.fetch.bind(window);
   window.fetch = function(...args){
     return _origFetch(...args).then(resp=>{
       if(resp.status === 401 && resp.url.includes('/api/')){
-        // 尝试 JSON body 里的 redirect
-        return resp.json().then(d=>{
-          const rd = d.redirect || '/pages/stats.html';
-          alert('登录已失效, 请重新登录');
-          window.location.href = rd;
-          return resp;
-        }).catch(()=>{
-          alert('登录已失效, 请重新登录');
-          window.location.href = '/pages/stats.html';
-          return resp;
-        });
+        alert('登录已失效, 请重新登录');
+        return resp;
       }
       return resp;
     });
   };
-  // 启动时检查登录状态, 在页面上显示用户名 + 退出按钮
+  // 启动时显示用户名 + 退出按钮
   (async function initAuth(){
     try{
       const r = await _origFetch('/api/auth/me', {credentials:'include'});
@@ -557,258 +544,169 @@
           }
         }
       }
-    }catch(e){ /* ignore */ }
+    }catch(e){}
   })();
 
-
-(function(){
-  const API="/api";
-  const state={examId:null,subjects:[],items:[],headers:[]};
-  const $=(id)=>document.getElementById(id);
-  const fmt=(x,d=1)=>x==null||isNaN(x)?"-":Number(x).toFixed(d);
-
   async function loadExams(){
-    try{
-      const r=await fetch(API+"/stats/exams");
-      const data=await r.json();
-      const sel=$("exam-select"); sel.innerHTML="";
-      if(!data.length){sel.innerHTML='<option value="">暂无考试</option>';return;}
-      data.forEach(ex=>{
-        const opt=document.createElement("option");
-        opt.value=ex.id;
-        opt.textContent=`${ex.school_year||""} ${ex.semester||""} ${ex.name}`.trim();
-        opt.dataset.year=ex.school_year||"";
-        opt.dataset.sem=ex.semester||"";
-        sel.appendChild(opt);
-      });
-      const sySet=[...new Set(data.map(e=>e.school_year).filter(Boolean))].sort();
-      $("sy-select").innerHTML='<option value="">自动</option>'+sySet.map(y=>`<option value="${y}">${y}</option>`).join("");
-      sel.addEventListener("change",onExamChange);
-      onExamChange();
-    }catch(e){$("exam-select").innerHTML='<option value="">加载失败</option>';}
+    const r=await fetch(API+'/stats/exams');
+    const exams=await r.json();
+    const sel=$('exam-select'); sel.innerHTML='';
+    exams.forEach(ex=>{
+      const o=document.createElement('option'); o.value=ex.id;
+      o.textContent=`${ex.school_year||''} ${ex.semester||''} ${ex.name}`.trim();
+      sel.appendChild(o);
+    });
+    sel.onchange = onExamChange;
+    onExamChange();
   }
 
-  function onExamChange(){
-    const sel=$("exam-select"); const opt=sel.options[sel.selectedIndex];
-    state.examId=opt?parseInt(opt.value)||null:null;
-    if(state.examId&&opt){
-      if(opt.dataset.year)$("sy-select").value=opt.dataset.year;
-      loadSubjects();
-    }else{$("subject-grid").innerHTML='<div class="text-xs" style="color:var(--color-neutral-400);">请先选考试</div>';}
+  async function onExamChange(){
+    const eid = parseInt($('exam-select').value);
+    if(!eid) return;
+    state.examId = eid;
+    const r=await fetch(API+`/stats/subjects?exam_id=${eid}`);
+    const subs = await r.json();
+    const subjMap = subs.subjects || {};
+    const names = Object.keys(subjMap);
+    const sel=$('subject-select'); sel.innerHTML='';
+    names.forEach((n,i)=>{
+      const o=document.createElement('option'); o.value=n; o.textContent=n;
+      sel.appendChild(o);
+    });
+    sel.onchange = onSubjectChange;
+    onSubjectChange();
+    state.passScore = Object.values(subjMap)[0]?.pass_score;
+    $('pass-line').value = state.passScore || '';
+    state.fullScore = Object.values(subjMap)[0]?.full_score;
   }
 
-  async function loadSubjects(){
-    try{
-      const r=await fetch(API+"/stats/subjects?exam_id="+state.examId);
-      const data=await r.json();
-      const subs=data.subjects||{}; state.subjects=subs;
-      const grid=$("subject-grid"); grid.innerHTML="";
-      Object.entries(subs).forEach(([name,info],idx)=>{
-        const label=document.createElement("label");
-        label.className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer";
-        label.style.cssText="background:var(--color-neutral-50); border:1px solid var(--color-neutral-200);";
-        const ps=info&&info.pass_score?info.pass_score:"";
-        label.innerHTML=`<input type="checkbox" data-subj="${name}" ${idx<4?"checked":""} style="accent-color:var(--color-primary-600);">
-          <span class="text-sm" style="color:var(--color-neutral-700);">${name}</span>
-          <span class="text-xs" style="color:var(--color-neutral-400);">及格</span>
-          <input type="number" data-line="${name}" min="0" max="200" step="0.5" value="${ps}"
-                 class="w-14 px-1 py-0.5 text-xs rounded"
-                 style="background:white; border:1px solid var(--color-neutral-200); color:var(--color-neutral-800);">`;
-        grid.appendChild(label);
-      });
-    }catch(e){$("subject-grid").innerHTML='<div class="text-xs" style="color:var(--color-neutral-400);">加载失败</div>';}
+  function onSubjectChange(){
+    const name = $('subject-select').value;
+    state.subject = name;
   }
 
   async function runQuery(){
-    if(!state.examId){$("status-msg").textContent="请选考试";return;}
-    const checks=document.querySelectorAll("#subject-grid input[type=checkbox]:checked");
-    const subjectIds=[...checks].map(c=>c.dataset.subj);
-    if(!subjectIds.length){$("status-msg").textContent="请至少勾选一个科目";return;}
-    const passLines={};
-    document.querySelectorAll("#subject-grid input[data-line]").forEach(inp=>{if(inp.value.trim())passLines[inp.dataset.line]=parseFloat(inp.value);});
-    const tlr=$("total-line").value.trim();
-    const body={exam_id:state.examId,subject_ids:subjectIds,pass_lines:passLines,
-      total_pass_line:tlr?parseFloat(tlr):0,school_year:$("sy-select").value||null,semester:$("sem-select").value||null};
-    $("status-msg").textContent="查询中...";
+    if(!state.examId || !state.subject){ alert('请选考试和科目'); return; }
+    const pl = $('pass-line').value.trim();
+    const url = `${API}/stats/subject-dist?exam_id=${state.examId}&subject_name=${encodeURIComponent(state.subject)}` +
+                (pl ? `&pass_line=${pl}` : '');
+    $('status-msg').textContent='查询中...';
     try{
-      const r=await fetch(API+"/stats/combined",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-      if(!r.ok)throw new Error((await r.json()).detail||r.status);
-      const data=await r.json();
-      state.items=data.items||[]; state.headers=subjectIds;
-      renderTable();
-      renderCharts();
-      $("status-msg").textContent=`共 ${state.items.length} 个班级`;
-    }catch(e){$("status-msg").textContent="查询失败: "+e.message;}
+      const r = await fetch(url);
+      if(!r.ok){ $('status-msg').textContent='查询失败: '+r.status; return; }
+      const d = await r.json();
+      state.data = d;
+      state.passScore = d.pass_score;
+      state.fullScore = d.full_score;
+      renderKPI(d); renderHistogram(d); renderClassPass(d); renderTable(d);
+      $('result-section').classList.remove('hidden');
+      $('status-msg').textContent=`参考 ${d.summary['参考人数']} 人 · ${d['by_class'].length} 个班级`;
+    }catch(e){ $('status-msg').textContent='异常: '+e.message; }
   }
 
-  function renderTable(){
-    const th=$("thead-row"),tb=$("result-tbody"); th.innerHTML=""; tb.innerHTML="";
-    if(!state.items.length){$("empty-hint").classList.remove("hidden");$("row-count").textContent="";return;}
-    $("empty-hint").classList.add("hidden");
-    $("row-count").textContent=`· ${state.items.length} 个班级`;
-    const hdr=["班级","班主任"];
-    state.headers.forEach(s=>{hdr.push(s+"教师");hdr.push(s+"及格/参考");});
-    hdr.push("总分及格","总分人均");
-    hdr.forEach(h=>{const x=document.createElement("th");x.textContent=h;x.className="px-3 py-2 text-left text-xs font-semibold";x.style.cssText="color:var(--color-neutral-600); white-space:nowrap;";th.appendChild(x);});
-    state.items.forEach(item=>{
-      const tr=document.createElement("tr"); tr.style.cssText="border-bottom:1px solid var(--color-neutral-100);";
-      const cells=[item.class_name||"",item.homeroom_teacher||""];
-      state.headers.forEach(s=>{const ss=item.subject_stats[s]||{};cells.push(ss.teacher||"");cells.push(`${ss.及格??"-"}/${ss.参考??"-"}`);});
-      const t=item.total||{};cells.push(t["总分及格"]??"-");cells.push(fmt(t["总分人均"]??null));
-      cells.forEach((c,i)=>{const td=document.createElement("td");td.textContent=c;td.className="px-3 py-2";if(i===0)td.style.fontWeight="500";tr.appendChild(td);});
-      tb.appendChild(tr);
-    });
-  }
-
-  // ============ 图表 ============
-  let echartsReady = false;
-  const chartInstances = {};
-  const PRIMARY = getComputedStyle(document.documentElement).getPropertyValue('--color-primary-600').trim() || '#4338ca';
-  const SUCCESS = '#16a34a';
-  const WARNING = '#d97706';
-
-  function ensureCharts(){
-    if(typeof echarts === 'undefined'){
-      console.warn('ECharts not loaded'); return false;
-    }
-    echartsReady = true;
-    return true;
-  }
-
-  function disposeChart(id){
-    if(chartInstances[id]){ try{ chartInstances[id].dispose(); }catch(e){} delete chartInstances[id]; }
-  }
-
-  function renderCharts(){
-    if(!ensureCharts() || !state.items.length){
-      document.getElementById('chart-section').classList.add('hidden'); return;
-    }
-    const section = document.getElementById('chart-section');
-    section.classList.remove('hidden');
-
-    // ---- KPI strip ----
-    const total = state.items.length;
-    const withHomeroom = state.items.filter(i => i.homeroom_teacher && i.homeroom_teacher.trim()).length;
-    // 全科及格: 所有勾选科目都及格的班级 (按 total_pass_line 或逐科阈值)
-    // 简化: 有"总分及格">0 即视为达标班级
-    const totalPassOk = state.items.filter(i => (i.total && i.total['总分及格'] && i.total['总分及格'] > 0)).length;
-    // 逐科都及格线达标 (pass_ratio 风格) -- 简化: 看 subject_stats 每个都有"及格"字段
-    const allSubjPass = state.items.filter(it => state.headers.every(s => {
-      const ss = it.subject_stats[s] || {}; const passed = ss['及格']; const ref = ss['参考'];
-      if(!passed || !ref || ref===0) return false;
-      return (passed/ref) >= 0.6;
-    })).length;
-    const totalAvg = (state.items.reduce((a,b)=>a+(b.total&&b.total['总分人均']?b.total['总分人均']:0),0) / total).toFixed(1);
-
+  function renderKPI(d){
+    const s = d.summary;
     const kpis = [
-      { label: '班级数', value: total, sub: '' },
-      { label: '有班主任', value: withHomeroom, sub: `占比 ${(withHomeroom/total*100).toFixed(0)}%`, tone: 'info' },
-      { label: '总分≥阈值班级', value: totalPassOk, sub: totalPassOk ? `${(totalPassOk/total*100).toFixed(1)}%` : '-', tone: 'success' },
-      { label: '全科及格率≥60%班级', value: allSubjPass, sub: `${(allSubjPass/total*100).toFixed(1)}%`, tone: 'success' },
-      { label: '全校总分人均', value: totalAvg, sub: '', tone: 'info' },
+      { label:'参考人数', value:s['参考人数'] },
+      { label:'平均分', value:s['平均分'] },
+      { label:'中位数', value:s['中位数'] },
+      { label:'标准差', value:s['标准差'] },
+      { label:`及格数(≥${d.pass_score})`, value:s['及格数'], sub:`${(s['及格率']*100).toFixed(1)}%`, tone:'success' },
+      { label:`优秀数(≥${Math.round(d.full_score*0.8)})`, value:s['优秀数'], sub:`${(s['优秀率']*100).toFixed(1)}%`, tone:'success' },
     ];
-    const kpiEl = document.getElementById('kpi-strip');
-    kpiEl.innerHTML = kpis.map(k => {
-      const tone = k.tone === 'success' ? SUCCESS : k.tone === 'warning' ? WARNING : 'var(--color-primary-600)';
+    const el = $('kpi-strip');
+    el.innerHTML = kpis.map(k => {
+      const tone = k.tone === 'success' ? SUCCESS : PRIMARY;
       return `<div class="rounded-xl p-4" style="background:var(--color-neutral-0); border:1px solid var(--color-neutral-200);">
         <div class="text-xs" style="color:var(--color-neutral-500);">${k.label}</div>
         <div class="text-2xl font-semibold mt-1" style="color:${tone};">${k.value}</div>
         ${k.sub?`<div class="text-xs mt-0.5" style="color:var(--color-neutral-400);">${k.sub}</div>`:''}
       </div>`;
     }).join('');
+  }
 
-    // ---- 班级总分及格率柱状图 (降序) ----
-    const sorted = [...state.items].sort((a,b)=>{
-      const ap = a.total && a.total['总分及格'] ? a.total['总分及格'] : 0;
-      const ar = a.total && a.total['总分参考'] ? a.total['总分参考'] : (ap>0?1:0);
-      const bp = b.total && b.total['总分及格'] ? b.total['总分及格'] : 0;
-      const br = b.total && b.total['总分参考'] ? b.total['总分参考'] : (bp>0?1:0);
-      return (bp/(br||1)) - (ap/(ar||1));
-    });
-    const classNames = sorted.map(i => i.class_name);
-    const classRates = sorted.map(i => {
-      const ap = i.total && i.total['总分及格'] ? i.total['总分及格'] : 0;
-      const ar = i.total && i.total['总分参考'] ? i.total['总分参考'] : 0;
-      return ar ? +(ap/ar*100).toFixed(1) : 0;
-    });
-
-    disposeChart('class-pass');
-    const cc = document.getElementById('chart-class-pass');
-    chartInstances['class-pass'] = echarts.init(cc);
-    chartInstances['class-pass'].setOption({
+  function renderHistogram(d){
+    const bins = d.bins;
+    if(state.charts.histogram){ state.charts.histogram.dispose(); }
+    const c = document.getElementById('chart-histogram');
+    state.charts.histogram = echarts.init(c);
+    state.charts.histogram.setOption({
       tooltip:{ trigger:'axis', formatter:p=>{
-        const d=p[0]; return `${d.name}<br/>总分及格率: <b>${d.value}%</b>`;
+        const b=bins[p[0].dataIndex];
+        return `${b.label} (${b.range})<br/>人数: <b>${b.count}</b>`;
       }},
-      grid:{ top:20, bottom:60, left:40, right:20 },
-      xAxis:{ type:'category', data:classNames, axisLabel:{ rotate:40, fontSize:10, color:'#64748b' } },
-      yAxis:{ type:'value', max:100, axisLabel:{ formatter:'{value}%', color:'#64748b' }, splitLine:{ lineStyle:{ color:'#e2e8f0' }} },
-      series:[{
-        type:'bar', data:classRates, barWidth:'55%',
-        itemStyle:{ borderRadius:[4,4,0,0], color:p => p.value>=80?SUCCESS:p.value>=60?PRIMARY:WARNING },
-        label:{ show:true, position:'top', formatter:'{c}%', fontSize:10, color:'#334155' }
-      }]
+      grid:{ top:20, bottom:60, left:50, right:20 },
+      xAxis:{ type:'category', data:bins.map(b=>b.label+'\\n'+b.range),
+              axisLabel:{ fontSize:10, color:'#64748b' } },
+      yAxis:{ type:'value', splitLine:{ lineStyle:{ color:'#e2e8f0' } }, axisLabel:{ color:'#64748b' } },
+      series:[{ type:'bar', data:bins.map(b=>({
+        value:b.count,
+        itemStyle:{ color: b.range.includes('0-59') || (d.full_score>100 && (b.range.startsWith('30')||b.range.startsWith('0-29'))) ? WARNING : b.count===0?'#cbd5e1':SUCCESS,
+                   borderRadius:[4,4,0,0] }
+      })),
+      barWidth:'60%', label:{ show:true, position:'top', fontSize:11, color:'#334155' } }]
     });
+  }
 
-    // ---- 逐科全校及格率 (水平条形) ----
-    const subjData = state.headers.map(subj => {
-      let passed=0, ref=0;
-      state.items.forEach(it=>{
-        const ss=it.subject_stats[subj]||{};
-        passed += ss['及格']||0; ref += ss['参考']||0;
+  function renderClassPass(d){
+    const items = [...d.by_class].sort((a,b)=>b['及格率']-a['及格率']);
+    if(state.charts.classPass){ state.charts.classPass.dispose(); }
+    const c = document.getElementById('chart-class-pass');
+    state.charts.classPass = echarts.init(c);
+    state.charts.classPass.setOption({
+      tooltip:{ trigger:'axis', formatter:p=>{
+        const v=p[0].value; return `${items[p[0].dataIndex].class_name}<br/>及格率: <b>${(v*100).toFixed(1)}%</b>`;
+      }},
+      grid:{ top:20, bottom:60, left:100, right:30 },
+      xAxis:{ type:'value', max:1, axisLabel:{ formatter:v=>(v*100)+'%', color:'#64748b' }, splitLine:{ lineStyle:{ color:'#e2e8f0' } } },
+      yAxis:{ type:'category', data:items.map(i=>i.class_name), inverse:true, axisLabel:{ fontSize:11, color:'#475569' } },
+      series:[{ type:'bar', data:items.map(i=>({
+        value:i['及格率'],
+        itemStyle:{ color: i['及格率']>=0.8?SUCCESS : i['及格率']>=0.6?PRIMARY : WARNING, borderRadius:[0,4,4,0] }
+      })), barWidth:'55%',
+      label:{ show:true, position:'right', formatter:p=>(p.value*100).toFixed(1)+'%', fontSize:11, color:'#334155' } }]
+    });
+  }
+
+  function renderTable(d){
+    const items = [...d.by_class].sort((a,b)=>b['及格率']-a['及格率']);
+    const tb = $('result-tbody'); tb.innerHTML='';
+    items.forEach(i=>{
+      const tr=document.createElement('tr'); tr.style.cssText='border-bottom:1px solid var(--color-neutral-100);';
+      const rateClass = i['及格率']>=0.8?'color:'+SUCCESS : i['及格率']>=0.6?'color:'+PRIMARY : 'color:'+WARNING;
+      const rateStr = (i['及格率']*100).toFixed(1)+'%';
+      const cells = [i['class_name'], i['homeroom_teacher']||'', i['参考'], i['及格'],
+                     `<span style="${rateClass}; font-weight:500;">${rateStr}</span>`,
+                     i['平均分']];
+      cells.forEach((c,idx)=>{
+        const td=document.createElement('td'); td.innerHTML=c; td.className='px-3 py-2';
+        if(idx>=2) td.style.textAlign='right';
+        if(idx===0) td.style.fontWeight='500';
+        tr.appendChild(td);
       });
-      return { name:subj, rate: ref ? +(passed/ref*100).toFixed(1) : 0 };
-    }).sort((a,b)=>b.rate-a.rate);
-
-    disposeChart('subject-pass');
-    const sc = document.getElementById('chart-subject-pass');
-    chartInstances['subject-pass'] = echarts.init(sc);
-    chartInstances['subject-pass'].setOption({
-      tooltip:{ trigger:'axis', formatter:p=>{
-        const d=p[0]; return `${d.name}<br/>全校及格率: <b>${d.value}%</b>`;
-      }},
-      grid:{ top:10, bottom:30, left:80, right:40 },
-      xAxis:{ type:'value', max:100, axisLabel:{ formatter:'{value}%', color:'#64748b' }, splitLine:{ lineStyle:{ color:'#e2e8f0' }} },
-      yAxis:{ type:'category', data:subjData.map(d=>d.name), axisLabel:{ fontSize:11, color:'#475569' } },
-      series:[{
-        type:'bar', data:subjData.map(d=>d.rate), barWidth:'50%',
-        itemStyle:{ borderRadius:[0,4,4,0], color:p=>p.value>=80?SUCCESS:p.value>=60?PRIMARY:WARNING },
-        label:{ show:true, position:'right', formatter:'{c}%', fontSize:11, color:'#334155' }
-      }]
+      tb.appendChild(tr);
     });
-
-    // resize 监听 (去重)
-    if(!window.__echartsResizeBound){
-      window.addEventListener('resize', ()=> Object.values(chartInstances).forEach(ch=>ch.resize()));
-      window.__echartsResizeBound = true;
-    }
   }
 
   function exportCsv(){
-    if(!state.items.length){alert("没有数据可导出");return;}
-    const hdr=["班级","班主任"];
-    state.headers.forEach(s=>{hdr.push(s+"教师");hdr.push(s+"及格/参考");});
-    hdr.push("总分及格","总分人均");
-    const rows=[hdr.join(",")];
-    state.items.forEach(item=>{
-      const row=[item.class_name||"",item.homeroom_teacher||""];
-      state.headers.forEach(s=>{const ss=item.subject_stats[s]||{};row.push(ss.teacher||"");row.push(`${ss.及格??""}/${ss.参考??""}`);});
-      const t=item.total||{};row.push(t["总分及格"]??"");row.push(t["总分人均"]==null?"":fmt(t["总分人均"],1));
-      rows.push(row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(","));
-    });
-    const csv="\\ufeff"+rows.join("\\n");
-    const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
-    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;
-    const en=$("exam-select").selectedOptions[0]?.textContent.trim()||"统计";
-    a.download=`${en}_组合统计_${new Date().toISOString().slice(0,10)}.csv`;
-    document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+    const d = state.data; if(!d) return alert('没有数据');
+    const items = [...d.by_class].sort((a,b)=>b['及格率']-a['及格率']);
+    const rows = [['班级','班主任','参考','及格','及格率','平均分']];
+    items.forEach(i=>{ rows.push([i['class_name'], i['homeroom_teacher']||'', i['参考'], i['及格'],
+      (i['及格率']*100).toFixed(1)+'%', i['平均分']]); });
+    const csv='\\ufeff'+rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url;
+    a.download=`${d['subject']}_逐科统计_${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   }
 
-  document.addEventListener("DOMContentLoaded",()=>{
+  document.addEventListener('DOMContentLoaded', ()=>{
     loadExams();
-    $("btn-run").addEventListener("click",runQuery);
-    $("btn-reset").addEventListener("click",()=>{$("total-line").value="";document.querySelectorAll("#subject-grid input[type=number]").forEach(i=>i.value="");state.items=[];state.headers=[];renderTable();$("status-msg").textContent="已重置";});
-    $("btn-export").addEventListener("click",exportCsv);
-    $("btn-check-all").addEventListener("click",()=>{const b=document.querySelectorAll("#subject-grid input[type=checkbox]");const u=[...b].some(x=>!x.checked);b.forEach(x=>x.checked=u);});
+    $('btn-run').onclick = runQuery;
+    $('btn-reset').onclick = ()=>{ $('pass-line').value=''; $('result-section').classList.add('hidden'); };
+    $('btn-export').onclick = exportCsv;
+    window.addEventListener('resize', ()=> Object.values(state.charts).forEach(c=>c.resize()));
   });
 })();
 </script>

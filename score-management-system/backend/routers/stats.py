@@ -210,3 +210,102 @@ def get_teachers(
 
         log_operation("统计查询", f"教师视图 exam_id={exam_id} 教师数={len(items)}")
         return {"exam_id": exam_id, "items": items}
+
+
+@router.get("/subject-dist")
+def get_subject_dist(
+    exam_id: int = Query(...),
+    subject_name: str = Query(...),
+    pass_line: Optional[float] = Query(None),
+):
+    """逐科成绩分布: 全校直方图 bin + summary + 班级对比."""
+    import statistics as _st
+    from services.stats_engine import load_stat_rows, effective_score
+
+    with get_db() as conn:
+        rows, subject_registry = load_stat_rows(conn, exam_id)
+        if subject_name not in subject_registry:
+            raise HTTPException(400, f"未找到学科: {subject_name}")
+        reg = subject_registry[subject_name]
+        full_score = reg["full_score"]
+        pass_score = pass_line if pass_line is not None else reg["pass_score"]
+
+        subject_rows = [r for r in rows if r["subject_name"] == subject_name]
+        valid = [r for r in subject_rows if r["score_status"] in ("正常", "补考") and r.get("score") is not None]
+        scores = [effective_score(r) for r in valid]
+        n = len(scores)
+
+        # --- summary ---
+        if scores:
+            mean = round(_st.mean(scores), 2)
+            median = round(_st.median(scores), 2)
+            sd = round(_st.stdev(scores), 2) if n > 1 else 0.0
+            lo, hi = min(scores), max(scores)
+            pass_cnt = sum(1 for s in scores if s >= pass_score)
+            exc_cnt = sum(1 for s in scores if s >= full_score * 0.8)
+        else:
+            mean = median = sd = lo = hi = 0
+            pass_cnt = exc_cnt = 0
+
+        summary = {
+            "参考人数": n, "平均分": mean, "中位数": median, "标准差": sd,
+            "及格数": pass_cnt, "及格率": round(pass_cnt/n, 4) if n else 0,
+            "优秀数": exc_cnt, "优秀率": round(exc_cnt/n, 4) if n else 0,
+            "最低分": lo, "最高分": hi,
+        }
+
+        # --- bins (5 档) ---
+        if full_score <= 100:
+            edges = [0, 60, 70, 80, 90, 101]
+            labels = ["0-59", "60-69", "70-79", "80-89", "90+"]
+        else:
+            step = full_score / 5
+            edges = [int(i*step) for i in range(6)]
+            edges[-1] = int(full_score) + 1
+            labels = [f"{edges[i]}-{edges[i+1]-1}" for i in range(5)]
+        bin_names = ["不及格", "及格", "良好", "优秀", "卓越"]
+        bins = []
+        for i in range(5):
+            lo_e, hi_e = edges[i], edges[i+1]
+            cnt = sum(1 for s in scores if lo_e <= s < hi_e)
+            bins.append({"range": labels[i], "count": cnt, "label": bin_names[i]})
+
+        # --- by_class ---
+        class_ids = sorted({r["class_id"] for r in subject_rows if r["class_id"] is not None})
+        class_map = {}; hr_map = {}
+        if class_ids:
+            placeholders = ",".join(["?"]*len(class_ids))
+            cr = conn.execute(
+                f"SELECT id, name FROM classes WHERE id IN ({placeholders})",
+                tuple(class_ids),
+            ).fetchall()
+            class_map = {r["id"]: r["name"] for r in cr}
+            hr = conn.execute(
+                f"SELECT class_id, homeroom_teacher FROM students WHERE class_id IN ({placeholders}) AND homeroom_teacher IS NOT NULL AND homeroom_teacher != '' GROUP BY class_id",
+                tuple(class_ids),
+            ).fetchall()
+            hr_map = {r["class_id"]: r["homeroom_teacher"] for r in hr}
+
+        by_class = []
+        for cid in class_ids:
+            crs = [r for r in subject_rows if r["class_id"] == cid and r["score_status"] in ("正常", "补考") and r.get("score") is not None]
+            cs = [effective_score(r) for r in crs]
+            if not cs:
+                by_class.append({"class_id": cid, "class_name": class_map.get(cid, ""),
+                    "homeroom_teacher": hr_map.get(cid, ""), "参考": 0, "及格": 0, "及格率": 0, "平均分": 0})
+                continue
+            pc = sum(1 for s in cs if s >= pass_score)
+            by_class.append({
+                "class_id": cid, "class_name": class_map.get(cid, ""),
+                "homeroom_teacher": hr_map.get(cid, ""),
+                "参考": len(cs), "及格": pc,
+                "及格率": round(pc/len(cs), 4),
+                "平均分": round(_st.mean(cs), 2),
+            })
+
+        log_operation("统计查询", f"逐科分布 exam_id={exam_id} subject={subject_name} 参考={n}")
+        return {
+            "exam_id": exam_id, "subject": subject_name,
+            "full_score": full_score, "pass_score": pass_score,
+            "summary": summary, "bins": bins, "by_class": by_class,
+        }

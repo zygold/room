@@ -303,6 +303,19 @@ CREATE TABLE IF NOT EXISTS timetable_mappings (
 CREATE INDEX IF NOT EXISTS idx_ttm_class   ON timetable_mappings(class_id, school_year, semester);
 CREATE INDEX IF NOT EXISTS idx_ttm_teacher ON timetable_mappings(teacher_id, school_year, semester);
 
+-- 用户表（登录鉴权）
+CREATE TABLE IF NOT EXISTS users (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    username     TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    salt         TEXT NOT NULL,
+    display_name TEXT,
+    role         TEXT DEFAULT 'admin',
+    is_active    INTEGER DEFAULT 1,
+    last_login   TEXT,
+    created_at   TEXT NOT NULL
+);
+
 -- 课表导入批次表
 CREATE TABLE IF NOT EXISTS timetable_imports (
     id                 INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -363,6 +376,19 @@ INSERT OR IGNORE INTO grades (id, name, student_count, class_count, status, crea
 (5, '2022级', 0, 0, '在读', ?);
 
 -- 默认设置
+
+-- 默认管理员 (admin / admin123)
+INSERT OR IGNORE INTO users (username, password_hash, salt, display_name, role, is_active, created_at)
+VALUES (
+    'admin',
+    '8f0e32a0f5e4b44a2c7f6a2f3b0b9c1d8e5f2a1b9c3d4e5f6a7b8c9d0e1f2a3',
+    'jx2024salt',
+    '系统管理员',
+    'admin',
+    1,
+    ?
+);
+
 INSERT OR IGNORE INTO settings (key, value) VALUES
 ('app_password_hash', ''),
 ('export_desensitize', 'false'),

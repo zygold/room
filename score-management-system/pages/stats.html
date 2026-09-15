@@ -92,6 +92,7 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
     <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
     <style type="text/tailwindcss">
   @theme inline {
     --color-background: var(--background);
@@ -447,6 +448,23 @@
       <div id="subject-grid" class="flex flex-wrap gap-2"></div>
     </div>
   </div>
+  <!-- KPI strip + 图表 -->
+  <div id="chart-section" class="hidden mb-5">
+    <!-- KPI strip -->
+    <div id="kpi-strip" class="grid grid-cols-5 gap-3 mb-4"></div>
+    <!-- 图表 2 栏 -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="rounded-xl p-4" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
+        <div class="text-xs font-semibold mb-2" style="color: var(--color-neutral-700);">班级总分及格率（降序）</div>
+        <div id="chart-class-pass" style="height: 340px;"></div>
+      </div>
+      <div class="rounded-xl p-4" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
+        <div class="text-xs font-semibold mb-2" style="color: var(--color-neutral-700);">逐科及格率（全校平均）</div>
+        <div id="chart-subject-pass" style="height: 340px;"></div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- 结果表格 -->
   <div class="rounded-xl overflow-hidden" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
@@ -573,6 +591,7 @@
       const data=await r.json();
       state.items=data.items||[]; state.headers=subjectIds;
       renderTable();
+      renderCharts();
       $("status-msg").textContent=`共 ${state.items.length} 个班级`;
     }catch(e){$("status-msg").textContent="查询失败: "+e.message;}
   }
@@ -594,6 +613,129 @@
       cells.forEach((c,i)=>{const td=document.createElement("td");td.textContent=c;td.className="px-3 py-2";if(i===0)td.style.fontWeight="500";tr.appendChild(td);});
       tb.appendChild(tr);
     });
+  }
+
+  // ============ 图表 ============
+  let echartsReady = false;
+  const chartInstances = {};
+  const PRIMARY = getComputedStyle(document.documentElement).getPropertyValue('--color-primary-600').trim() || '#4338ca';
+  const SUCCESS = '#16a34a';
+  const WARNING = '#d97706';
+
+  function ensureCharts(){
+    if(typeof echarts === 'undefined'){
+      console.warn('ECharts not loaded'); return false;
+    }
+    echartsReady = true;
+    return true;
+  }
+
+  function disposeChart(id){
+    if(chartInstances[id]){ try{ chartInstances[id].dispose(); }catch(e){} delete chartInstances[id]; }
+  }
+
+  function renderCharts(){
+    if(!ensureCharts() || !state.items.length){
+      document.getElementById('chart-section').classList.add('hidden'); return;
+    }
+    const section = document.getElementById('chart-section');
+    section.classList.remove('hidden');
+
+    // ---- KPI strip ----
+    const total = state.items.length;
+    const withHomeroom = state.items.filter(i => i.homeroom_teacher && i.homeroom_teacher.trim()).length;
+    // 全科及格: 所有勾选科目都及格的班级 (按 total_pass_line 或逐科阈值)
+    // 简化: 有"总分及格">0 即视为达标班级
+    const totalPassOk = state.items.filter(i => (i.total && i.total['总分及格'] && i.total['总分及格'] > 0)).length;
+    // 逐科都及格线达标 (pass_ratio 风格) -- 简化: 看 subject_stats 每个都有"及格"字段
+    const allSubjPass = state.items.filter(it => state.headers.every(s => {
+      const ss = it.subject_stats[s] || {}; const passed = ss['及格']; const ref = ss['参考'];
+      if(!passed || !ref || ref===0) return false;
+      return (passed/ref) >= 0.6;
+    })).length;
+    const totalAvg = (state.items.reduce((a,b)=>a+(b.total&&b.total['总分人均']?b.total['总分人均']:0),0) / total).toFixed(1);
+
+    const kpis = [
+      { label: '班级数', value: total, sub: '' },
+      { label: '有班主任', value: withHomeroom, sub: `占比 ${(withHomeroom/total*100).toFixed(0)}%`, tone: 'info' },
+      { label: '总分≥阈值班级', value: totalPassOk, sub: totalPassOk ? `${(totalPassOk/total*100).toFixed(1)}%` : '-', tone: 'success' },
+      { label: '全科及格率≥60%班级', value: allSubjPass, sub: `${(allSubjPass/total*100).toFixed(1)}%`, tone: 'success' },
+      { label: '全校总分人均', value: totalAvg, sub: '', tone: 'info' },
+    ];
+    const kpiEl = document.getElementById('kpi-strip');
+    kpiEl.innerHTML = kpis.map(k => {
+      const tone = k.tone === 'success' ? SUCCESS : k.tone === 'warning' ? WARNING : 'var(--color-primary-600)';
+      return `<div class="rounded-xl p-4" style="background:var(--color-neutral-0); border:1px solid var(--color-neutral-200);">
+        <div class="text-xs" style="color:var(--color-neutral-500);">${k.label}</div>
+        <div class="text-2xl font-semibold mt-1" style="color:${tone};">${k.value}</div>
+        ${k.sub?`<div class="text-xs mt-0.5" style="color:var(--color-neutral-400);">${k.sub}</div>`:''}
+      </div>`;
+    }).join('');
+
+    // ---- 班级总分及格率柱状图 (降序) ----
+    const sorted = [...state.items].sort((a,b)=>{
+      const ap = a.total && a.total['总分及格'] ? a.total['总分及格'] : 0;
+      const ar = a.total && a.total['总分参考'] ? a.total['总分参考'] : (ap>0?1:0);
+      const bp = b.total && b.total['总分及格'] ? b.total['总分及格'] : 0;
+      const br = b.total && b.total['总分参考'] ? b.total['总分参考'] : (bp>0?1:0);
+      return (bp/(br||1)) - (ap/(ar||1));
+    });
+    const classNames = sorted.map(i => i.class_name);
+    const classRates = sorted.map(i => {
+      const ap = i.total && i.total['总分及格'] ? i.total['总分及格'] : 0;
+      const ar = i.total && i.total['总分参考'] ? i.total['总分参考'] : 0;
+      return ar ? +(ap/ar*100).toFixed(1) : 0;
+    });
+
+    disposeChart('class-pass');
+    const cc = document.getElementById('chart-class-pass');
+    chartInstances['class-pass'] = echarts.init(cc);
+    chartInstances['class-pass'].setOption({
+      tooltip:{ trigger:'axis', formatter:p=>{
+        const d=p[0]; return `${d.name}<br/>总分及格率: <b>${d.value}%</b>`;
+      }},
+      grid:{ top:20, bottom:60, left:40, right:20 },
+      xAxis:{ type:'category', data:classNames, axisLabel:{ rotate:40, fontSize:10, color:'#64748b' } },
+      yAxis:{ type:'value', max:100, axisLabel:{ formatter:'{value}%', color:'#64748b' }, splitLine:{ lineStyle:{ color:'#e2e8f0' }} },
+      series:[{
+        type:'bar', data:classRates, barWidth:'55%',
+        itemStyle:{ borderRadius:[4,4,0,0], color:p => p.value>=80?SUCCESS:p.value>=60?PRIMARY:WARNING },
+        label:{ show:true, position:'top', formatter:'{c}%', fontSize:10, color:'#334155' }
+      }]
+    });
+
+    // ---- 逐科全校及格率 (水平条形) ----
+    const subjData = state.headers.map(subj => {
+      let passed=0, ref=0;
+      state.items.forEach(it=>{
+        const ss=it.subject_stats[subj]||{};
+        passed += ss['及格']||0; ref += ss['参考']||0;
+      });
+      return { name:subj, rate: ref ? +(passed/ref*100).toFixed(1) : 0 };
+    }).sort((a,b)=>b.rate-a.rate);
+
+    disposeChart('subject-pass');
+    const sc = document.getElementById('chart-subject-pass');
+    chartInstances['subject-pass'] = echarts.init(sc);
+    chartInstances['subject-pass'].setOption({
+      tooltip:{ trigger:'axis', formatter:p=>{
+        const d=p[0]; return `${d.name}<br/>全校及格率: <b>${d.value}%</b>`;
+      }},
+      grid:{ top:10, bottom:30, left:80, right:40 },
+      xAxis:{ type:'value', max:100, axisLabel:{ formatter:'{value}%', color:'#64748b' }, splitLine:{ lineStyle:{ color:'#e2e8f0' }} },
+      yAxis:{ type:'category', data:subjData.map(d=>d.name), axisLabel:{ fontSize:11, color:'#475569' } },
+      series:[{
+        type:'bar', data:subjData.map(d=>d.rate), barWidth:'50%',
+        itemStyle:{ borderRadius:[0,4,4,0], color:p=>p.value>=80?SUCCESS:p.value>=60?PRIMARY:WARNING },
+        label:{ show:true, position:'right', formatter:'{c}%', fontSize:11, color:'#334155' }
+      }]
+    });
+
+    // resize 监听 (去重)
+    if(!window.__echartsResizeBound){
+      window.addEventListener('resize', ()=> Object.values(chartInstances).forEach(ch=>ch.resize()));
+      window.__echartsResizeBound = true;
+    }
   }
 
   function exportCsv(){

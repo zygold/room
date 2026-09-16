@@ -98,3 +98,28 @@ def require_auth(req: Request) -> dict:
     if not token or token not in SESSIONS:
         raise HTTPException(401, "未登录")
     return SESSIONS[token]
+
+class ChangePasswordRequest(BaseModel):
+    old_password: str
+    new_password: str
+
+
+@router.post("/change-password")
+def change_password(body: ChangePasswordRequest, req: Request):
+    """修改当前用户密码."""
+    token = req.cookies.get("token")
+    if not token or token not in SESSIONS:
+        raise HTTPException(401, "未登录")
+    s = SESSIONS[token]
+    if len(body.new_password) < 6:
+        raise HTTPException(400, "新密码至少 6 位")
+    with get_db() as conn:
+        row = conn.execute("SELECT password_hash, salt FROM users WHERE username = ?", (s["username"],)).fetchone()
+        if not row:
+            raise HTTPException(404, "用户不存在")
+        expected = _hash_pw(body.old_password, row["salt"])
+        if expected != row["password_hash"]:
+            raise HTTPException(400, "旧密码错误")
+        new_hash = _hash_pw(body.new_password, row["salt"])
+        conn.execute("UPDATE users SET password_hash = ? WHERE username = ?", (new_hash, s["username"]))
+    return {"detail": "密码已更新"}

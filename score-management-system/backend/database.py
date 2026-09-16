@@ -381,7 +381,7 @@ INSERT OR IGNORE INTO grades (id, name, student_count, class_count, status, crea
 INSERT OR IGNORE INTO users (username, password_hash, salt, display_name, role, is_active, created_at)
 VALUES (
     'admin',
-    '8f0e32a0f5e4b44a2c7f6a2f3b0b9c1d8e5f2a1b9c3d4e5f6a7b8c9d0e1f2a3',
+    'd815f6a1dd10a7c0406b5ddeaa822d6ef4db8b62b3aea985bdf58ea6544dc1db',
     'jx2024salt',
     '系统管理员',
     'admin',
@@ -397,6 +397,12 @@ INSERT OR IGNORE INTO settings (key, value) VALUES
 ('backup_on_close', 'true'),
 ('backup_after_import', 'true'),
 ('backup_retention_days', '30');
+
+-- 自愈: 如果 admin 用户密码 hash 与当前实现计算值不匹配, 自动更新
+-- (避免代码改动导致已有线上 DB 登不进去)
+UPDATE users SET password_hash = 'd815f6a1dd10a7c0406b5ddeaa822d6ef4db8b62b3aea985bdf58ea6544dc1db',
+                 salt = 'jx2024salt'
+WHERE username = 'admin' AND (password_hash != 'd815f6a1dd10a7c0406b5ddeaa822d6ef4db8b62b3aea985bdf58ea6544dc1db' OR salt != 'jx2024salt');
 """
 
 

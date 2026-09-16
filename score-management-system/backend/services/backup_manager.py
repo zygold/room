@@ -26,7 +26,9 @@ def get_data_snapshot() -> str:
         students = conn.execute("SELECT COUNT(*) FROM students").fetchone()[0]
         exams = conn.execute("SELECT COUNT(*) FROM exams").fetchone()[0]
         scores = conn.execute("SELECT COUNT(*) FROM scores").fetchone()[0]
-    return f"学生{students}/考试{exams}/成绩{scores}"
+        mappings = conn.execute("SELECT COUNT(*) FROM timetable_mappings").fetchone()[0]
+        users = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+    return f"学生{students}/考试{exams}/成绩{scores}/课表映射{mappings}/用户{users}"
 
 
 def create_backup(backup_type: str = "手动备份", description: str = "", encrypt: bool = False, password: str = None):
@@ -112,6 +114,8 @@ def preview_restore(backup_id: int, password: str = None) -> dict:
             "scores": bconn.execute("SELECT COUNT(*) FROM scores").fetchone()[0],
             "classes": bconn.execute("SELECT COUNT(*) FROM classes").fetchone()[0],
             "majors": bconn.execute("SELECT COUNT(*) FROM majors").fetchone()[0],
+            "timetable_mappings": bconn.execute("SELECT COUNT(*) FROM timetable_mappings").fetchone()[0],
+            "users": bconn.execute("SELECT COUNT(*) FROM users").fetchone()[0],
         }
     finally:
         bconn.close()

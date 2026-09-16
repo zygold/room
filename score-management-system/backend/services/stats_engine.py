@@ -332,13 +332,31 @@ def class_view(rows, class_id, subject_id, subject_registry):
 
 
 def teacher_view(rows, course_rows, teacher_id, subject_registry):
+    """教师视图: 先查 subject_id 精确匹配, 查不到再做标准化模糊匹配."""
+    def _resolve(course_subj, registry):
+        if course_subj in registry:
+            return course_subj, registry[course_subj]
+        # 模糊匹配: course 名是 registry 名前缀/包含, 或反过来
+        reg_keys = list(registry.keys())
+        for k in reg_keys:
+            if course_subj.startswith(k) or k.startswith(course_subj):
+                return k, registry[k]
+            # 括号后缀: "数学(普高)" vs "数学"
+            base = course_subj.split("(")[0].strip()
+            if base == k:
+                return k, registry[k]
+        return None, None
+
     results = []
     for c in [c for c in course_rows if c["teacher_id"] == teacher_id]:
+        std_key, s = _resolve(c["subject_id"], subject_registry)
+        if std_key is None:
+            # 注册表无此科目, 跳过 (避免 KeyError)
+            continue
         class_ids = {c["class_id"]} | set(c.get("combined_class_ids") or [])
         pool = [r for r in rows
-                if r["class_id"] in class_ids and r["subject_id"] == c["subject_id"]]
-        s = subject_registry[c["subject_id"]]
-        results.append({"subject_id": c["subject_id"],
+                if r["class_id"] in class_ids and r["subject_id"] == std_key]
+        results.append({"subject_id": std_key,
                         "class_ids": sorted(class_ids),
                         **_metrics(pool, s["full_score"], s["pass_ratio"])})
     return results

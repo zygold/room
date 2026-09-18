@@ -97,4 +97,4 @@ class TimetableMappingRepository(BaseRepository):
             if semester:
                 sql += ' AND semester=?'
                 params.append(semester)
-        return self._execute_sql(conn, sql, tuple(params))
+        return self.query(sql, tuple(params), conn=conn)

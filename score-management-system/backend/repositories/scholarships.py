@@ -71,20 +71,22 @@ class ScholarshipCandidateRepository(BaseRepository):
 
     # --- Phase 3+ 新增 ---
     def create_screen_run(self, name, grade_id, category, class_id, exam_ids, created_at, conn=None):
-        cur = self._execute_sql(conn,
+        cur = self.execute_dml(
             """INSERT INTO scholarship_screen_runs (name, grade_id, category, class_id, exam_ids, created_at)
                VALUES (?, ?, ?, ?, ?, ?)""",
-            (name, grade_id, category, class_id, exam_ids, created_at))
+            (name, grade_id, category, class_id, exam_ids, created_at),
+            conn=conn, commit=False)
         return cur.lastrowid
 
     def delete_by_run(self, screen_run_id, conn=None):
-        self._execute_sql(conn, 'DELETE FROM scholarships WHERE screen_run_id = ?', (screen_run_id,))
+        self.execute_dml('DELETE FROM scholarships WHERE screen_run_id = ?', (screen_run_id,),
+                         conn=conn, commit=False)
 
     def upsert_candidate(self, student_id, exam_id, class_id, average_score, language_avg, professional_avg,
                          total_score=None, subjects_json=None, category=None, screen_run_id=None,
                          grade_rank=None, major_rank=None, award_level=None, review_status='待复核',
                          conn=None):
-        cur = self._execute_sql(conn,
+        cur = self.execute_dml(
             """INSERT OR REPLACE INTO scholarships
                (student_id, exam_id, class_id, average_score, language_avg, professional_avg,
                 total_score, subjects, category, screen_run_id, grade_rank, major_rank,
@@ -92,7 +94,8 @@ class ScholarshipCandidateRepository(BaseRepository):
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (student_id, exam_id, class_id, average_score, language_avg, professional_avg,
              total_score, subjects_json, category, screen_run_id, grade_rank, major_rank,
-             award_level, review_status))
+             award_level, review_status),
+            conn=conn, commit=False)
         return cur.lastrowid
 
     # --- 原始 Phase 3 前已有方法 (被截断丢失, 重建) ---

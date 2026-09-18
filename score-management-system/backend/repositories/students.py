@@ -37,35 +37,27 @@ class StudentRepository(BaseRepository):
             ).fetchone()[0]
 
     def update_homeroom_by_class_name(self, teacher, class_name, conn=None):
-        own_conn = False
-        if conn is None:
-            conn = self.get_connection()
-            own_conn = True
-        try:
+        with self._resolve_conn(conn) as conn:
             cur = conn.execute(
                 'UPDATE students SET homeroom_teacher=? WHERE class_id IN (SELECT id FROM classes WHERE name=?)',
                 (teacher, class_name),
             )
             return cur.rowcount
-        finally:
-            if own_conn:
-                conn.close()
     def get_by_student_no_and_class(self, student_no, class_id, conn=None):
-        cur = self._execute_sql(
+        row = self.query_one(
             "SELECT id FROM students WHERE student_no=? AND class_id=?",
-            (student_no, class_id), conn=conn, commit=False)
-        row = cur.fetchone()
+            (student_no, class_id), conn=conn)
         return row["id"] if row else None
 
     def get_by_name_and_class(self, name, class_id, conn=None):
-        cur = self._execute_sql(
+        rows = self.query(
             "SELECT id FROM students WHERE name=? AND class_id=?",
-            (name, class_id), conn=conn, commit=False)
-        return [r["id"] for r in cur.fetchall()]
+            (name, class_id), conn=conn)
+        return [r["id"] for r in rows]
 
     def create_student(self, name, student_no, grade_id, major_id, class_type_id, class_id, conn=None):
         from utils.common import now_str
-        cur = self._execute_sql(
+        cur = self.execute_dml(
             """INSERT INTO students (name, student_no, grade_id, major_id, class_type_id,
                class_id, homeroom_teacher, created_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -76,6 +68,6 @@ class StudentRepository(BaseRepository):
 
 
     def update_homeroom_by_class(self, class_id, homeroom_teacher, conn=None):
-            self._execute_sql(conn,
-                'UPDATE students SET homeroom_teacher = ? WHERE class_id = ?',
-                (homeroom_teacher, class_id))
+        self.execute_dml(
+            'UPDATE students SET homeroom_teacher = ? WHERE class_id = ?',
+            (homeroom_teacher, class_id), conn=conn, commit=False)

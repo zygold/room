@@ -34,8 +34,7 @@ class SubjectStandardRepository(BaseRepository):
             conn.commit()
             return True
     def list_all_rows(self, conn=None):
-        cur = self._execute_sql(
-            "SELECT subject_name, major_id, max_score FROM subject_standards",
-            conn=conn, commit=False)
-        return cur.fetchall()
+        return self.query(
+            "SELECT subject_name, major_id, max_score, pass_score FROM subject_standards",
+            conn=conn)
 

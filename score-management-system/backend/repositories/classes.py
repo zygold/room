@@ -133,26 +133,22 @@ class ClassRepository(BaseRepository):
             ).fetchall()
             return {r['class_id']: r['homeroom_teacher'] for r in rows}
     def get_by_name(self, name, conn=None):
-        cur = self._execute_sql(
+        return self.query_one(
             "SELECT id, grade_id, major_id, class_type_id FROM classes WHERE name=?",
-            (name,), conn=conn, commit=False)
-        row = cur.fetchone()
-        return dict(row) if row else None
+            (name,), conn=conn)
 
     def get_by_id_detailed(self, class_id, conn=None):
-        cur = self._execute_sql(
+        return self.query_one(
             "SELECT id, grade_id, major_id, class_type_id FROM classes WHERE id=?",
-            (class_id,), conn=conn, commit=False)
-        row = cur.fetchone()
-        return dict(row) if row else None
+            (class_id,), conn=conn)
 
     # --- Phase 3+ 新增 ---
     def list_basic(self, conn=None):
         """Return [(id, name), ...] - 轻量列表."""
-        rows = self._execute_sql(conn, 'SELECT id, name FROM classes')
+        rows = self.query('SELECT id, name FROM classes', conn=conn)
         return [(r["id"], r["name"]) for r in rows]
 
     def update_head_teacher_batch(self, class_id, head_teacher, conn=None):
         """Update a single class's head teacher."""
-        self._execute_sql(conn, 'UPDATE classes SET head_teacher = ? WHERE id = ?',
-                          (head_teacher, class_id))
+        self.execute_dml('UPDATE classes SET head_teacher = ? WHERE id = ?',
+                         (head_teacher, class_id), conn=conn, commit=False)

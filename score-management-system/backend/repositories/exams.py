@@ -51,16 +51,9 @@ class ExamRepository(BaseRepository):
             return [dict(r) for r in conn.execute(sql, params).fetchall()]
 
     def mark_imported(self, exam_id, conn=None):
-            own_conn = False
-            if conn is None:
-                conn = self.get_connection()
-                own_conn = True
-            try:
-                conn.execute('UPDATE exams SET is_imported=1 WHERE id=?', (exam_id,))
-                conn.commit()
-            finally:
-                if own_conn:
-                    conn.close()
+        with self._resolve_conn(conn) as conn:
+            conn.execute('UPDATE exams SET is_imported=1 WHERE id=?', (exam_id,))
+            conn.commit()
 
     def find_by_meta(self, name, exam_type, school_year=None, semester=None, month=None, conn=None):
         sql = """SELECT id FROM exams
@@ -69,18 +62,27 @@ class ExamRepository(BaseRepository):
                  LIMIT 1"""
         params = (name, exam_type, school_year or '', semester or '',
                   month if month is not None else '')
-        cur = self._execute_sql(sql, params, conn=conn, commit=False)
-        row = cur.fetchone()
+        row = self.query_one(sql, params, conn=conn)
         return row["id"] if row else None
 
     def create_exam(self, name, exam_type, school_year, semester, month, exam_date, conn=None):
-        cur = self._execute_sql(
+        cur = self.execute_dml(
             """INSERT INTO exams (name, exam_type, school_year, semester, month, exam_date, is_imported, created_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
             (name, exam_type, school_year, semester, month, exam_date, 1,
              __import__('utils.common', fromlist=['now_str']).now_str()),
             conn=conn, commit=False)
         return cur.lastrowid
+
+    def get_major_id(self, exam_id, conn=None):
+        """考试对应的专业 id (可能为空)."""
+        row = self.query_one('SELECT major_id FROM exams WHERE id = ?', (exam_id,), conn=conn)
+        return row["major_id"] if row else None
+
+    def get_subject_configs(self, exam_id, conn=None):
+        """考试科目满分配置行 [{subject_name, max_score}...]."""
+        return self.query('SELECT subject_name, max_score FROM exam_subject_configs WHERE exam_id=?',
+                          (exam_id,), conn=conn)
 
 class ExamSubjectConfigRepository(BaseRepository):
     table = 'exam_subject_configs'
@@ -112,16 +114,3 @@ class ExamSubjectConfigRepository(BaseRepository):
                ON CONFLICT(exam_id, subject_name) DO UPDATE SET max_score=?""",
             (exam_id, subject_name, max_score, max_score),
             conn=conn, commit=False)
-
-
-
-    def get_major_id(self, exam_id, conn=None):
-            rows = self._execute_sql(conn, 'SELECT major_id FROM exams WHERE id = ?', (exam_id,))
-            return rows[0]["major_id"] if rows else None
-
-
-    def get_subject_configs(self, exam_id, conn=None):
-            """Get exam_subject_configs rows for an exam."""
-            return self._execute_sql(conn,
-                'SELECT subject_name, max_score FROM exam_subject_configs WHERE exam_id=?',
-                (exam_id,))

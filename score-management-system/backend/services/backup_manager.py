@@ -110,14 +110,21 @@ def preview_restore(backup_id: int, password: str = None) -> dict:
     bconn = sqlite3.connect(target_db)
     bconn.row_factory = sqlite3.Row
     try:
+        def _safe_count(table: str) -> int:
+            # 旧备份可能缺后加入的表 (timetable_mappings/users), 按 0 计
+            try:
+                return bconn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+            except sqlite3.OperationalError:
+                return 0
+
         snapshot = {
-            "students": bconn.execute("SELECT COUNT(*) FROM students").fetchone()[0],
-            "exams": bconn.execute("SELECT COUNT(*) FROM exams").fetchone()[0],
-            "scores": bconn.execute("SELECT COUNT(*) FROM scores").fetchone()[0],
-            "classes": bconn.execute("SELECT COUNT(*) FROM classes").fetchone()[0],
-            "majors": bconn.execute("SELECT COUNT(*) FROM majors").fetchone()[0],
-            "timetable_mappings": bconn.execute("SELECT COUNT(*) FROM timetable_mappings").fetchone()[0],
-            "users": bconn.execute("SELECT COUNT(*) FROM users").fetchone()[0],
+            "students": _safe_count("students"),
+            "exams": _safe_count("exams"),
+            "scores": _safe_count("scores"),
+            "classes": _safe_count("classes"),
+            "majors": _safe_count("majors"),
+            "timetable_mappings": _safe_count("timetable_mappings"),
+            "users": _safe_count("users"),
         }
     finally:
         bconn.close()

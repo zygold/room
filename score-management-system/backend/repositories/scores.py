@@ -130,35 +130,34 @@ class ScoreRepository(BaseRepository):
             })
         return result
     def get_by_student_and_exam(self, student_id, exam_id, conn=None):
-        cur = self._execute_sql(
+        return self.query_one(
             """SELECT id, chinese_score, math_score, english_score, professional_score,
                       physics_score, chemistry_score, biology_score, history_score,
                       geography_score, politics_score, total_score
                FROM scores WHERE student_id=? AND exam_id=?""",
-            (student_id, exam_id), conn=conn, commit=False)
-        return cur.fetchone()
+            (student_id, exam_id), conn=conn)
 
     def check_students_participated(self, exam_id, student_ids, conn=None):
         if not student_ids:
             return set()
         ph = ",".join(["?"] * len(student_ids))
-        cur = self._execute_sql(
+        rows = self.query(
             f"SELECT student_id FROM scores WHERE exam_id=? AND student_id IN ({ph})",
-            (exam_id,) + tuple(student_ids), conn=conn, commit=False)
-        return {r["student_id"] for r in cur.fetchall()}
+            (exam_id,) + tuple(student_ids), conn=conn)
+        return {r["student_id"] for r in rows}
 
     def update_scores(self, student_id, exam_id, fields_values, conn=None):
         cols = list(fields_values.keys())
         placeholders = ",".join(f"{c}=?" for c in cols)
         values = [fields_values[c] for c in cols] + [student_id, exam_id]
-        cur = self._execute_sql(
+        cur = self.execute_dml(
             f"UPDATE scores SET {placeholders} WHERE student_id=? AND exam_id=?",
             values, conn=conn, commit=False)
         return cur.rowcount
 
     def insert_score(self, student_id, exam_id, scores_dict, total_score, prof_max_score, batch, conn=None):
         from utils.common import now_str
-        cur = self._execute_sql(
+        cur = self.execute_dml(
             """INSERT INTO scores
                (student_id, exam_id, chinese_score, math_score, english_score,
                 physics_score, chemistry_score, biology_score, history_score,
@@ -183,9 +182,10 @@ class ScoreRepository(BaseRepository):
 
 
     def update_converted(self, score_id, chinese_c, math_c, english_c, prof_c, total_c, prof_max, conn=None):
-            self._execute_sql(conn,
-                """UPDATE scores SET
-                   chinese_converted=?, math_converted=?, english_converted=?, professional_converted=?,
-                   professional_max_score=?, total_converted=?, is_converted=1
-                   WHERE id=?""",
-                (chinese_c, math_c, english_c, prof_c, prof_max, total_c, score_id))
+        self.execute_dml(
+            """UPDATE scores SET
+               chinese_converted=?, math_converted=?, english_converted=?, professional_converted=?,
+               professional_max_score=?, total_converted=?, is_converted=1
+               WHERE id=?""",
+            (chinese_c, math_c, english_c, prof_c, prof_max, total_c, score_id),
+            conn=conn, commit=False)

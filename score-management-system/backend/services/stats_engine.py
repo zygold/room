@@ -8,6 +8,21 @@
 import re
 import json
 
+from repositories.base import BaseRepository
+from repositories.exams import ExamRepository
+from repositories.subject_standards import SubjectStandardRepository
+from repositories.score_subject_details import ScoreSubjectDetailRepository
+from repositories.classes import ClassRepository
+from repositories.timetables import TimetableMappingRepository
+
+# 模块级 repo 单例（Phase 4 重构后数据访问统一走 Repository 层）
+_base_repo = BaseRepository()
+_exam_repo = ExamRepository()
+_subject_std_repo = SubjectStandardRepository()
+_score_detail_repo = ScoreSubjectDetailRepository()
+_classes_repo = ClassRepository()
+_timetables_repo = TimetableMappingRepository()
+
 
 # ---------------------------------------------------------------------------
 # T1 数据适配层

@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.db.bak*
+*.bak
+*.log
+.env
+_verify_*.py
+_p*_migrate.py
+_fix_*.py
+_rewrite_*.py
+_smoke.py

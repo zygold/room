@@ -1,4 +1,4 @@
-"""Operation log audit APIs."""
+"""Operation log audit APIs — Repository 重构版."""
 import io
 from datetime import datetime
 from typing import Optional
@@ -7,11 +7,11 @@ from fastapi import APIRouter, Query, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-from database import get_db
-from utils.common import now_str
+from repositories.operation_logs import OperationLogRepository
 from utils.logger import log_operation
 
 router = APIRouter()
+log_repo = OperationLogRepository()
 
 
 @router.get("/")
@@ -26,50 +26,18 @@ def list_logs(
     page_size: int = Query(20, ge=1, le=1000),
 ):
     """Query operation logs with filters and pagination."""
-    with get_db() as conn:
-        sql = "SELECT * FROM operation_logs WHERE 1=1"
-        params = []
-        if operation_type:
-            sql += " AND operation_type=?"
-            params.append(operation_type)
-        if status:
-            sql += " AND status=?"
-            params.append(status)
-        if operator:
-            sql += " AND operator LIKE ?"
-            params.append(f"%{operator}%")
-        if keyword:
-            sql += " AND (operation_type LIKE ? OR operation_detail LIKE ?)"
-            params.append(f"%{keyword}%")
-            params.append(f"%{keyword}%")
-        if start_date:
-            sql += " AND created_at >= ?"
-            params.append(start_date)
-        if end_date:
-            sql += " AND created_at < ?"
-            params.append(end_date)
-
-        total = conn.execute(f"SELECT COUNT(*) FROM ({sql})", params).fetchone()[0]
-        sql += " ORDER BY id DESC LIMIT ? OFFSET ?"
-        params.extend([page_size, (page - 1) * page_size])
-        rows = conn.execute(sql, params).fetchall()
-
-    return {
-        "total": total,
-        "page": page,
-        "page_size": page_size,
-        "items": [dict(r) for r in rows],
-    }
+    return log_repo.list(
+        page=page, page_size=page_size,
+        operation_type=operation_type, status=status,
+        operator=operator, keyword=keyword,
+        start_date=start_date, end_date=end_date,
+    )
 
 
 @router.get("/types")
 def list_log_types():
     """Return distinct operation types for filtering."""
-    with get_db() as conn:
-        rows = conn.execute(
-            "SELECT DISTINCT operation_type FROM operation_logs ORDER BY operation_type"
-        ).fetchall()
-    return [r["operation_type"] for r in rows]
+    return log_repo.list_types()
 
 
 @router.get("/export")
@@ -83,31 +51,11 @@ def export_logs(
     fmt: str = Query("xlsx"),
 ):
     """Export filtered operation logs."""
-    with get_db() as conn:
-        sql = "SELECT * FROM operation_logs WHERE 1=1"
-        params = []
-        if operation_type:
-            sql += " AND operation_type=?"
-            params.append(operation_type)
-        if status:
-            sql += " AND status=?"
-            params.append(status)
-        if operator:
-            sql += " AND operator LIKE ?"
-            params.append(f"%{operator}%")
-        if keyword:
-            sql += " AND (operation_type LIKE ? OR operation_detail LIKE ?)"
-            params.append(f"%{keyword}%")
-            params.append(f"%{keyword}%")
-        if start_date:
-            sql += " AND created_at >= ?"
-            params.append(start_date)
-        if end_date:
-            sql += " AND created_at < ?"
-            params.append(end_date)
-        sql += " ORDER BY id DESC"
-        rows = conn.execute(sql, params).fetchall()
-
+    rows = log_repo.for_export(
+        operation_type=operation_type, status=status,
+        operator=operator, keyword=keyword,
+        start_date=start_date, end_date=end_date,
+    )
     filename = f"operation_logs_{datetime.now().strftime('%Y%m%d%H%M%S')}"
     if fmt.lower() == "csv":
         import csv
@@ -149,12 +97,6 @@ def cleanup_logs(payload: CleanupPayload):
     """Delete logs older than the specified number of days."""
     if payload.days < 1:
         raise HTTPException(status_code=400, detail="保留天数必须大于 0")
-    with get_db() as conn:
-        cur = conn.execute(
-            "DELETE FROM operation_logs WHERE created_at < datetime('now', ?)",
-            (f"-{payload.days} days",),
-        )
-        deleted = cur.rowcount
-        conn.commit()
+    deleted = log_repo.cleanup_older_than_days(payload.days)
     log_operation("日志清理", f"删除 {deleted} 条 {payload.days} 天前的操作日志")
     return {"deleted": deleted}

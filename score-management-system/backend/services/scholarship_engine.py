@@ -8,11 +8,16 @@ Categories:
   top 3 language rank in grade + professional major rank top 15.
 """
 
-import sqlite3
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 
 from database import get_db
+from repositories.base import BaseRepository
+
+_base_repo = BaseRepository()
+from repositories.scholarships import ScholarshipRepository
+
+_scholarship_repo = ScholarshipRepository()
 
 
 def _to_float(v):
@@ -25,7 +30,7 @@ def _rank_desc(values: List[tuple]) -> Dict[int, int]:
     return {sid: (idx + 1) for idx, (sid, _) in enumerate(sorted_values)}
 
 
-def _fetch_student_averages(conn, grade_id: int, class_type_ids: List[int], exam_ids: List[int], use_converted: bool = False) -> List[sqlite3.Row]:
+def _fetch_student_averages(conn, grade_id: int, class_type_ids: List[int], exam_ids: List[int], use_converted: bool = False) -> List[dict]:
     placeholders_exams = ",".join(["?"] * len(exam_ids))
     placeholders_types = ",".join(["?"] * len(class_type_ids))
     if use_converted:
@@ -56,10 +61,10 @@ def _fetch_student_averages(conn, grade_id: int, class_type_ids: List[int], exam
     HAVING exam_count > 0
     """
     params = list(exam_ids) + [grade_id] + list(class_type_ids)
-    return conn.execute(sql, params).fetchall()
+    return _base_repo.query(sql, params, conn=conn, as_dict=False)
 
 
-def _screen_benkefangxiang(students: List[sqlite3.Row], special_top_language_first_prize: bool = True) -> List[Dict[str, Any]]:
+def _screen_benkefangxiang(students: List[dict], special_top_language_first_prize: bool = True) -> List[Dict[str, Any]]:
     """本科方向班（特优高考班）评选逻辑。"""
     # Exclude students with no language score or no professional score
     valid_students = [
@@ -74,7 +79,7 @@ def _screen_benkefangxiang(students: List[sqlite3.Row], special_top_language_fir
     grade_lang_rank = _rank_desc(grade_lang_values)
 
     # Professional class rank
-    class_groups: Dict[int, List[sqlite3.Row]] = {}
+    class_groups: Dict[int, List[dict]] = {}
     for r in valid_students:
         class_groups.setdefault(r["class_id"], []).append(r)
     prof_class_rank: Dict[int, int] = {}
@@ -134,7 +139,7 @@ def _screen_benkefangxiang(students: List[sqlite3.Row], special_top_language_fir
     return winners
 
 
-def _screen_putong(students: List[sqlite3.Row]) -> List[Dict[str, Any]]:
+def _screen_putong(students: List[dict]) -> List[Dict[str, Any]]:
     """普通升学班评选逻辑。"""
     # Exclude students with no language score or no professional score
     valid_students = [
@@ -149,7 +154,7 @@ def _screen_putong(students: List[sqlite3.Row]) -> List[Dict[str, Any]]:
     grade_lang_rank = _rank_desc(grade_lang_values)
 
     # Professional major rank within same grade + major
-    major_groups: Dict[int, List[sqlite3.Row]] = {}
+    major_groups: Dict[int, List[dict]] = {}
     for r in valid_students:
         major_groups.setdefault(r["major_id"], []).append(r)
     prof_major_rank: Dict[int, int] = {}
@@ -191,7 +196,7 @@ def _screen_putong(students: List[sqlite3.Row]) -> List[Dict[str, Any]]:
     return winners
 
 
-def _screen_zhipu(students: List[sqlite3.Row]) -> List[Dict[str, Any]]:
+def _screen_zhipu(students: List[dict]) -> List[Dict[str, Any]]:
     """职普融通班评选逻辑。
 
     方案：高一结束后够条件转入普高却选择留校的学生都享受一等奖学金。
@@ -272,40 +277,31 @@ def run_screen(
             if not winners:
                 return 0
 
-        # 清除该年级/考试批次历史候选，避免切换类别后旧类别数据仍显示在列表中
-        placeholders_exams = ",".join(["?"] * len(exam_ids))
-        delete_sql = (
-            f"DELETE FROM scholarships WHERE exam_id IN ({placeholders_exams}) AND student_id IN (SELECT id FROM students WHERE grade_id=?)"
-        )
-        params = list(exam_ids) + [grade_id]
-        if class_id:
-            delete_sql += " AND class_id=?"
-            params.append(class_id)
-        conn.execute(delete_sql, params)
-
+        # ========== Phase 1 修复: 用 screen_run_id 隔离每次筛选 ==========
         now = datetime.now().isoformat(timespec='seconds')
+
+        # 1. 创建 run 记录，拿到 run_id
+        run_name = f"Grade{grade_id}_{category}_{now[:16]}"
+        screen_run_id = _scholarship_repo.create_screen_run(
+            run_name, grade_id, category, class_id,
+            ",".join(str(e) for e in exam_ids), now, conn=conn)
+
+        # 2. 按 run_id 清这次筛选留下的旧候选（同一 run 不应该有重复）
+        _scholarship_repo.delete_by_run(screen_run_id, conn=conn)
+
+        # 3. 插入候选，带上 screen_run_id（UNIQUE 索引在数据库层再兜一次）
         primary_exam_id = exam_ids[0]
         for w in winners:
-            conn.execute(
-                """
-                INSERT INTO scholarships
-                (student_id, exam_id, class_id, average_score, language_avg, professional_avg,
-                 grade_rank, major_rank, award_level, review_status, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    w["student_id"],
-                    primary_exam_id,
-                    w["class_id"],
-                    w["average_score"],
-                    w["language_avg"],
-                    w["professional_avg"],
-                    w["grade_rank"],
-                    w["major_rank"],
-                    w["award_level"],
-                    "待复核",
-                    now,
-                ),
-            )
+            _scholarship_repo.upsert_candidate(
+                w["student_id"], w["exam_id"], w["class_id"],
+                w["average_score"], w["language_avg"], w["professional_avg"],
+                total_score=w.get("total_score"),
+                subjects_json=json.dumps(w.get("subjects", []), ensure_ascii=False),
+                category=category,
+                screen_run_id=screen_run_id,
+                grade_rank=w["grade_rank"], major_rank=w["major_rank"],
+                award_level=w["award_level"],
+                review_status="待复核",
+                conn=conn)
         conn.commit()
         return len(winners)

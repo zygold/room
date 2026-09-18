@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-CN" class="light">
 <head>
+    <style>html{visibility:hidden}</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap">
+    <script src="/static/vendor/tailwind.js?v=2"></script>
+    <script src="/static/vendor/lucide.js?v=2"></script>
+    <script src="/static/js/auth-bootstrap.js?v=2"></script>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>统计分析</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>统计分析</title>
     <style id="theme-vars">
 /* Score Management System - Brand CSS */
 /* Professional, clean, data-dense administrative interface */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
 
 :root {
   /* Brand Primary - Indigo Blue */
@@ -89,10 +91,7 @@
   --input: #334155;
   --ring: #818cf8;
 }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
-    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+    </style><script src="/static/vendor/echarts.js?v=2" defer></script>
     <style type="text/tailwindcss">
   @theme inline {
     --color-background: var(--background);
@@ -355,6 +354,15 @@
             <span class="truncate" style="font-size: 14px; font-weight: 500;">系统设置</span>
           </a>
         </li>
+        <li>
+          <a href="javascript:void(0)" onclick="openHtModal()"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.color='#94a3b8';this.style.background='transparent'">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            <span class="truncate" style="font-size:14px;">班主任导入</span>
+            <span id="ht-badge" style="margin-left:auto;font-size:11px;background:#4f46e5;color:#fff;padding:1px 7px;border-radius:10px;">-/80</span>
+          </a>
+        </li>
 
       </ul>
     </nav>
@@ -486,7 +494,6 @@
     </div>
   </div>
 
-
   <!-- 结果表格 -->
   <div class="rounded-xl overflow-hidden" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
     <div class="flex items-center justify-between px-5 py-3"
@@ -544,13 +551,13 @@
       if(resp.status === 401 && resp.url.includes('/api/')){
         // 尝试 JSON body 里的 redirect
         return resp.json().then(d=>{
-          const rd = d.redirect || '/pages/stats.html';
+          const rd = encodeURIComponent(window.location.pathname + window.location.search);
           alert('登录已失效, 请重新登录');
-          window.location.href = rd;
+          window.location.href = '/pages/login.html?redirect=' + rd;
           return resp;
         }).catch(()=>{
           alert('登录已失效, 请重新登录');
-          window.location.href = '/pages/stats.html';
+          const rd2 = encodeURIComponent(window.location.pathname + window.location.search); window.location.href = '/pages/login.html?redirect=' + rd2;
           return resp;
         });
       }
@@ -580,7 +587,6 @@
       }
     }catch(e){ /* ignore */ }
   })();
-
 
 (function(){
   const API="/api";
@@ -804,7 +810,7 @@
     }
   }
 
-  function exportCsv(){
+  function legacy_exportCsv(){
     if(!state.items.length){alert("没有数据可导出");return;}
     const hdr=["班级","班主任"];
     state.headers.forEach(s=>{hdr.push(s+"教师");hdr.push(s+"及格/参考");});
@@ -828,10 +834,164 @@
     loadExams();
     $("btn-run").addEventListener("click",runQuery);
     $("btn-reset").addEventListener("click",()=>{$("total-line").value="";document.querySelectorAll("#subject-grid input[type=number]").forEach(i=>i.value="");state.items=[];state.headers=[];renderTable();$("status-msg").textContent="已重置";});
-    $("btn-export").addEventListener("click",exportCsv);
+    $("btn-export").addEventListener("click",openExportModal);
     $("btn-check-all").addEventListener("click",()=>{const b=document.querySelectorAll("#subject-grid input[type=checkbox]");const u=[...b].some(x=>!x.checked);b.forEach(x=>x.checked=u);});
   });
 })();
 </script>
+
+<!-- ===== 导出配置 Modal ===== -->
+<div id="export-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;width:520px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;">
+    <div style="padding:18px 22px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+      <h3 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">📥 导出 CSV 配置</h3>
+      <button onclick="document.getElementById('export-modal').style.display='none'" style="border:none;background:none;cursor:pointer;font-size:20px;color:#64748b;">✕</button>
+    </div>
+    <div style="padding:18px 22px;">
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:13px;color:#475569;margin-bottom:8px;font-weight:500;">导出文件名</label>
+        <input id="export-filename" type="text" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;background:#f8fafc;font-family:inherit;" placeholder="组合统计_2025秋.csv">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:13px;color:#475569;margin-bottom:8px;font-weight:500;">导出列 (勾选)</label>
+        <div id="export-cols" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px 16px;"></div>
+      </div>
+      <div style="margin-bottom:8px;display:flex;gap:10px;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#475569;cursor:pointer;">
+          <input id="export-row-total" type="checkbox" checked> 只导出有全班全科总分的班级
+        </label>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#475569;cursor:pointer;">
+          <input id="export-percent" type="checkbox" checked> 及格率导出为 % (如 85.5%)
+        </label>
+      </div>
+    </div>
+    <div style="padding:12px 22px;border-top:1px solid #e2e8f0;display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="document.getElementById('export-modal').style.display='none'" style="padding:7px 16px;border:1px solid #e2e8f0;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:#475569;">取消</button>
+      <button onclick="doExportCsv()" style="padding:7px 16px;border:none;border-radius:6px;background:#4f46e5;color:#fff;cursor:pointer;font-size:13px;font-weight:500;">确认导出</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openExportModal(){
+  if(!state.items.length){alert("没有数据可导出");return;}
+  // 初始化列勾选项: 基础信息 + state.headers 对应每科的两个指标
+  const container = document.getElementById('export-cols');
+  container.innerHTML = '';
+  const defaults = [
+    {key:'class_name', label:'班级'},
+    {key:'homeroom', label:'班主任'},
+  ];
+  state.headers.forEach(h=>{
+    defaults.push({key:h+'_teacher', label:h+' 教师'});
+    defaults.push({key:h+'_pass', label:h+' 及格/参考'});
+  });
+  defaults.push({key:'total_pass', label:'总分及格'});
+  defaults.push({key:'total_avg', label:'总分人均'});
+  defaults.forEach((col,i)=>{
+    const d = document.createElement('label');
+    d.style.cssText = 'display:flex;align-items:center;gap:6px;font-size:13px;color:#334155;cursor:pointer;';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = true; cb.dataset.key = col.key;
+    d.appendChild(cb);
+    d.appendChild(document.createTextNode(col.label));
+    container.appendChild(d);
+  });
+  // 文件名默认值
+  const en = document.getElementById('exam-select').selectedOptions[0]?.textContent.trim() || '统计';
+  document.getElementById('export-filename').value = `${en}_组合统计_${new Date().toISOString().slice(0,10)}.csv`;
+  document.getElementById('export-modal').style.display = 'flex';
+}
+
+function doExportCsv(){
+  // 收集勾选的列
+  const checked = [...document.querySelectorAll('#export-cols input[type=checkbox]:checked')].map(cb=>cb.dataset.key);
+  if(!checked.length){alert('至少选一列');return;}
+  const onlyTotal = document.getElementById('export-row-total').checked;
+  const asPct = document.getElementById('export-percent').checked;
+  const filename = document.getElementById('export-filename').value.trim() || 'export.csv';
+  const fn = filename.endsWith('.csv') ? filename : filename + '.csv';
+
+  // 构建表头
+  const labelMap = {
+    'class_name':'班级','homeroom':'班主任',
+    'total_pass':'总分及格','total_avg':'总分人均'
+  };
+  const hdr = checked.map(k=>{
+    if(k in labelMap) return labelMap[k];
+    // 学科相关
+    for(const h of state.headers){
+      if(k === h+'_teacher') return h+' 教师';
+      if(k === h+'_pass') return h+' 及格/参考';
+    }
+    return k;
+  });
+
+  const rows = [hdr.join(',')];
+  state.items.forEach(item=>{
+    if(onlyTotal && (!item.total || item.total['总分及格'] == null)) return;
+    const row = checked.map(k=>{
+      if(k==='class_name') return item.class_name || '';
+      if(k==='homeroom') return item.homeroom_teacher || '';
+      if(k==='total_pass') return item.total?.['总分及格'] ?? '';
+      if(k==='total_avg') return item.total?.['总分人均']==null?'':fmt(item.total['总分人均'],1);
+      for(const h of state.headers){
+        if(k===h+'_teacher') return (item.subject_stats[h]||{}).teacher || '';
+        if(k===h+'_pass'){
+          const ss = item.subject_stats[h] || {};
+          const ref = ss['参考'] ?? '';
+          const pass = ss['及格'] ?? '';
+          return `${pass}/${ref}`;
+        }
+      }
+      return '';
+    });
+    rows.push(row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  });
+  const csv = '\ufeff' + rows.join('\n');
+  const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = fn;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  document.getElementById('export-modal').style.display = 'none';
+}
+</script>
+
+<!-- ===== 班主任批量导入 Modal ===== -->
+<div id="ht-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;width:560px;max-width:92vw;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;">
+      <h3 style="margin:0;font-size:16px;font-weight:600;color:#0f172a;">📋 批量导入班主任</h3>
+      <button onclick="closeHtModal()" style="border:none;background:none;cursor:pointer;font-size:20px;color:#64748b;">✕</button>
+    </div>
+    <div style="padding:20px 24px;overflow-y:auto;flex:1;">
+      <p style="margin:0 0 12px;color:#475569;font-size:13px;">上传 Excel (.xlsx / .xls)，自动匹配班级并回填班主任。</p>
+      <div style="border:2px dashed #cbd5e1;border-radius:8px;padding:24px;text-align:center;cursor:pointer;background:#f8fafc;" onclick="document.getElementById('ht-file').click()">
+        <div style="font-size:32px;margin-bottom:8px;">📂</div>
+        <div style="font-size:14px;color:#334155;">点击选择文件 或 拖拽上传</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">支持 .xlsx / .xls</div>
+      </div>
+      <input id="ht-file" type="file" accept=".xlsx,.xls" style="display:none" onchange="handleHtFile(this.files[0])">
+      <div id="ht-preview" style="margin-top:16px;display:none;"></div>
+      <div id="ht-loading" style="display:none;text-align:center;padding:16px;color:#64748b;">⏳ 处理中...</div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid #e2e8f0;display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="closeHtModal()" style="padding:8px 18px;border:1px solid #e2e8f0;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:#475569;">取消</button>
+      <button id="ht-btn-apply" onclick="applyHt()" style="padding:8px 18px;border:none;border-radius:6px;background:#4f46e5;color:#fff;cursor:pointer;font-size:13px;font-weight:500;display:none;">确认应用</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let _htSid = null;
+function openHtModal(){ _htSid=null; document.getElementById('ht-preview').style.display='none'; document.getElementById('ht-btn-apply').style.display='none'; document.getElementById('ht-modal').style.display='flex'; refreshHtOverview(); }
+function closeHtModal(){ document.getElementById('ht-modal').style.display='none'; }
+function handleHtFile(file){ if(!file) return; const fd=new FormData(); fd.append('file',file); const load=document.getElementById('ht-loading'); const prev=document.getElementById('ht-preview'); const btn=document.getElementById('ht-btn-apply'); load.style.display='block'; prev.style.display='none'; btn.style.display='none'; fetch('/api/headteacher/preview',{method:'POST',body:fd,credentials:'include'}).then(r=>r.json().then(d=>({ok:r.ok,d:d}))).then(x=>{ load.style.display='none'; if(!x.ok){alert(x.d.detail||'上传失败');return;} _htSid=x.d.session_id; let h=`<div style="background:#f1f5f9;border-radius:8px;padding:14px;margin-bottom:12px;">共 ${x.d.total_parsed} 条，<span style="color:#16a34a;">匹配 ${x.d.summary.matched_count}</span> / <span style="color:#dc2626;">未匹配 ${x.d.summary.unmatched_count}</span></div>`; if(x.d.matched.length){ h+='<table style="width:100%;font-size:12px;border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="text-align:left;padding:6px;">班级</th><th style="text-align:left;padding:6px;">班主任</th></tr></thead><tbody>'; x.d.matched.slice(0,15).forEach(m=>{h+=`<tr><td style="padding:4px 6px;">${m.class_name}</td><td style="padding:4px 6px;color:#4f46e5;">${m.head_teacher}</td></tr>`;}); h+='</tbody></table>'; } if(x.d.unmatched_class.length){ h+='<div style="margin-top:12px;font-size:12px;color:#dc2626;">未匹配班级 (前10): '; h+=', '.join(x.d.unmatched_class.slice(0,10).map(u=>u.class_raw)); h+='</div>'; } prev.innerHTML=h; prev.style.display='block'; if(x.d.matched.length){ btn.textContent=`确认应用 ${x.d.matched.length} 个`; btn.style.display='inline-block'; } }).catch(e=>{ load.style.display='none'; alert('网络错误: '+e.message); }); }
+function applyHt(){ if(!_htSid) return; const btn=document.getElementById('ht-btn-apply'); btn.disabled=true; btn.textContent='应用中...'; fetch('/api/headteacher/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:_htSid,override:true}),credentials:'include'}).then(r=>r.json()).then(d=>{ btn.disabled=false; alert('成功更新 '+d.applied+' 个班级的班主任'); closeHtModal(); refreshHtOverview(); }).catch(e=>{ btn.disabled=false; alert('应用失败: '+e.message); }); }
+function refreshHtOverview(){ fetch('/api/headteacher/overview',{credentials:'include'}).then(r=>r.json()).then(d=>{ const b=document.getElementById('ht-badge'); if(b) b.textContent=d.with_head_teacher+'/'+d.total_classes; }).catch(()=>{}); }
+</script>
+
 </body>
 </html>

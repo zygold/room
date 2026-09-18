@@ -118,6 +118,18 @@ CREATE TABLE IF NOT EXISTS scores (
     professional_score REAL,
     professional_converted REAL,
     professional_max_score REAL DEFAULT 100,
+    physics_score REAL,
+    physics_converted REAL,
+    chemistry_score REAL,
+    chemistry_converted REAL,
+    biology_score REAL,
+    biology_converted REAL,
+    history_score REAL,
+    history_converted REAL,
+    geography_score REAL,
+    geography_converted REAL,
+    politics_score REAL,
+    politics_converted REAL,
     total_score REAL,                      -- 原始总分
     total_converted REAL,                  -- 换算后总分
     is_converted INTEGER DEFAULT 0,
@@ -529,6 +541,18 @@ def init_db():
             ("students", "student_no TEXT"),
             ("scores", "total_converted REAL"),
             ("scholarships", "screen_run_id INTEGER"),
+            ("scores", "physics_score REAL"),
+            ("scores", "physics_converted REAL"),
+            ("scores", "chemistry_score REAL"),
+            ("scores", "chemistry_converted REAL"),
+            ("scores", "biology_score REAL"),
+            ("scores", "biology_converted REAL"),
+            ("scores", "history_score REAL"),
+            ("scores", "history_converted REAL"),
+            ("scores", "geography_score REAL"),
+            ("scores", "geography_converted REAL"),
+            ("scores", "politics_score REAL"),
+            ("scores", "politics_converted REAL"),
         ]
         # Ensure score_subject_details table exists for older databases
         conn.execute("""

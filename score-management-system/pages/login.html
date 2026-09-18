@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 · 成绩管理系统</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap">
+    <style id="theme-vars">
+:root {
+  --color-primary-500: #4f46e5; --color-primary-600: #4338ca; --color-primary-700: #3730a3;
+  --color-neutral-0:#fff; --color-neutral-50:#f8fafc; --color-neutral-100:#f1f5f9;
+  --color-neutral-200:#e2e8f0; --color-neutral-300:#cbd5e1; --color-neutral-400:#94a3b8;
+  --color-neutral-500:#64748b; --color-neutral-700:#334155; --color-neutral-800:#1e293b; --color-neutral-900:#0f172a;
+  --state-error:#dc2626; --state-success:#16a34a;
+}
+    </style>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Inter','Noto Sans SC',system-ui,sans-serif;background:linear-gradient(135deg,#eef2ff 0%,#f8fafc 40%,#f1f5f9 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+        .login-card{background:#fff;border-radius:16px;box-shadow:0 20px 60px -12px rgba(79,70,229,.15),0 4px 20px -4px rgba(15,23,42,.08);padding:48px 40px;width:100%;max-width:420px}
+        .brand{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+        .brand-logo{width:44px;height:44px;background:linear-gradient(135deg,#4f46e5,#3730a3);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:20px}
+        .brand-text h1{font-size:20px;font-weight:600;color:#0f172a}
+        .brand-text p{font-size:12px;color:#64748b;margin-top:2px}
+        .field{margin-bottom:20px}
+        .field label{display:block;font-size:13px;font-weight:500;color:#334155;margin-bottom:8px}
+        .field input{width:100%;padding:12px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;transition:border-color .15s,box-shadow .15s;background:#f8fafc}
+        .field input:focus{outline:none;border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,229,.12);background:#fff}
+        .field input::placeholder{color:#94a3b8}
+        .btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#4f46e5,#3730a3);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:transform .1s,box-shadow .15s,opacity .15s}
+        .btn-login:hover{box-shadow:0 8px 20px -6px rgba(79,70,229,.5)}
+        .btn-login:active{transform:scale(.98)}
+        .btn-login:disabled{opacity:.6;cursor:not-allowed}
+        .error{margin-top:14px;padding:10px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#dc2626;font-size:13px;display:none}
+        .error.show{display:block;animation:shake .3s ease-out}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+        .hint{margin-top:24px;text-align:center;font-size:12px;color:#94a3b8}
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand">
+            <div class="brand-logo">绩</div>
+            <div class="brand-text"><h1>成绩管理系统</h1><p>教学质量统计 · Web 版</p></div>
+        </div>
+        <form id="loginForm" autocomplete="off">
+            <div class="field">
+                <label for="username">用户名</label>
+                <input id="username" name="username" type="text" placeholder="请输入用户名" autofocus required>
+            </div>
+            <div class="field">
+                <label for="password">密码</label>
+                <input id="password" name="password" type="password" placeholder="请输入密码" required>
+            </div>
+            <button type="submit" class="btn-login" id="btnLogin">登 录</button>
+            <div class="error" id="errMsg"></div>
+        </form>
+        <div class="hint">默认账户 admin / admin123 · 首次登录后请及时修改密码</div>
+    </div>
+    <script>
+    (async () => {
+        // 已登录 -> 直接跳转, 不显示表单
+        try {
+            const r = await fetch("/api/auth/me", {credentials:"include", cache:"no-store"});
+            const d = await r.json().catch(() => ({}));
+            if (d && d.user) {
+                const params = new URLSearchParams(location.search);
+                location.replace(params.get("redirect") || "/pages/dashboard.html");
+                return;
+            }
+        } catch(_) {}
+        // 未登录: 绑定表单
+        const form = document.getElementById("loginForm"),
+              btn = document.getElementById("btnLogin"),
+              err = document.getElementById("errMsg");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault(); err.classList.remove("show");
+            const u = document.getElementById("username").value.trim(),
+                  p = document.getElementById("password").value;
+            if (!u || !p) { err.textContent = "请填写用户名和密码"; err.classList.add("show"); return; }
+            btn.disabled = true; btn.textContent = "登录中...";
+            try {
+                const resp = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    credentials: "include",
+                    body: JSON.stringify({username: u, password: p})
+                });
+                if (resp.ok) {
+                    const params = new URLSearchParams(location.search);
+                    location.replace(params.get("redirect") || "/pages/dashboard.html");
+                } else {
+                    const d = await resp.json().catch(()=>({}));
+                    err.textContent = d.detail || "登录失败, 请检查用户名和密码";
+                    err.classList.add("show"); btn.disabled = false; btn.textContent = "登 录";
+                }
+            } catch(ex) {
+                err.textContent = "网络错误"; err.classList.add("show");
+                btn.disabled = false; btn.textContent = "登 录";
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

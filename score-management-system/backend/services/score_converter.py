@@ -2,11 +2,22 @@
 from typing import Optional
 
 from database import get_db
+from repositories.base import BaseRepository
+
+_base_repo = BaseRepository()
+from repositories.subject_standards import SubjectStandardRepository
+from repositories.exams import ExamRepository
+from repositories.score_subject_details import ScoreSubjectDetailRepository
+from repositories.scores import ScoreRepository
+
+_subject_std_repo = SubjectStandardRepository()
+_exam_repo = ExamRepository()
+_score_detail_repo = ScoreSubjectDetailRepository()
+_score_repo = ScoreRepository()
 
 
 def get_subject_standards():
-    with get_db() as conn:
-        rows = conn.execute("SELECT subject_name, major_id, max_score, pass_score FROM subject_standards").fetchall()
+    rows = _subject_std_repo.list_all_rows()
     fixed = {}
     by_major = {}
     for r in rows:
@@ -19,11 +30,7 @@ def get_subject_standards():
 
 def get_exam_subject_configs(exam_id: int) -> dict:
     """Return subject_name -> max_score mapping for an exam."""
-    with get_db() as conn:
-        rows = conn.execute(
-            "SELECT subject_name, max_score FROM exam_subject_configs WHERE exam_id=?",
-            (exam_id,),
-        ).fetchall()
+    rows = _exam_repo.get_subject_configs(exam_id)
     return {r["subject_name"]: r["max_score"] for r in rows}
 
 
@@ -40,10 +47,7 @@ def _convert_professional_details(conn, score_id: int, prof_target_max: float) -
     detail scores equals the converted professional total. This implements
     the "convert details first, then summarize" requirement.
     """
-    detail_rows = conn.execute(
-        "SELECT id, original_score, max_score FROM score_subject_details WHERE score_id=?",
-        (score_id,),
-    ).fetchall()
+    detail_rows = _score_detail_repo.get_by_score(score_id, conn=conn)
     if not detail_rows:
         return None
 
@@ -57,10 +61,7 @@ def _convert_professional_details(conn, score_id: int, prof_target_max: float) -
     for d in detail_rows:
         original = d["original_score"]
         converted = round(original * ratio, 2) if original is not None else None
-        conn.execute(
-            "UPDATE score_subject_details SET converted_score=? WHERE id=?",
-            (converted, d["id"]),
-        )
+        _score_detail_repo.update_converted(d["id"], converted, conn=conn)
         if converted is not None:
             converted_total += converted
 
@@ -94,10 +95,9 @@ def convert_scores(exam_id: int, score_ids: list = None, target_max_map: dict = 
             where += f" AND s.id IN ({placeholders})"
             params.extend(score_ids)
 
-        rows = conn.execute(
+        rows = _base_repo.query(
             f"SELECT s.*, st.major_id FROM scores s JOIN students st ON s.student_id=st.id {where}",
-            params,
-        ).fetchall()
+            params, conn=conn, as_dict=False)
 
         updated = 0
         for r in rows:
@@ -121,13 +121,13 @@ def convert_scores(exam_id: int, score_ids: list = None, target_max_map: dict = 
 
             converted_total = sum([v for v in [chinese_c, math_c, english_c, prof_c] if v is not None])
 
-            conn.execute(
+            _base_repo.execute_dml(
                 """UPDATE scores SET
                 chinese_converted=?, math_converted=?, english_converted=?, professional_converted=?,
                 professional_max_score=?, total_converted=?, is_converted=?
                 WHERE id=?""",
                 (chinese_c, math_c, english_c, prof_c, prof_max, converted_total, 1, r["id"]),
-            )
+                conn=conn)
             updated += 1
 
         conn.commit()

@@ -8,6 +8,11 @@ from datetime import datetime
 
 from config import BACKUP_DIR, DB_PATH
 from database import get_db
+from repositories.backups import BackupRepository
+from repositories.base import BaseRepository
+
+_backup_repo = BackupRepository()
+_base_repo = BaseRepository()
 
 BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -23,11 +28,11 @@ def get_db_size() -> str:
 
 def get_data_snapshot() -> str:
     with get_db() as conn:
-        students = conn.execute("SELECT COUNT(*) FROM students").fetchone()[0]
-        exams = conn.execute("SELECT COUNT(*) FROM exams").fetchone()[0]
-        scores = conn.execute("SELECT COUNT(*) FROM scores").fetchone()[0]
-        mappings = conn.execute("SELECT COUNT(*) FROM timetable_mappings").fetchone()[0]
-        users = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+        students = _base_repo.count_table('students', conn=conn)
+        exams = _base_repo.count_table('exams', conn=conn)
+        scores = _base_repo.count_table('scores', conn=conn)
+        mappings = _base_repo.count_table('timetable_mappings', conn=conn)
+        users = _base_repo.count_table('users', conn=conn)
     return f"学生{students}/考试{exams}/成绩{scores}/课表映射{mappings}/用户{users}"
 
 
@@ -66,18 +71,15 @@ def create_backup(backup_type: str = "手动备份", description: str = "", encr
 
     size = get_db_size()
     with get_db() as conn:
-        cur = conn.execute(
-            "INSERT INTO backups (backup_type, file_path, file_size, description, data_snapshot, is_encrypted, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (backup_type, str(final_path), size, description, get_data_snapshot(), is_encrypted, datetime.now().isoformat(timespec='seconds')),
-        )
-        conn.commit()
-    return cur.lastrowid, final_path
+        bid = _backup_repo.create(backup_type, str(final_path), size, description,
+                                  get_data_snapshot(), is_encrypted,
+                                  datetime.now().isoformat(timespec='seconds'))
+    return bid, final_path
 
 
 def preview_restore(backup_id: int, password: str = None) -> dict:
     """Return a snapshot of the backup without modifying current DB."""
-    with get_db() as conn:
-        row = conn.execute("SELECT * FROM backups WHERE id=?", (backup_id,)).fetchone()
+    row = _backup_repo.get_by_id(backup_id)
     if not row:
         raise ValueError("备份不存在")
     path = Path(row["file_path"])
@@ -125,8 +127,7 @@ def preview_restore(backup_id: int, password: str = None) -> dict:
 
 
 def restore_backup(backup_id: int, password: str = None):
-    with get_db() as conn:
-        row = conn.execute("SELECT * FROM backups WHERE id=?", (backup_id,)).fetchone()
+    row = _backup_repo.get_by_id(backup_id)
     if not row:
         raise ValueError("备份不存在")
     path = Path(row["file_path"])

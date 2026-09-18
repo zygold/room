@@ -1,4 +1,4 @@
-"""Data export APIs."""
+"""Data export APIs — Repository 重构版."""
 import json
 from pathlib import Path
 
@@ -6,12 +6,13 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-from database import get_db
-from services.export_generator import fetch_data, generate, EXPORT_DIR
+from repositories.exports import ExportRecordRepository
+from services.export_generator import fetch_data, generate
 from utils.common import now_str, sizeof_fmt
 from utils.logger import log_operation
 
 router = APIRouter()
+export_repo = ExportRecordRepository()
 
 
 class ExportPayload(BaseModel):
@@ -32,21 +33,22 @@ def generate_export(payload: ExportPayload):
     fmt = payload.format.lower()
     desensitize = payload.options.get("desensitize", False)
     path, size = generate(payload.filter_condition, fmt, desensitize, payload.options)
-    with get_db() as conn:
-        cur = conn.execute(
-            "INSERT INTO export_records (export_type, filter_condition, format, file_path, file_size, options, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (payload.export_type, json.dumps(payload.filter_condition, ensure_ascii=False), fmt,
-             str(path), sizeof_fmt(size), json.dumps(payload.options, ensure_ascii=False), now_str()),
-        )
-        conn.commit()
+    record_id = export_repo.create(
+        export_type=payload.export_type,
+        filter_condition_json=json.dumps(payload.filter_condition, ensure_ascii=False),
+        fmt=fmt,
+        file_path=str(path),
+        file_size=sizeof_fmt(size),
+        options_json=json.dumps(payload.options, ensure_ascii=False),
+        created_at=now_str(),
+    )
     log_operation("导出名单", f"生成 {fmt} 文件 {path.name}")
-    return {"id": cur.lastrowid, "file_path": str(path), "file_name": path.name, "file_size": sizeof_fmt(size)}
+    return {"id": record_id, "file_path": str(path), "file_name": path.name, "file_size": sizeof_fmt(size)}
 
 
 @router.get("/download/{record_id}")
 def download_export(record_id: int):
-    with get_db() as conn:
-        row = conn.execute("SELECT * FROM export_records WHERE id=?", (record_id,)).fetchone()
+    row = export_repo.get_by_id(record_id)
     if not row:
         raise HTTPException(status_code=404, detail="导出记录不存在")
     path = Path(row["file_path"])
@@ -57,19 +59,15 @@ def download_export(record_id: int):
 
 @router.get("/history")
 def export_history():
-    with get_db() as conn:
-        rows = conn.execute("SELECT * FROM export_records ORDER BY id DESC").fetchall()
-        return [dict(r) for r in rows]
+    return export_repo.get_all()
 
 
 @router.delete("/delete/{record_id}")
 def delete_export(record_id: int):
-    with get_db() as conn:
-        row = conn.execute("SELECT * FROM export_records WHERE id=?", (record_id,)).fetchone()
-        if row:
-            path = Path(row["file_path"])
-            if path.exists():
-                path.unlink()
-        conn.execute("DELETE FROM export_records WHERE id=?", (record_id,))
-        conn.commit()
+    row = export_repo.get_by_id(record_id)
+    if row:
+        path = Path(row["file_path"])
+        if path.exists():
+            path.unlink()
+    export_repo.delete_by_id(record_id)
     return {"deleted": record_id}

@@ -14,6 +14,9 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 from config import EXPORT_DIR
 from database import get_db
+from repositories.base import BaseRepository
+
+_base_repo = BaseRepository()
 
 EXPORT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -80,8 +83,7 @@ def build_query(payload: dict):
 def fetch_data(payload: dict):
     with get_db() as conn:
         sql, params = build_query(payload)
-        rows = conn.execute(sql, params).fetchall()
-        return [dict(r) for r in rows]
+        return _base_repo.query(sql, params, conn=conn)
 
 
 def to_xlsx(rows: list, desensitize: bool = False, include_converted: bool = False):

@@ -5,8 +5,8 @@
 - T2 统计引擎移植：effective_score / _metrics / class_view / teacher_view / combined_view
 """
 
+import re
 import json
-import sqlite3
 
 
 # ---------------------------------------------------------------------------
@@ -15,16 +15,28 @@ import sqlite3
 
 # 主科（宽表）字段与学科名称的对应关系
 _CORE_SUBJECTS = [
-    ("chinese_score", "chinese_converted", "语文"),
-    ("math_score", "math_converted", "数学"),
-    ("english_score", "english_converted", "英语"),
-    ("professional_score", "professional_converted", "专业课"),
+    ("chinese_score",    "chinese_converted",    "语文"),
+    ("math_score",       "math_converted",       "数学"),
+    ("english_score",    "english_converted",    "英语"),
+    ("physics_score",    "physics_converted",    "物理"),
+    ("chemistry_score",  "chemistry_converted",  "化学"),
+    ("biology_score",    "biology_converted",    "生物"),
+    ("history_score",    "history_converted",    "历史"),
+    ("geography_score",  "geography_converted",  "地理"),
+    ("politics_score",   "politics_converted",   "政治"),
+    ("professional_score","professional_converted","专业课"),
 ]
 
 _DEFAULT_MAX_SCORES = {
     "语文": 150,
     "数学": 150,
     "英语": 100,
+    "物理": 100,
+    "化学": 100,
+    "生物": 100,
+    "历史": 100,
+    "地理": 100,
+    "政治": 100,
     "专业课": 100,
 }
 
@@ -41,7 +53,7 @@ def _to_float(value):
         return None
 
 
-def load_stat_rows(conn: sqlite3.Connection, exam_id: int, use_converted: bool = False):
+def load_stat_rows(conn, exam_id: int, use_converted: bool = False):
     """加载指定考试的成绩行数据，并构建学科注册表。
 
     返回 (rows, subject_registry)。
@@ -58,7 +70,7 @@ def load_stat_rows(conn: sqlite3.Connection, exam_id: int, use_converted: bool =
                s.chinese_score, s.chinese_converted,
                s.math_score, s.math_converted,
                s.english_score, s.english_converted,
-               s.professional_score, s.professional_converted,
+               s.professional_score, s.professional_converted, s.physics_score, s.physics_converted, s.chemistry_score, s.chemistry_converted, s.biology_score, s.biology_converted, s.history_score, s.history_converted, s.geography_score, s.geography_converted, s.politics_score, s.politics_converted,
                st.class_id,
                c.name AS class_name
         FROM scores s
@@ -66,7 +78,7 @@ def load_stat_rows(conn: sqlite3.Connection, exam_id: int, use_converted: bool =
         JOIN classes c ON c.id = st.class_id
         WHERE s.exam_id = ?
     """
-    score_rows = conn.execute(sql, (exam_id,)).fetchall()
+    score_rows = _base_repo.query(sql, (exam_id,), conn=conn, as_dict=False)
 
     rows = []
     score_ids = []
@@ -91,12 +103,7 @@ def load_stat_rows(conn: sqlite3.Connection, exam_id: int, use_converted: bool =
     # 追加专业课明细长表数据
     if score_ids:
         placeholders = ",".join(["?"] * len(score_ids))
-        details = conn.execute(
-            f"""SELECT score_id, subject_name, original_score, converted_score
-                FROM score_subject_details
-                WHERE score_id IN ({placeholders})""",
-            tuple(score_ids),
-        ).fetchall()
+        details = _score_detail_repo.get_by_scores(score_ids, conn=conn)
 
         # 建立 score_id -> class_id/student_id 的映射
         score_meta = {}
@@ -124,7 +131,7 @@ def load_stat_rows(conn: sqlite3.Connection, exam_id: int, use_converted: bool =
     return rows, subject_registry
 
 
-def build_subject_registry(conn: sqlite3.Connection, exam_id: int):
+def build_subject_registry(conn, exam_id: int):
     """根据考试科目配置和学科标准构建学科注册表。"""
     # 1. 默认配置
     registry = {}
@@ -136,26 +143,21 @@ def build_subject_registry(conn: sqlite3.Connection, exam_id: int):
         }
 
     # 2. 收集与本次考试相关的 major_id（学生所属专业）
-    exam_major_rows = conn.execute(
-        "SELECT major_id FROM exams WHERE id = ?", (exam_id,)
-    ).fetchall()
-    exam_major_id = exam_major_rows[0]["major_id"] if exam_major_rows else None
+    exam_major = _exam_repo.get_major_id(exam_id, conn=conn)
+    exam_major_id = exam_major
 
-    student_major_rows = conn.execute(
+    student_major_rows = _base_repo.query(
         """SELECT DISTINCT st.major_id
            FROM scores s
            JOIN students st ON st.id = s.student_id
            WHERE s.exam_id = ? AND st.major_id IS NOT NULL""",
-        (exam_id,),
-    ).fetchall()
+        (exam_id,), conn=conn)
     related_major_ids = {r["major_id"] for r in student_major_rows}
     if exam_major_id is not None:
         related_major_ids.add(exam_major_id)
 
     # 3. 学科标准（按专业优先，通用兜底）
-    standards_rows = conn.execute(
-        "SELECT subject_name, major_id, max_score, pass_score FROM subject_standards"
-    ).fetchall()
+    standards_rows = _subject_std_repo.list_all_rows()
 
     def _standards_key(subject_name, major_id):
         return (subject_name, major_id)
@@ -202,10 +204,7 @@ def build_subject_registry(conn: sqlite3.Connection, exam_id: int):
         }
 
     # 4. 考试科目配置（优先级最高）
-    config_rows = conn.execute(
-        "SELECT subject_name, max_score FROM exam_subject_configs WHERE exam_id = ?",
-        (exam_id,),
-    ).fetchall()
+    config_rows = _exam_repo.get_subject_configs(exam_id, conn=conn)
     config_names = {r["subject_name"] for r in config_rows}
 
     # 先应用 exam_subject_configs
@@ -224,13 +223,12 @@ def build_subject_registry(conn: sqlite3.Connection, exam_id: int):
                 registry[subject_id] = entry
 
     # 5. 补充专业课明细中涉及的科目（用通用标准或默认值）
-    detail_rows = conn.execute(
+    detail_rows = _base_repo.query(
         """SELECT DISTINCT d.subject_name
            FROM score_subject_details d
            JOIN scores s ON s.id = d.score_id
            WHERE s.exam_id = ?""",
-        (exam_id,),
-    ).fetchall()
+        (exam_id,), conn=conn)
     for r in detail_rows:
         name = r["subject_name"]
         if name not in registry:
@@ -242,24 +240,15 @@ def build_subject_registry(conn: sqlite3.Connection, exam_id: int):
     return registry
 
 
-def build_course_rows(conn: sqlite3.Connection, school_year: str, semester: str):
+def build_course_rows(conn, school_year: str, semester: str):
     """根据课表映射构建 course_rows，用于 teacher_view。
 
     返回 [{teacher_id, teacher_name, class_id, subject_id, combined_class_ids}, ...]
     """
     # 先建立班级名到 id 的映射
-    class_map = {
-        r["name"]: r["id"]
-        for r in conn.execute("SELECT id, name FROM classes").fetchall()
-    }
+    class_map = {name: cid for cid, name in _classes_repo.list_basic(conn=conn)}
 
-    mappings = conn.execute(
-        """SELECT class_id, class_name, subject_name, teacher_id, teacher_name,
-                  is_combined, combined_class_names
-           FROM timetable_mappings
-           WHERE school_year = ? AND semester = ?""",
-        (school_year, semester),
-    ).fetchall()
+    mappings = _timetables_repo.list_mappings(school_year=school_year, semester=semester, conn=conn)
 
     course_rows = []
     for m in mappings:
@@ -286,7 +275,7 @@ def build_course_rows(conn: sqlite3.Connection, school_year: str, semester: str)
             "teacher_id": m["teacher_id"],
             "teacher_name": m["teacher_name"],
             "class_id": m["class_id"],
-            "subject_id": m["subject_name"],
+            "subject_id": _normalize_subject_name(m["subject_name"]),
             "combined_class_ids": combined_class_ids,
         })
 
@@ -331,34 +320,75 @@ def class_view(rows, class_id, subject_id, subject_registry):
     return _metrics(pool, s["full_score"], s["pass_ratio"])
 
 
+
+# ====== subject_name 双向归一化 ======
+# 标准学科关键词 (按长度降序匹配, 避免短词误命中长词)
+_STANDARD_SUBJECTS = sorted(
+    [name for _, _, name in _CORE_SUBJECTS] + ["思想政治", "信息技术", "通用技术"],
+    key=len, reverse=True,
+)
+
+def _normalize_subject_name(text):
+    """归一化 subject_name: 去括号后缀/合班标记/多余空白 → 匹配标准学科."""
+    if not text:
+        return ""
+    t = str(text).strip()
+    t = re.sub(r"[（(]?合班[）)]?\d*", "", t)
+    t = re.sub(r"[（(][^（()）]+[)）]", "", t)
+    t = t.strip()
+    # 关键词匹配: "世界历史"→"历史", "中国旅游地理"→"地理", "政治(普高)"→"政治"
+    for std in _STANDARD_SUBJECTS:
+        if std in t:
+            if len(std) >= 2 or t == std:
+                return std
+    return t
+
+
+def _match_subject(course_subject, registry_subject):
+    """判断课表的 course_subject 和 registry 的 registry_subject 是否指向同一科目."""
+    if not course_subject or not registry_subject:
+        return False
+    if course_subject == registry_subject:
+        return True
+    norm1 = _normalize_subject_name(course_subject)
+    norm2 = _normalize_subject_name(registry_subject)
+    if norm1 == norm2:
+        return True
+    if norm1.startswith(norm2) or norm2.startswith(norm1):
+        return True
+    return False
 def teacher_view(rows, course_rows, teacher_id, subject_registry):
-    """教师视图: 先查 subject_id 精确匹配, 查不到再做标准化模糊匹配."""
+    """教师视图: 同一教师同一科目的多行 (合班/多学期) 合并成一个条目."""
     def _resolve(course_subj, registry):
         if course_subj in registry:
             return course_subj, registry[course_subj]
-        # 模糊匹配: course 名是 registry 名前缀/包含, 或反过来
-        reg_keys = list(registry.keys())
-        for k in reg_keys:
-            if course_subj.startswith(k) or k.startswith(course_subj):
-                return k, registry[k]
-            # 括号后缀: "数学(普高)" vs "数学"
-            base = course_subj.split("(")[0].strip()
-            if base == k:
-                return k, registry[k]
+        norm_course = _normalize_subject_name(course_subj)
+        for k, v in registry.items():
+            if _match_subject(course_subj, k) or _match_subject(norm_course, k):
+                return k, v
         return None, None
 
-    results = []
-    for c in [c for c in course_rows if c["teacher_id"] == teacher_id]:
-        std_key, s = _resolve(c["subject_id"], subject_registry)
-        if std_key is None:
-            # 注册表无此科目, 跳过 (避免 KeyError)
+    # 按 (teacher, subject) 分组聚合
+    buckets = {}
+    for cr in course_rows:
+        if cr["teacher_id"] != teacher_id:
             continue
-        class_ids = {c["class_id"]} | set(c.get("combined_class_ids") or [])
+        std_key, s = _resolve(cr["subject_id"], subject_registry)
+        if std_key is None:
+            continue
+        class_ids = {cr["class_id"]} | set(cr.get("combined_class_ids") or [])
+        key = (teacher_id, std_key)
+        if key not in buckets:
+            buckets[key] = {"subject_id": std_key, "registry_entry": s, "class_ids": set(), "pool": []}
+        buckets[key]["class_ids"] |= class_ids
+
+    results = []
+    for key, b in buckets.items():
         pool = [r for r in rows
-                if r["class_id"] in class_ids and r["subject_id"] == std_key]
-        results.append({"subject_id": std_key,
-                        "class_ids": sorted(class_ids),
-                        **_metrics(pool, s["full_score"], s["pass_ratio"])})
+                if r["class_id"] in b["class_ids"] and r["subject_id"] == b["subject_id"]]
+        results.append({"subject_id": b["subject_id"],
+                        "class_ids": sorted(b["class_ids"]),
+                        **_metrics(pool, b["registry_entry"]["full_score"], b["registry_entry"]["pass_ratio"])})
     return results
 
 

@@ -1,20 +1,14 @@
-"""极简 session 鉴权（单用户/小团队）。
-
-- 密码: sha256(salt + password)
-- session: 内存 dict, key=token, value={"user_id","username","role","created_at"}
-- cookie: token (HttpOnly=False, 前端 JS 可读)
-- 有效期: 12h
-"""
+"""极简 session 鉴权（单用户/小团队） — Repository 重构版."""
 import hashlib, secrets, time
 from datetime import datetime
-from typing import Optional
 
 from fastapi import APIRouter, Request, Response, HTTPException
 from pydantic import BaseModel
 
-from database import get_db
+from repositories.users import UserRepository
 
 router = APIRouter()
+user_repo = UserRepository()
 
 SESSIONS: dict[str, dict] = {}
 SESSION_TTL = 12 * 3600  # 12h
@@ -40,20 +34,13 @@ class LoginRequest(BaseModel):
 def login(body: LoginRequest, resp: Response):
     """用户名密码登录, 成功后 Set-Cookie token=..."""
     _gc_sessions()
-    with get_db() as conn:
-        row = conn.execute(
-            "SELECT id, username, password_hash, salt, display_name, role, is_active FROM users WHERE username = ?",
-            (body.username,),
-        ).fetchone()
-        if not row or not row["is_active"]:
-            raise HTTPException(401, "用户名或密码错误")
-        expected = _hash_pw(body.password, row["salt"])
-        if expected != row["password_hash"]:
-            raise HTTPException(401, "用户名或密码错误")
-        conn.execute(
-            "UPDATE users SET last_login = ? WHERE id = ?",
-            (datetime.now().isoformat(timespec="seconds"), row["id"]),
-        )
+    row = user_repo.get_by_username(body.username)
+    if not row or not row["is_active"]:
+        raise HTTPException(401, "用户名或密码错误")
+    expected = _hash_pw(body.password, row["salt"])
+    if expected != row["password_hash"]:
+        raise HTTPException(401, "用户名或密码错误")
+    user_repo.update_last_login(row["id"])
 
     token = secrets.token_urlsafe(32)
     SESSIONS[token] = {
@@ -99,6 +86,7 @@ def require_auth(req: Request) -> dict:
         raise HTTPException(401, "未登录")
     return SESSIONS[token]
 
+
 class ChangePasswordRequest(BaseModel):
     old_password: str
     new_password: str
@@ -113,13 +101,12 @@ def change_password(body: ChangePasswordRequest, req: Request):
     s = SESSIONS[token]
     if len(body.new_password) < 6:
         raise HTTPException(400, "新密码至少 6 位")
-    with get_db() as conn:
-        row = conn.execute("SELECT password_hash, salt FROM users WHERE username = ?", (s["username"],)).fetchone()
-        if not row:
-            raise HTTPException(404, "用户不存在")
-        expected = _hash_pw(body.old_password, row["salt"])
-        if expected != row["password_hash"]:
-            raise HTTPException(400, "旧密码错误")
-        new_hash = _hash_pw(body.new_password, row["salt"])
-        conn.execute("UPDATE users SET password_hash = ? WHERE username = ?", (new_hash, s["username"]))
+    row = user_repo.get_by_username(s["username"])
+    if not row:
+        raise HTTPException(404, "用户不存在")
+    expected = _hash_pw(body.old_password, row["salt"])
+    if expected != row["password_hash"]:
+        raise HTTPException(400, "旧密码错误")
+    new_hash = _hash_pw(body.new_password, row["salt"])
+    user_repo.update_password(s["username"], new_hash)
     return {"detail": "密码已更新"}

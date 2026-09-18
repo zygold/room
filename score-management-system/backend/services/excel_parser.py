@@ -10,6 +10,12 @@ from typing import List, Dict, Any, Tuple, Optional
 
 import pandas as pd
 
+from repositories.class_name_standards import ClassNameStandardsRepository
+from repositories.class_name_aliases import ClassNameAliasesRepository
+
+_cn_standards_repo = ClassNameStandardsRepository()
+_cn_aliases_repo = ClassNameAliasesRepository()
+
 
 STUDENT_ID_KEYWORDS = ["学号", "准考证号", "考号", "学籍号", "考生号", "报名号"]
 
@@ -211,21 +217,13 @@ def normalize_class_name(name: str, conn=None) -> str:
     s = s.replace("（", "(").replace("）", ")")
     
     # 第1级：数据库别名映射表
-    if conn is not None:
-        row = conn.execute(
-            "SELECT canonical_name FROM class_name_aliases WHERE alias=?",
-            (s,)
-        ).fetchone()
-        if row:
+    canonical = _cn_aliases_repo.find_canonical(s, conn=conn)
+    if canonical:
             return row["canonical_name"]
     
     # 第2级：规范名称库确认
-    if conn is not None:
-        row = conn.execute(
-            "SELECT name FROM class_name_standards WHERE name=?",
-            (s,)
-        ).fetchone()
-        if row:
+    std_name = _cn_standards_repo.find_by_name(s, conn=conn)
+    if std_name:
             return row["name"]
     
     # 第3级：本地硬编码别名兜底
@@ -235,12 +233,9 @@ def normalize_class_name(name: str, conn=None) -> str:
     normalized = _regex_normalize_class_name(s)
 
     # 第5级：正则结果再次匹配规范名称库
-    if conn is not None and normalized != s:
-        row = conn.execute(
-            "SELECT name FROM class_name_standards WHERE name=?",
-            (normalized,)
-        ).fetchone()
-        if row:
+    if normalized != s:
+        std_name2 = _cn_standards_repo.find_by_name(normalized, conn=conn)
+        if std_name2:
             return row["name"]
 
     return normalized

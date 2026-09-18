@@ -90,11 +90,11 @@ class ScholarshipCandidateRepository(BaseRepository):
             """INSERT OR REPLACE INTO scholarships
                (student_id, exam_id, class_id, average_score, language_avg, professional_avg,
                 total_score, subjects, category, screen_run_id, grade_rank, major_rank,
-                award_level, review_status)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                award_level, review_status, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (student_id, exam_id, class_id, average_score, language_avg, professional_avg,
              total_score, subjects_json, category, screen_run_id, grade_rank, major_rank,
-             award_level, review_status),
+             award_level, review_status, now_str()),
             conn=conn, commit=False)
         return cur.lastrowid
 

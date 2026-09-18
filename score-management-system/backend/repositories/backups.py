@@ -24,7 +24,7 @@ class BackupRepository(BaseRepository):
             conn.execute('DELETE FROM backups WHERE id=?', (backup_id,))
             conn.commit()
 
-def create(self, backup_type, file_path, file_size, description, data_snapshot, is_encrypted, created_at):
+    def create(self, backup_type, file_path, file_size, description, data_snapshot, is_encrypted, created_at):
         with self.get_connection() as conn:
             cur = conn.execute(
                 "INSERT INTO backups (backup_type, file_path, file_size, description, data_snapshot, is_encrypted, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",

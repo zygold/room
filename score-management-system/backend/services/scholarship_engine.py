@@ -8,6 +8,7 @@ Categories:
   top 3 language rank in grade + professional major rank top 15.
 """
 
+import json
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 
@@ -293,7 +294,7 @@ def run_screen(
         primary_exam_id = exam_ids[0]
         for w in winners:
             _scholarship_repo.upsert_candidate(
-                w["student_id"], w["exam_id"], w["class_id"],
+                w["student_id"], primary_exam_id, w["class_id"],
                 w["average_score"], w["language_avg"], w["professional_avg"],
                 total_score=w.get("total_score"),
                 subjects_json=json.dumps(w.get("subjects", []), ensure_ascii=False),

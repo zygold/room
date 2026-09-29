@@ -14,6 +14,7 @@ from repositories.subject_standards import SubjectStandardRepository
 from repositories.score_subject_details import ScoreSubjectDetailRepository
 from repositories.classes import ClassRepository
 from repositories.timetables import TimetableMappingRepository
+from repositories.subject_aliases import SubjectAliasRepository
 
 # 模块级 repo 单例（Phase 4 重构后数据访问统一走 Repository 层）
 _base_repo = BaseRepository()
@@ -290,7 +291,7 @@ def build_course_rows(conn, school_year: str, semester: str):
             "teacher_id": m["teacher_id"],
             "teacher_name": m["teacher_name"],
             "class_id": m["class_id"],
-            "subject_id": _normalize_subject_name(m["subject_name"]),
+            "subject_id": _canonical_subject(m["subject_name"], conn=conn),
             "combined_class_ids": combined_class_ids,
         })
 
@@ -359,14 +360,72 @@ def _normalize_subject_name(text):
     return t
 
 
+# ====== 专业科目别名归一化 (方案2) ======
+# 别名表把课表科目名对齐到成绩科目名, 使任课教师统计口径一致
+_subject_alias_repo = SubjectAliasRepository()
+_ALIAS_CACHE = {"map": None}
+
+
+def _get_alias_map(conn=None):
+    """读取别名映射 {alias: standard_subject}; 传入 conn 时刷新缓存."""
+    if conn is not None:
+        try:
+            _ALIAS_CACHE["map"] = _subject_alias_repo.load_map(conn=conn)
+        except Exception:
+            _ALIAS_CACHE["map"] = {}
+    if _ALIAS_CACHE["map"] is None:
+        try:
+            _ALIAS_CACHE["map"] = _subject_alias_repo.load_map()
+        except Exception:
+            _ALIAS_CACHE["map"] = {}
+    return _ALIAS_CACHE["map"]
+
+
+def refresh_subject_aliases():
+    """别名表变更后调用, 使下次访问重新加载."""
+    _ALIAS_CACHE["map"] = None
+
+
+def _canonical_subject(name, conn=None):
+    """把科目名归一化到标准科目名: 先按别名表解析, 再按关键词归一化."""
+    if not name:
+        return ""
+    raw = str(name).strip()
+    amap = _get_alias_map(conn)
+    if raw in amap:
+        return amap[raw]
+    norm = _normalize_subject_name(raw)
+    if norm in amap:
+        return amap[norm]
+    return norm
+
+
+def unaligned_subjects(conn, subject_names):
+    """课表导入校验: 返回未能与成绩侧科目对齐的科目名 (仅提示, 不写库)."""
+    known = set()
+    for r in _base_repo.query(
+            "SELECT DISTINCT subject_name FROM score_subject_details", conn=conn):
+        known.add(_canonical_subject(r["subject_name"], conn=conn))
+    for r in _subject_std_repo.list_all_rows(conn=conn):
+        known.add(_canonical_subject(r["subject_name"], conn=conn))
+    core = {name for _, _, name in _CORE_SUBJECTS}
+    out = set()
+    for name in subject_names:
+        c = _canonical_subject(name, conn=conn)
+        if c in core or c in known:
+            continue
+        out.add(str(name).strip())
+    return sorted(out)
+
+
 def _match_subject(course_subject, registry_subject):
     """判断课表的 course_subject 和 registry 的 registry_subject 是否指向同一科目."""
     if not course_subject or not registry_subject:
         return False
     if course_subject == registry_subject:
         return True
-    norm1 = _normalize_subject_name(course_subject)
-    norm2 = _normalize_subject_name(registry_subject)
+    norm1 = _canonical_subject(course_subject)
+    norm2 = _canonical_subject(registry_subject)
     if norm1 == norm2:
         return True
     if norm1.startswith(norm2) or norm2.startswith(norm1):

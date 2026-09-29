@@ -261,6 +261,16 @@ CREATE TABLE IF NOT EXISTS class_name_aliases (
     UNIQUE(alias)
 );
 
+-- 专业科目别名映射表（课表科目名 → 成绩科目名，用于任课教师统计口径对齐）
+CREATE TABLE IF NOT EXISTS subject_aliases (
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    alias            TEXT NOT NULL,          -- 别名（如课表科目名「汽车电工电子基础」）
+    standard_subject TEXT NOT NULL,          -- 标准科目名（如成绩科目名「电工电子」）
+    subject_type     TEXT,                   -- core|professional，可空
+    created_at       TEXT NOT NULL,
+    UNIQUE(alias)
+);
+
 -- 文件科目映射表
 CREATE TABLE IF NOT EXISTS file_subject_mappings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -381,6 +391,14 @@ INSERT OR IGNORE INTO subject_standards (subject_name, major_id, max_score, pass
 ('专业课', 5, 100, 60, 0),
 ('专业课', 6, 100, 60, 0),
 ('专业课', 7, 100, 60, 0);
+
+-- 专业科目别名（课表科目名 → 成绩科目名），用于任课教师统计口径对齐
+INSERT OR IGNORE INTO subject_aliases (alias, standard_subject, subject_type, created_at) VALUES
+('汽车电工电子基础', '电工电子', 'professional', ?),
+('汽车构造与拆装', '汽车构造', 'professional', ?),
+('办公应用基础', '办公应用', 'professional', ?),
+('学前儿童卫生保健', '卫生', 'professional', ?),
+('单片机技术与应用', '专业课', 'professional', ?);
 
 -- 默认年级
 INSERT OR IGNORE INTO grades (id, name, student_count, class_count, status, created_at) VALUES

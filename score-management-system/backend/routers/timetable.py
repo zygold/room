@@ -11,6 +11,7 @@ from repositories.classes import ClassRepository
 from repositories.teachers import TeacherRepository
 from repositories.timetables import TimetableImportRepository, TimetableMappingRepository
 from services import timetable_parser
+from services.stats_engine import unaligned_subjects
 from services.excel_parser import normalize_class_name
 from utils.common import now_str
 from utils.logger import log_operation
@@ -48,7 +49,7 @@ def _resolve_mappings(content_class, content_teacher):
         cv = timetable_parser.parse_class_timetable(content_class)
         tv = timetable_parser.parse_teacher_timetable(content_teacher)
         conflicts = timetable_parser.cross_validate(cv, tv)
-        return {"conflicts": conflicts, "mappings": [], "unmatched": []}
+        return {"conflicts": conflicts, "mappings": [], "unmatched": [], "unmapped_subjects": []}
 
     mappings, unmatched = [], set()
     for cls_title, subject, teacher_raw, slot in detailed:
@@ -65,7 +66,13 @@ def _resolve_mappings(content_class, content_teacher):
             "teacher_name": teacher,
             "slot": slot,
         })
-    return {"conflicts": [], "mappings": mappings, "unmatched": sorted(unmatched)}
+    subject_names = sorted({m["subject_name"] for m in mappings if m.get("subject_name")})
+    unmapped = []
+    if subject_names:
+        with mapping_repo.get_connection() as conn:
+            unmapped = unaligned_subjects(conn, subject_names)
+    return {"conflicts": [], "mappings": mappings,
+            "unmatched": sorted(unmatched), "unmapped_subjects": unmapped}
 
 
 def _mark_combined(mappings, school_year, semester):
@@ -135,6 +142,7 @@ def preview_timetable(import_id: int):
     result = _resolve_mappings(class_content, teacher_content)
     return {"import_id": import_id, "school_year": row["school_year"], "semester": row["semester"],
             "mappings": result["mappings"], "unmatched": result["unmatched"], "conflicts": result["conflicts"],
+            "unmapped_subjects": result["unmapped_subjects"],
             "total": len(result["mappings"])}
 
 
@@ -187,8 +195,9 @@ def confirm_timetable(import_id: int, payload: Optional[ConfirmTimetable] = None
     except Exception:
         pass
 
-    log_operation("课表确认入库", f"导入批次 {import_id} 学年 {school_year} 学期 {semester}, 保存 {saved} 条映射, 未匹配 {len(result['unmatched'])} 个班级, 自动设置班主任 {ht_updated} 个")
-    return {"import_id": import_id, "saved": saved, "unmatched": result["unmatched"], "head_teachers_set": ht_updated}
+    log_operation("课表确认入库", f"导入批次 {import_id} 学年 {school_year} 学期 {semester}, 保存 {saved} 条映射, 未匹配 {len(result['unmatched'])} 个班级, 自动设置班主任 {ht_updated} 个, 未映射科目 {len(result['unmapped_subjects'])} 个")
+    return {"import_id": import_id, "saved": saved, "unmatched": result["unmatched"],
+            "unmapped_subjects": result["unmapped_subjects"], "head_teachers_set": ht_updated}
 
 
 @router.get("/mappings")

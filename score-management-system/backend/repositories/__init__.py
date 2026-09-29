@@ -11,6 +11,7 @@ from .majors import MajorRepository
 from .class_types import ClassTypeRepository
 from .students import StudentRepository
 from .subject_standards import SubjectStandardRepository
+from .subject_aliases import SubjectAliasRepository
 from .settings_table import SettingsTableRepository
 from .exams import ExamRepository, ExamSubjectConfigRepository
 from .scores import ScoreRepository
@@ -30,6 +31,7 @@ __all__ = [
     'ClassTypeRepository',
     'StudentRepository',
     'SubjectStandardRepository',
+    'SubjectAliasRepository',
     'SettingsTableRepository',
     'ExamRepository',
     'ExamSubjectConfigRepository',

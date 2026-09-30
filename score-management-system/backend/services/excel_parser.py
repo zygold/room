@@ -219,12 +219,12 @@ def normalize_class_name(name: str, conn=None) -> str:
     # 第1级：数据库别名映射表
     canonical = _cn_aliases_repo.find_canonical(s, conn=conn)
     if canonical:
-            return row["canonical_name"]
+        return canonical
     
     # 第2级：规范名称库确认
     std_name = _cn_standards_repo.find_by_name(s, conn=conn)
     if std_name:
-            return row["name"]
+        return std_name
     
     # 第3级：本地硬编码别名兜底
     s = _CLASS_NAME_ALIASES_LOCAL.get(s, s)
@@ -236,7 +236,7 @@ def normalize_class_name(name: str, conn=None) -> str:
     if normalized != s:
         std_name2 = _cn_standards_repo.find_by_name(normalized, conn=conn)
         if std_name2:
-            return row["name"]
+            return std_name2
 
     return normalized
 

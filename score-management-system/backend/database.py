@@ -271,6 +271,15 @@ CREATE TABLE IF NOT EXISTS subject_aliases (
     UNIQUE(alias)
 );
 
+-- 未映射科目忽略名单（精确科目名，可在科目管理页勾选维护）
+CREATE TABLE IF NOT EXISTS ignored_subjects (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    pattern    TEXT NOT NULL,          -- 科目名（精确匹配）
+    note       TEXT,                   -- 备注
+    created_at TEXT NOT NULL,
+    UNIQUE(pattern)
+);
+
 -- 文件科目映射表
 CREATE TABLE IF NOT EXISTS file_subject_mappings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -355,6 +364,40 @@ CREATE TABLE IF NOT EXISTS timetable_imports (
     unmatched_classes  TEXT,
     created_at         TEXT NOT NULL
 );
+
+-- 课程设置导入批次表（Excel/Word/PDF）
+CREATE TABLE IF NOT EXISTS course_setting_imports (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    file_name          TEXT NOT NULL,
+    file_path          TEXT,
+    school_year        TEXT,
+    semester           TEXT,
+    status             TEXT NOT NULL DEFAULT '待确认',
+    saved_count        INTEGER NOT NULL DEFAULT 0,
+    unmatched_classes  TEXT,
+    created_at         TEXT NOT NULL
+);
+
+-- 课程设置表（课程名称 × 班级），来源: 文件导入 / 课表导入
+CREATE TABLE IF NOT EXISTS course_settings (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_name  TEXT NOT NULL,
+    class_id     INTEGER REFERENCES classes(id) ON DELETE SET NULL,
+    class_name   TEXT NOT NULL,
+    teacher_name TEXT,
+    periods      INTEGER,
+    grade_id     INTEGER,
+    source       TEXT NOT NULL DEFAULT '文件导入',
+    source_file  TEXT,
+    school_year  TEXT,
+    semester     TEXT,
+    status       TEXT NOT NULL DEFAULT '待确认',
+    note         TEXT,
+    created_at   TEXT NOT NULL,
+    UNIQUE(course_name, class_name)
+);
+CREATE INDEX IF NOT EXISTS idx_cs_class ON course_settings(class_id);
+CREATE INDEX IF NOT EXISTS idx_cs_year  ON course_settings(school_year, semester);
 """
 
 DEFAULT_DATA_SQL = """
@@ -391,6 +434,29 @@ INSERT OR IGNORE INTO subject_standards (subject_name, major_id, max_score, pass
 ('专业课', 5, 100, 60, 0),
 ('专业课', 6, 100, 60, 0),
 ('专业课', 7, 100, 60, 0);
+
+-- 未映射科目忽略名单初始数据（精确科目名）
+INSERT OR IGNORE INTO ignored_subjects (pattern, note, created_at) VALUES
+('体育与健康', '公共基础课', ?),
+('军事', '公共基础课', ?),
+('劳动教育', '公共基础课', ?),
+('心理健康与职业生涯', '公共基础课', ?),
+('职业道德与法治', '公共基础课', ?),
+('中国特色社会主义', '公共基础课', ?),
+('哲学与人生', '公共基础课', ?),
+('思想政治', '公共基础课', ?),
+('班会', '公共基础课', ?),
+('田径', '公共基础课', ?),
+('篮球', '公共基础课', ?),
+('艺术-美术鉴赏与实践', '公共基础课', ?),
+('艺术-音乐鉴赏与实践', '公共基础课', ?),
+('简笔画', '艺术/技能类', ?),
+('舞蹈', '艺术/技能类', ?),
+('茶艺', '艺术/技能类', ?),
+('键盘乐器演奏基础', '艺术/技能类', ?),
+('模拟导游', '艺术/技能类', ?),
+('旅游服务礼仪', '艺术/技能类', ?);
+
 
 -- 专业科目别名（课表科目名 → 成绩科目名），用于任课教师统计口径对齐
 INSERT OR IGNORE INTO subject_aliases (alias, standard_subject, subject_type, created_at) VALUES

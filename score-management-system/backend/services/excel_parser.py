@@ -242,18 +242,24 @@ def normalize_class_name(name: str, conn=None) -> str:
 
 
 def _regex_normalize_class_name(s: str) -> str:
-    """兜底正则规范化，处理常见缩写、后缀。"""
+    """兜底正则规范化，处理常见缩写、后缀。
+
+    原则：只做「去噪」与「补全省略」，不凭空增删班级标识字符。
+    """
     # 国防特色班级名称必须保持原样，不做任何修改
     if re.search(r"国防特色", s):
         return s
 
-    # Detect "本方" suffix before stripping; re-attach at the end in unified format.
-    has_benfang = bool(re.search(r"\(本方\)", s) or s.endswith("本方班"))
+    # 统一括号为半角（与 normalize_class_name 第 1 级保持一致）
+    s = s.replace("（", "(").replace("）", ")").strip()
+
+    # 「本方」只在其位于名称末尾时才规范化，避免破坏 (本方)职普 这类名称
+    has_benfang_tail = bool(re.search(r"(?:\(本方\)|本方班)\s*$", s))
 
     # Remove other common suffixes that don't change class identity
-    s = re.sub(r"(半期|期末|期中|月考|成绩|记分册|登记表)$", "", s).strip()
-    # Ensure grade suffix "级" is present and uniform, but do not add it to bare class numbers like "01班".
-    s = re.sub(r"^(\d{2})(?!级)(?!班)", r"\1级", s)
+    s = re.sub(r"(?:(?:半期|期末|期中|月考|成绩|记分册|登记表)\s*)+$", "", s).strip()
+    # 补年级后缀「级」：2 位前缀后面不能再跟数字，否则会把 2026级 拆成 20级26级
+    s = re.sub(r"^(\d{2})(?!\d)(?!级)(?!班)", r"\1级", s)
     s = re.sub(r"^(20\d{2})(?!级)(?!班)", r"\1级", s)
 
     # Expand single-character major abbreviations: 计->计算机, 电->电子, 数->数控
@@ -283,12 +289,12 @@ def _regex_normalize_class_name(s: str) -> str:
     s = re.sub(r"\s*\(本方\)\s*$", "", s).strip()
     s = re.sub(r"\s*本方班\s*$", "", s).strip()
 
-    # Ensure class name ends with "班"
-    if s and not s.endswith("班"):
+    # 补「班」：仅当名称尚未定型时（不以 班/括号 结尾，且不含括号后缀）
+    if s and not s.endswith(("班", ")", "）", "】", "]")) and not re.search(r"[（(].+?[）)]", s):
         s += "班"
 
-    # Re-attach "本方" suffix in unified full-width format
-    if has_benfang:
+    # Re-attach "本方" suffix in unified form — 仅当它原本就在名称末尾
+    if has_benfang_tail:
         s = re.sub(r"\s*班\s*$", "", s).strip()
         s += "班（本方）"
 

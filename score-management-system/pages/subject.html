@@ -10,7 +10,7 @@
     <script src="/static/js/auth-bootstrap.js?v=2"></script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>逐科统计</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>课程设置</title>
     <style id="theme-vars">
 /* Score Management System - Brand CSS */
 /* Professional, clean, data-dense administrative interface */
@@ -271,11 +271,11 @@
             <span class="nav-label text-sm font-medium leading-5">统计分析</span>
           </a>
         </li>
-        <!-- 逐科统计 (ACTIVE) -->
+        <!-- 课程设置 (ACTIVE) -->
         <li>
           <a href="subject.html" data-dom-id="nav-subject-stat" class="nav-item active flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors" style="color: #818cf8; background-color: rgba(79,70,229,0.15);">
             <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-6"/></svg>
-            <span class="nav-label text-sm font-semibold leading-5">逐科统计</span>
+            <span class="nav-label text-sm font-semibold leading-5">课程设置</span>
           </a>
         </li>
 
@@ -380,17 +380,19 @@
     <header class="shrink-0 flex items-center justify-between px-6" style="height: 56px; background-color: var(--card); border-bottom: 1px solid var(--border);">
       <!-- Left: Page Title -->
       <h1 class="truncate" style="font-size: 16px; font-weight: 600; color: var(--foreground);">
-        课表管理
+        课程设置
       </h1>
 
       <!-- Right: Actions -->
       <div class="flex items-center gap-3 shrink-0">
         <!-- Notification Bell -->
- 
-<div class="p-6">
+      </div>
+    </header>
+
+    <div class="p-6 flex-1 min-h-0 overflow-y-auto">
   <div class="flex items-center justify-between mb-6">
     <div>
-      <h1 class="text-2xl font-semibold" style="color: var(--color-neutral-900);">逐科统计</h1>
+      <h1 class="text-2xl font-semibold" style="color: var(--color-neutral-900);">课程设置</h1>
       <p class="text-sm mt-1" style="color: var(--color-neutral-500);">全校成绩分布直方图 · 班级及格率对比 · 逐科及格线可调</p>
     </div>
   </div>
@@ -463,20 +465,88 @@
       </div>
     </div>
   </div>
-</div>
- font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教师</th>
-                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">科目</th>
-                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教学班数量</th>
-                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">教学班列表</th>
-                    <th class="text-left px-4 py-3 font-medium" style="color: var(--muted-foreground); border-bottom: 1px solid var(--border);">是否含合班</th>
+
+  <!-- 未映射科目忽略名单 -->
+  <div class="rounded-xl mt-5" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
+    <div class="px-5 py-3 flex flex-wrap items-center justify-between gap-3"
+         style="background: var(--color-neutral-50); border-bottom: 1px solid var(--color-neutral-200);">
+      <div>
+        <h2 class="text-sm font-semibold" style="color: var(--color-neutral-700);">未映射科目忽略名单</h2>
+        <p class="text-xs mt-0.5" style="color: var(--color-neutral-500);">勾选后，该科目不再出现在课表导入的“未映射科目”提示中</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="ignore-count" class="text-xs" style="color: var(--color-neutral-600);"></span>
+        <input id="ignore-search" type="text" placeholder="搜索科目名"
+               class="px-3 py-1.5 rounded-lg text-xs"
+               style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800); width: 150px;">
+        <label class="flex items-center gap-1.5 text-xs" style="color: var(--color-neutral-600); cursor: pointer;">
+          <input id="ignore-only-unchecked" type="checkbox" class="rounded"> 仅看未忽略
+        </label>
+        <button id="ignore-refresh" class="px-3 py-1.5 rounded-lg text-xs"
+                style="background: var(--color-neutral-100); color: var(--color-neutral-700); border: 1px solid var(--color-neutral-200);">刷新</button>
+      </div>
+    </div>
+    <div id="ignore-list" class="p-4 grid grid-cols-3 gap-x-4 gap-y-2" style="max-height: 340px; overflow-y: auto;"></div>
+  </div>
+
+  <!-- 课程设置导入 -->
+  <div class="rounded-xl mt-5" style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200);">
+    <div class="px-5 py-3 flex flex-wrap items-center justify-between gap-3"
+         style="background: var(--color-neutral-50); border-bottom: 1px solid var(--color-neutral-200);">
+      <div>
+        <h2 class="text-sm font-semibold" style="color: var(--color-neutral-700);">课程设置导入</h2>
+        <p class="text-xs mt-0.5" style="color: var(--color-neutral-500);">支持 Excel / Word / PDF；文件需含「班级」「课程名称」列，导入前可与课表来源对比</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <input id="cs-file" type="file" accept=".xlsx,.xls,.xlsm,.docx,.pdf"
+               class="text-xs rounded-lg px-2 py-1.5"
+               style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-700); width: 220px;">
+        <select id="cs-year" class="text-xs px-2 py-1.5 rounded-lg"
+                style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);"></select>
+        <select id="cs-semester" class="text-xs px-2 py-1.5 rounded-lg"
+                style="background: var(--color-neutral-0); border: 1px solid var(--color-neutral-200); color: var(--color-neutral-800);"></select>
+        <button id="cs-parse" class="px-3 py-1.5 rounded-lg text-xs font-medium"
+                style="background: var(--color-primary-600); color: white;">解析预览</button>
+      </div>
+    </div>
+    <div class="p-4">
+      <div id="cs-status" class="text-xs" style="color: var(--color-neutral-500);">尚未选择文件</div>
+      <div id="cs-result" class="hidden mt-3">
+        <div id="cs-kpi" class="grid grid-cols-5 gap-3 mb-3"></div>
+        <div class="rounded-xl p-3 mb-3" style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200);">
+          <div id="cs-unmatched"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <div class="text-xs font-semibold mb-2" style="color: var(--color-neutral-700);">文件解析明细</div>
+            <div class="rounded-xl overflow-hidden" style="border: 1px solid var(--color-neutral-200); max-height: 320px; overflow-y: auto;">
+              <table class="w-full text-xs">
+                <thead class="sticky top-0" style="background: var(--color-neutral-100);">
+                  <tr>
+                    <th class="px-3 py-2 text-left">班级</th>
+                    <th class="px-3 py-2 text-left">课程名称</th>
+                    <th class="px-3 py-2 text-left">任课教师</th>
+                    <th class="px-3 py-2 text-right">节数</th>
+                    <th class="px-3 py-2 text-left">对比状态</th>
                   </tr>
                 </thead>
-                <tbody id="overview-table-body">
-                  <tr style="border-top: 1px solid var(--border);">
-                    <td class="px-4 py-3" colspan="5" style="color: var(--muted-foreground); text-align: center;">请选择学年/学期后点击查询</td>
-                  </tr>
-                </tbody>
+                <tbody id="cs-tbody"></tbody>
               </table>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-semibold mb-2" style="color: var(--color-neutral-700);">仅课表来源有（文件缺失）</div>
+            <div id="cs-only-tt"></div>
+          </div>
+        </div>
+        <div class="flex justify-end mt-3">
+          <button id="cs-import" class="px-4 py-2 rounded-lg text-xs font-medium"
+                  style="background: var(--state-success); color: white;">确认导入</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
             </div>
           </div>
         </div>
@@ -714,6 +784,231 @@
     $('btn-reset').onclick = ()=>{ $('pass-line').value=''; $('result-section').classList.add('hidden'); };
     $('btn-export').onclick = exportCsv;
     window.addEventListener('resize', ()=> Object.values(state.charts).forEach(c=>c.resize()));
+  });
+})();
+</script>
+<script>
+(function(){
+  const API = "/api";
+  const $ = function(id){ return document.getElementById(id); };
+  let allItems = [];
+
+  function esc(t){
+    return String(t == null ? "" : t)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  async function loadIgnoreOptions(){
+    const box = $("ignore-list");
+    box.innerHTML = '<div class="text-xs" style="color: var(--color-neutral-500);">加载中…</div>';
+    try{
+      const r = await fetch(API + "/ignored-subjects/subjects");
+      if(!r.ok){ box.innerHTML = '<div class="text-xs" style="color: var(--color-neutral-500);">加载失败</div>'; return; }
+      const d = await r.json();
+      allItems = d.items || [];
+      renderIgnoreList();
+    }catch(e){
+      box.innerHTML = '<div class="text-xs" style="color: var(--color-neutral-500);">加载失败</div>';
+    }
+  }
+
+  function renderIgnoreList(){
+    const kw = ($("ignore-search").value || "").trim();
+    const onlyUnchecked = $("ignore-only-unchecked").checked;
+    const shown = allItems.filter(function(i){
+      if(kw && i.subject_name.indexOf(kw) < 0) return false;
+      if(onlyUnchecked && i.ignored) return false;
+      return true;
+    });
+    const ignoredCount = allItems.filter(function(i){ return i.ignored; }).length;
+    $("ignore-count").textContent = "已忽略 " + ignoredCount + " / 共 " + allItems.length + " 个科目";
+    if(!shown.length){
+      $("ignore-list").innerHTML = '<div class="text-xs" style="color: var(--color-neutral-500);">没有符合条件的科目</div>';
+      return;
+    }
+    $("ignore-list").innerHTML = shown.map(function(i){
+      return '<label class="flex items-center gap-2 px-2 py-1.5 rounded-lg" style="cursor: pointer; border: 1px solid var(--color-neutral-200);">' +
+        '<input type="checkbox" class="ignore-cb rounded" data-name="' + encodeURIComponent(i.subject_name) + '"' +
+        (i.ignored ? ' checked' : '') + '>' +
+        '<span class="truncate text-xs" style="color: var(--color-neutral-700);" title="' + esc(i.subject_name) + '">' +
+        esc(i.subject_name) + '</span>' +
+        (i.ignored ? '<span class="ml-auto shrink-0 text-xs px-1.5 rounded" style="color: var(--color-primary-600); background: var(--color-neutral-100);">已忽略</span>' : '') +
+        '</label>';
+    }).join("");
+  }
+
+  async function setIgnored(name, ignored){
+    const item = allItems.find(function(i){ return i.subject_name === name; });
+    let ok = false;
+    if(ignored){
+      const r = await fetch(API + "/ignored-subjects", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pattern: name, note: "手动勾选" })
+      });
+      ok = r.ok;
+    }else if(item && item.id){
+      const r = await fetch(API + "/ignored-subjects/" + item.id, { method: "DELETE" });
+      ok = r.ok;
+    }
+    if(ok){
+      await loadIgnoreOptions();
+    }else{
+      renderIgnoreList();
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    loadIgnoreOptions();
+    $("ignore-list").addEventListener("change", function(e){
+      const cb = e.target.closest(".ignore-cb");
+      if(!cb) return;
+      setIgnored(decodeURIComponent(cb.dataset.name), cb.checked);
+    });
+    $("ignore-search").addEventListener("input", renderIgnoreList);
+    $("ignore-only-unchecked").addEventListener("change", renderIgnoreList);
+    $("ignore-refresh").addEventListener("click", loadIgnoreOptions);
+  });
+})();
+</script>
+<script>
+(function(){
+  const API = "/api";
+  const $ = function(id){ return document.getElementById(id); };
+  let importId = null;
+
+  function esc(t){
+    return String(t == null ? "" : t)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function fillOptions(sel, arr){
+    if(!sel || !Array.isArray(arr) || !arr.length) return;
+    const cur = sel.value;
+    sel.innerHTML = arr.map(function(v){
+      return '<option value="' + esc(v) + '"' + (v === cur ? ' selected' : '') + '>' + esc(v) + '</option>';
+    }).join("");
+  }
+
+  async function loadOptions(){
+    try{
+      const res = await Promise.all([
+        fetch(API + "/settings/school-years").then(function(r){ return r.json(); }),
+        fetch(API + "/settings/semesters").then(function(r){ return r.json(); }),
+      ]);
+      fillOptions($("cs-year"), res[0]);
+      fillOptions($("cs-semester"), res[1]);
+    }catch(e){}
+  }
+
+  function setStatus(msg, isError){
+    const el = $("cs-status");
+    el.textContent = msg;
+    el.style.color = isError ? "var(--state-error)" : "var(--color-neutral-500)";
+  }
+
+  async function parseFile(){
+    const f = $("cs-file").files[0];
+    if(!f){ setStatus("请先选择课程设置文件", true); return; }
+    $("cs-result").classList.add("hidden");
+    setStatus("上传并解析中…");
+    try{
+      const fd = new FormData();
+      fd.append("file", f);
+      fd.append("school_year", $("cs-year").value || "");
+      fd.append("semester", $("cs-semester").value || "");
+      const up = await fetch(API + "/course-settings/upload", { method: "POST", body: fd });
+      const upData = await up.json();
+      if(!up.ok){ setStatus(upData.detail || ("上传失败: " + up.status), true); return; }
+      importId = upData.import_id;
+
+      const pv = await fetch(API + "/course-settings/preview/" + importId, { method: "POST" });
+      const d = await pv.json();
+      if(!pv.ok){ setStatus(d.detail || "解析失败", true); return; }
+      render(d);
+      if(!(d.comparison && d.comparison.timetable_total)){
+        setStatus("解析完成；所选学年/学期在课表中无数据，如需对比请切换学年/学期", true);
+      }else{
+        setStatus("解析完成，请核对后确认导入");
+      }
+    }catch(e){ setStatus("异常: " + e.message, true); }
+  }
+
+  function render(d){
+    const c = d.comparison || {};
+    const kpis = [
+      { label: "文件记录", value: d.total, color: "var(--color-primary-600)" },
+      { label: "班级匹配", value: d.matched_count, color: "var(--state-success)" },
+      { label: "与课表一致", value: c.both_count, color: "var(--state-success)" },
+      { label: "仅文件有", value: (c.only_file || []).length, color: "var(--state-warning)" },
+      { label: "仅课表有", value: (c.only_timetable || []).length, color: "var(--state-error)" },
+    ];
+    $("cs-kpi").innerHTML = kpis.map(function(k){
+      return '<div class="rounded-xl p-3" style="background: var(--color-neutral-50); border: 1px solid var(--color-neutral-200);">' +
+        '<div class="text-xs" style="color: var(--color-neutral-500);">' + k.label + '</div>' +
+        '<div class="text-xl font-semibold mt-1" style="color:' + k.color + ';">' + k.value + '</div></div>';
+    }).join("");
+
+    const unmatched = d.unmatched_classes || [];
+    $("cs-unmatched").innerHTML = unmatched.length
+      ? '<div class="text-xs mb-1" style="color: var(--state-warning);">未匹配班级（' + unmatched.length + '）：</div>' +
+        '<div class="text-xs" style="color: var(--color-neutral-600);">' + unmatched.map(esc).join("、") + '</div>'
+      : '<div class="text-xs" style="color: var(--state-success);">全部班级均匹配成功</div>';
+
+    const onlyTt = c.only_timetable || [];
+    $("cs-only-tt").innerHTML = onlyTt.length
+      ? '<div class="rounded-xl overflow-hidden" style="border: 1px solid var(--color-neutral-200); max-height: 320px; overflow-y: auto;">' +
+        '<table class="w-full text-xs"><thead style="background: var(--color-neutral-100);">' +
+        '<tr><th class="px-2 py-1.5 text-left">班级</th><th class="px-2 py-1.5 text-left">课表科目</th></tr></thead><tbody>' +
+        onlyTt.slice(0, 500).map(function(r){
+          return '<tr style="border-top: 1px solid var(--color-neutral-100);"><td class="px-2 py-1.5">' +
+            esc(r.class_name) + '</td><td class="px-2 py-1.5">' + esc(r.course_name) + '</td></tr>';
+        }).join("") + '</tbody></table></div>'
+      : '<div class="text-xs" style="color: var(--color-neutral-500);">课表来源没有额外科目</div>';
+
+    $("cs-tbody").innerHTML = (d.items || []).map(function(r){
+      let badge;
+      if(!r.class_id){
+        badge = '<span class="px-1.5 py-0.5 rounded" style="background: #fee2e2; color: #dc2626;">班级未匹配</span>';
+      }else if(r.in_timetable){
+        badge = '<span class="px-1.5 py-0.5 rounded" style="background: #dcfce7; color: #16a34a;">一致</span>';
+      }else{
+        badge = '<span class="px-1.5 py-0.5 rounded" style="background: #fef3c7; color: #d97706;">仅文件有</span>';
+      }
+      return '<tr style="border-top: 1px solid var(--color-neutral-100);">' +
+        '<td class="px-3 py-2">' + esc(r.class_name) +
+          (r.match_note ? '<span class="ml-1 px-1 rounded" style="background: var(--color-neutral-100); color: var(--color-neutral-500); font-size: 10px;">' + esc(r.match_note) + '</span>' : '') +
+        '</td>' +
+        '<td class="px-3 py-2">' + esc(r.course_name) + '</td>' +
+        '<td class="px-3 py-2">' + esc(r.teacher_name) + '</td>' +
+        '<td class="px-3 py-2 text-right">' + (r.periods == null ? "" : r.periods) + '</td>' +
+        '<td class="px-3 py-2">' + badge + '</td></tr>';
+    }).join("");
+
+    $("cs-result").classList.remove("hidden");
+  }
+
+  async function confirmImport(){
+    if(!importId){ setStatus("请先解析文件", true); return; }
+    if(!confirm("确认将解析结果写入课程设置？同文件上次导入的记录会被覆盖。")) return;
+    setStatus("导入中…");
+    try{
+      const r = await fetch(API + "/course-settings/confirm/" + importId, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ replace: true })
+      });
+      const d = await r.json();
+      if(!r.ok){ setStatus(d.detail || "导入失败", true); return; }
+      setStatus("已导入 " + d.saved + " 条课程设置（未匹配班级 " + (d.unmatched_classes || []).length + " 个）");
+    }catch(e){ setStatus("异常: " + e.message, true); }
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    loadOptions();
+    $("cs-parse").addEventListener("click", parseFile);
+    $("cs-import").addEventListener("click", confirmImport);
   });
 })();
 </script>

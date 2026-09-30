@@ -287,11 +287,13 @@ def run_screen(
             run_name, grade_id, category, class_id,
             ",".join(str(e) for e in exam_ids), now, conn=conn)
 
-        # 2. 按 run_id 清这次筛选留下的旧候选（同一 run 不应该有重复）
-        _scholarship_repo.delete_by_run(screen_run_id, conn=conn)
-
-        # 3. 插入候选，带上 screen_run_id（UNIQUE 索引在数据库层再兜一次）
         primary_exam_id = exam_ids[0]
+
+        # 2. 清掉同一筛选范围（年级+班级类别+主考试[+班级]）的历史候选，
+        #    否则每次筛选都会追加一批新行，候选列表就会出现重复
+        _scholarship_repo.delete_by_scope(grade_id, class_type_ids, primary_exam_id, class_id, conn=conn)
+
+        # 3. 插入候选，带上 screen_run_id
         for w in winners:
             _scholarship_repo.upsert_candidate(
                 w["student_id"], primary_exam_id, w["class_id"],

@@ -69,6 +69,13 @@ def _get_existing_class(conn, class_name):
     result = class_repo.get_by_name(normalized, conn=conn)
     if result:
         return result
+    # 档案里括号全/半角不统一时，两种写法都试一次
+    for variant in (normalized.replace("(", "（").replace(")", "）"),
+                    normalized.replace("（", "(").replace("）", ")")):
+        if variant != normalized:
+            result = class_repo.get_by_name(variant, conn=conn)
+            if result:
+                return result
     if normalized.endswith("班（本方）"):
         result = class_repo.get_by_name(normalized[:-4], conn=conn)
         if result:

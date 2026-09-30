@@ -256,6 +256,26 @@
           </a>
         </li>
 
+        <!-- 统计分析 -->
+        <li>
+          <a href="stats.html" data-dom-id="nav-stats"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">统计分析</span>
+          </a>
+        </li>
+
+        <!-- 课程设置 -->
+        <li>
+          <a href="subject.html" data-dom-id="nav-subject-stat"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-6"/></svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">课程设置</span>
+          </a>
+        </li>
+
         <!-- 成绩管理 -->
         <li>
           <a href="score-management.html" data-dom-id="nav-score-management"
@@ -281,6 +301,16 @@
               <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
             </svg>
             <span class="truncate" style="font-size: 14px; font-weight: 500;">奖学金评定</span>
+          </a>
+        </li>
+
+        <!-- 教师视图 -->
+        <li>
+          <a href="teacher.html" data-dom-id="nav-teacher"
+             class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg truncate transition-colors"
+             style="color: #94a3b8;">
+            <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span class="truncate" style="font-size: 14px; font-weight: 500;">教师视图</span>
           </a>
         </li>
 
@@ -734,6 +764,61 @@
       </div>
     </div>
 
+
+    <!-- 未匹配班级：注册为新班级 -->
+    <div id="uc-create-class-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:70; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 440px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 1rem;">注册为新班级</h3>
+        <div class="space-y-4">
+          <div>
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">班级名称 <span style="color: var(--state-error);">*</span></label>
+            <input type="text" id="uc-new-class-name" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;" placeholder="例如：2025级电子3班">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">年级 <span style="color: var(--state-error);">*</span></label>
+              <select id="uc-new-class-grade" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;"></select>
+            </div>
+            <div>
+              <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">专业 <span style="color: var(--state-error);">*</span></label>
+              <select id="uc-new-class-major" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;"></select>
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">班级类别 <span style="color: var(--state-error);">*</span></label>
+            <select id="uc-new-class-type" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;"></select>
+          </div>
+          <p id="uc-create-class-status" style="font-size: 13px; color: var(--state-error); min-height: 1.25em;"></p>
+        </div>
+        <div class="flex items-center justify-end gap-3 mt-6">
+          <button id="uc-create-class-cancel" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: transparent; color: var(--foreground); border: 1px solid var(--border);">取消</button>
+          <button id="uc-create-class-submit" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--primary); color: var(--primary-foreground);">创建班级</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 未匹配班级：关联到已有班级 -->
+    <div id="uc-link-alias-modal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.5); z-index:70; overflow-y:auto; padding: 1rem; align-items:flex-start; justify-content:center;">
+      <div class="rounded-lg border p-6" style="background-color: var(--card); border-color: var(--border); width: 100%; max-width: 440px; max-height: calc(100vh - 2rem); overflow-y:auto; margin: auto;">
+        <h3 style="font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 1rem;">关联到已有班级</h3>
+        <div class="space-y-4">
+          <div>
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">未匹配班级名</label>
+            <input type="text" id="uc-alias-source" readonly class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--muted); color: var(--foreground); font-size: 14px;">
+          </div>
+          <div>
+            <label style="font-size: 13px; color: var(--muted-foreground); display:block; margin-bottom: 0.25rem;">关联到（已有班级）<span style="color: var(--state-error);">*</span></label>
+            <select id="uc-alias-target" class="w-full rounded-md border px-3 py-2" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 14px;"></select>
+            <p style="font-size: 12px; color: var(--muted-foreground); margin-top: 4px;">保存后，成绩表中的该班级名将自动归入所选班级。</p>
+          </div>
+          <p id="uc-link-alias-status" style="font-size: 13px; color: var(--state-error); min-height: 1.25em;"></p>
+        </div>
+        <div class="flex items-center justify-end gap-3 mt-6">
+          <button id="uc-link-alias-cancel" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: transparent; color: var(--foreground); border: 1px solid var(--border);">取消</button>
+          <button id="uc-link-alias-submit" class="px-4 py-2 rounded-md text-sm font-medium" style="background-color: var(--primary); color: var(--primary-foreground);">保存关联</button>
+        </div>
+      </div>
+    </div>
     <script>
     (function() {
       const API_BASE = '/api';
@@ -755,6 +840,12 @@
       let currentClassMapping = {};
       let lastBatchFileConfigs = null;
       let isBatchReimportMode = false;
+
+      // 未匹配班级一键处理
+      let ucPanelMode = 'single';
+      let batchUnknownEntries = [];
+      let ucActiveFileId = null;
+      let ucActiveClassName = '';
 
       const uploadZone = document.getElementById('upload-zone');
       const fileInput = document.getElementById('file-input');
@@ -841,6 +932,177 @@
         const res = await fetch(API_BASE + path, { method: 'DELETE' });
         if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
         return res.json();
+      }
+
+      async function apiPostJson(path, obj) {
+        const res = await fetch(API_BASE + path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(obj),
+        });
+        if (!res.ok) throw new Error(parseError(await res.json().catch(() => ({}))) || res.statusText);
+        return res.json();
+      }
+
+      // 轻量 toast（非阻塞、自动消失，不产生遮罩）
+      function showToast(message, type) {
+        const colors = { success: 'var(--state-success)', error: 'var(--state-error)', info: 'var(--primary)' };
+        const el = document.createElement('div');
+        el.textContent = message;
+        el.style.cssText = 'position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:9999; padding:10px 18px; border-radius:8px; font-size:14px; color:#fff; background-color:' + (colors[type] || colors.info) + '; box-shadow:0 4px 12px rgba(0,0,0,0.15); pointer-events:none; opacity:0; transition:opacity .2s;';
+        document.body.appendChild(el);
+        requestAnimationFrame(() => { el.style.opacity = '1'; });
+        setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 250); }, 2600);
+      }
+
+      function ucParseFileId(v) {
+        if (v === undefined || v === null || v === '') return null;
+        const n = Number(v);
+        return isNaN(n) ? null : n;
+      }
+
+      function openCreateClassModal(className, fileId) {
+        ucActiveClassName = className || '';
+        ucActiveFileId = ucParseFileId(fileId);
+        document.getElementById('uc-new-class-name').value = ucActiveClassName;
+        const statusEl = document.getElementById('uc-create-class-status');
+        statusEl.style.color = 'var(--state-error)';
+        statusEl.textContent = '';
+        document.getElementById('uc-link-alias-modal').style.display = 'none';
+        document.getElementById('uc-create-class-modal').style.display = 'flex';
+        populateCreateClassOptions();
+      }
+
+      function closeCreateClassModal() {
+        document.getElementById('uc-create-class-modal').style.display = 'none';
+      }
+
+      async function populateCreateClassOptions() {
+        const gradeSel = document.getElementById('uc-new-class-grade');
+        const majorSel = document.getElementById('uc-new-class-major');
+        const typeSel = document.getElementById('uc-new-class-type');
+        try {
+          const [grades, majors, types] = await Promise.all([apiGet('/grades'), apiGet('/majors'), apiGet('/class-types')]);
+          gradeSel.innerHTML = '<option value="">请选择年级</option>' + (grades || []).map(g => '<option value="' + g.id + '">' + escapeHtml(g.name) + '</option>').join('');
+          majorSel.innerHTML = '<option value="">请选择专业</option>' + (majors || []).map(m => '<option value="' + m.id + '">' + escapeHtml(m.name) + '</option>').join('');
+          typeSel.innerHTML = '<option value="">请选择班级类别</option>' + (types || []).map(t => '<option value="' + t.id + '">' + escapeHtml(t.name) + '</option>').join('');
+        } catch (e) {
+          const statusEl = document.getElementById('uc-create-class-status');
+          statusEl.style.color = 'var(--state-error)';
+          statusEl.textContent = '加载选项失败：' + e.message;
+        }
+      }
+
+      function openLinkAliasModal(className, fileId) {
+        ucActiveClassName = className || '';
+        ucActiveFileId = ucParseFileId(fileId);
+        document.getElementById('uc-alias-source').value = ucActiveClassName;
+        const statusEl = document.getElementById('uc-link-alias-status');
+        statusEl.style.color = 'var(--state-error)';
+        statusEl.textContent = '';
+        document.getElementById('uc-create-class-modal').style.display = 'none';
+        document.getElementById('uc-alias-target').innerHTML = '<option value="">加载中...</option>';
+        document.getElementById('uc-link-alias-modal').style.display = 'flex';
+        loadAliasOptions();
+      }
+
+      function closeLinkAliasModal() {
+        document.getElementById('uc-link-alias-modal').style.display = 'none';
+      }
+
+      async function loadAliasOptions() {
+        const sel = document.getElementById('uc-alias-target');
+        try {
+          const data = await apiGet('/class-name-aliases/options');
+          const items = (data && data.items) || [];
+          if (!items.length) {
+            sel.innerHTML = '<option value="">暂无可选班级，请先注册新班级</option>';
+            return;
+          }
+          sel.innerHTML = '<option value="">请选择要关联的班级</option>' + items.map(c =>
+            '<option value="' + escapeHtml(c.name) + '">' + escapeHtml(c.name) + '（' + escapeHtml(c.grade_name || '') + ' · ' + escapeHtml(c.major_name || '') + '）</option>'
+          ).join('');
+        } catch (e) {
+          sel.innerHTML = '<option value="">加载失败</option>';
+          const statusEl = document.getElementById('uc-link-alias-status');
+          statusEl.style.color = 'var(--state-error)';
+          statusEl.textContent = '加载班级列表失败：' + e.message;
+        }
+      }
+
+      async function submitCreateClass() {
+        const statusEl = document.getElementById('uc-create-class-status');
+        const name = document.getElementById('uc-new-class-name').value.trim();
+        const grade_id = Number(document.getElementById('uc-new-class-grade').value);
+        const major_id = Number(document.getElementById('uc-new-class-major').value);
+        const class_type_id = Number(document.getElementById('uc-new-class-type').value);
+        if (!name) { statusEl.style.color = 'var(--state-error)'; statusEl.textContent = '请输入班级名称'; return; }
+        if (!grade_id || !major_id || !class_type_id) { statusEl.style.color = 'var(--state-error)'; statusEl.textContent = '请选择年级、专业、班级类别'; return; }
+        statusEl.style.color = 'var(--muted-foreground)';
+        statusEl.textContent = '正在创建...';
+        try {
+          await apiPostJson('/classes', { name, grade_id, major_id, class_type_id });
+          closeCreateClassModal();
+          showToast('班级「' + name + '」创建成功', 'success');
+          await loadAvailableClasses();
+          await afterUnknownClassResolved(ucActiveFileId);
+        } catch (e) {
+          statusEl.style.color = 'var(--state-error)';
+          statusEl.textContent = e.message;
+        }
+      }
+
+      async function submitLinkAlias() {
+        const statusEl = document.getElementById('uc-link-alias-status');
+        const canonical = document.getElementById('uc-alias-target').value;
+        if (!canonical) { statusEl.style.color = 'var(--state-error)'; statusEl.textContent = '请选择要关联的班级'; return; }
+        statusEl.style.color = 'var(--muted-foreground)';
+        statusEl.textContent = '正在保存...';
+        try {
+          await apiPostJson('/class-name-aliases', { alias: ucActiveClassName, canonical_name: canonical });
+          closeLinkAliasModal();
+          showToast('已将「' + ucActiveClassName + '」关联到「' + canonical + '」', 'success');
+          await afterUnknownClassResolved(ucActiveFileId);
+        } catch (e) {
+          statusEl.style.color = 'var(--state-error)';
+          statusEl.textContent = e.message;
+        }
+      }
+
+      async function afterUnknownClassResolved(fileId) {
+        if (fileId == null) { await loadFiles(); return; }
+        if (ucPanelMode === 'batch') {
+          await refreshBatchUnknown(fileId);
+        } else {
+          const row = scoreFilesData.find(f => f.id === fileId);
+          await window.validateFile(fileId, row ? row.file_name : '');
+        }
+      }
+
+      function renderBatchUnknownBlock() {
+        if (!batchUnknownEntries || batchUnknownEntries.length === 0) return '';
+        const blocks = batchUnknownEntries.map(entry =>
+          renderClassMapping(entry.unknown_classes, entry.file_id, { withDropdown: false, fileName: entry.file_name })
+        ).join('');
+        return '<div id="batch-unknown-block" style="grid-column: 1 / -1;">' + blocks + '</div>';
+      }
+
+      async function refreshBatchUnknown(fileId) {
+        try {
+          const result = await apiPost('/import/validate/' + fileId, null);
+          const fresh = result.unknown_classes || [];
+          const entry = batchUnknownEntries.find(e => e.file_id === fileId);
+          if (entry) entry.unknown_classes = fresh;
+          batchUnknownEntries = (batchUnknownEntries || []).filter(e => e.unknown_classes && e.unknown_classes.length);
+          const existing = document.getElementById('batch-unknown-block');
+          if (existing) {
+            if (batchUnknownEntries.length) existing.outerHTML = renderBatchUnknownBlock();
+            else existing.remove();
+          }
+        } catch (e) {
+          console.warn('重新校验失败', e);
+        }
+        await loadFiles();
       }
 
       function showCustomConfirm(title, message) {
@@ -1297,7 +1559,11 @@
             }
             items.push(checkItem(r.file_name, desc, status));
           });
-          validationContent.innerHTML = items.join('');
+          ucPanelMode = 'batch';
+          batchUnknownEntries = (result.results || [])
+            .filter(r => r.unknown_classes && r.unknown_classes.length)
+            .map(r => ({ file_id: r.file_id, file_name: r.file_name, unknown_classes: r.unknown_classes.slice() }));
+          validationContent.innerHTML = items.join('') + renderBatchUnknownBlock();
           if (allConflicts.length) {
             isBatchReimportMode = true;
             showConflicts(allConflicts);
@@ -1443,28 +1709,35 @@
         }
       };
 
-      function renderClassMapping(unknownClasses) {
-        if (!unknownClasses || unknownClasses.length === 0 || availableClasses.length === 0) return '';
+      function renderClassMapping(unknownClasses, fileId, opts) {
+        opts = opts || {};
+        if (!unknownClasses || unknownClasses.length === 0) return '';
+        const withDropdown = opts.withDropdown !== false;
+        const canMap = withDropdown && availableClasses.length > 0;
         const options = availableClasses.map(c =>
-          `<option value="${c.id}">${escapeHtml(c.grade_name || '')} ${escapeHtml(c.name)}（${escapeHtml(c.major_name || '')}）</option>`
+          '<option value="' + c.id + '">' + escapeHtml(c.grade_name || '') + ' ' + escapeHtml(c.name) + '（' + escapeHtml(c.major_name || '') + '）</option>'
         ).join('');
-        const rows = unknownClasses.map((name, idx) => `
-          <div class="flex items-center gap-2 py-1">
-            <span style="font-size: 13px; color: var(--foreground); white-space: nowrap; min-width: 140px;">${escapeHtml(name)} →</span>
-            <select class="class-mapping-select w-full rounded-md border px-2 py-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 13px;" data-unknown-class="${escapeHtml(name)}">
-              <option value="">请选择对应班级</option>
-              ${options}
-            </select>
-          </div>
-        `).join('');
-        return `
-          <div class="mt-3 px-4 py-3 rounded-md" style="background-color: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); grid-column: 1 / -1;">
-            <p style="font-size: 13px; color: var(--state-error); font-weight: 500; margin-bottom: 0.5rem;">以下班级未在系统中设置，请从下拉框选择对应的已有班级：</p>
-            <div class="flex flex-col gap-1">${rows}</div>
-          </div>
-        `;
+        const rows = unknownClasses.map(name => {
+          const safeName = escapeHtml(name);
+          const sel = canMap
+            ? '<select class="class-mapping-select rounded-md border px-2 py-1" style="border-color: var(--border); background-color: var(--card); color: var(--foreground); font-size: 13px; min-width: 200px;" data-unknown-class="' + safeName + '"><option value="">请选择对应班级</option>' + options + '</select>'
+            : '';
+          const fileAttr = (fileId === undefined || fileId === null) ? '' : fileId;
+          return '<div class="flex flex-wrap items-center gap-2 py-1">'
+            + '<span style="font-size: 13px; font-weight: 500; color: var(--foreground); white-space: nowrap;">' + safeName + '</span>'
+            + sel
+            + '<button type="button" data-uc-action="create" data-uc-class="' + safeName + '" data-uc-file="' + fileAttr + '" class="px-2 py-1 rounded-md text-xs font-medium transition-colors" style="background-color: var(--primary); color: var(--primary-foreground); font-size: 12px;">注册为新班级</button>'
+            + '<button type="button" data-uc-action="link" data-uc-class="' + safeName + '" data-uc-file="' + fileAttr + '" class="px-2 py-1 rounded-md text-xs font-medium transition-colors" style="background-color: var(--muted); color: var(--foreground); border: 1px solid var(--border); font-size: 12px;">关联到已有班级</button>'
+            + '</div>';
+        }).join('');
+        const head = opts.fileName
+          ? '<p style="font-size: 12px; color: var(--muted-foreground); font-weight: 500; margin-bottom: 0.5rem;">文件：' + escapeHtml(opts.fileName) + '</p>'
+          : '<p style="font-size: 13px; color: var(--state-error); font-weight: 500; margin-bottom: 0.5rem;">以下班级未在系统中设置，可直接在此处理：</p>';
+        return '<div class="mt-3 px-4 py-3 rounded-md" style="background-color: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); grid-column: 1 / -1;">'
+          + head
+          + '<div class="flex flex-col gap-1">' + rows + '</div>'
+          + '</div>';
       }
-
       function collectClassMapping() {
         const mapping = {};
         validationContent.querySelectorAll('.class-mapping-select').forEach(sel => {
@@ -1512,7 +1785,8 @@
         const batchTip = (status === '校验通过' && validatedCount >= 2)
           ? `<div class="px-4 py-2 mt-3 rounded-md text-xs" style="background-color: rgba(79,70,229,0.08); color: var(--primary); grid-column: 1 / -1;">提示：当前共有 ${validatedCount} 个校验通过的文件。点击上方“导入全部已校验 (${validatedCount})”可将它们一次性导入同一个考试。</div>`
           : '';
-        const classMappingHtml = renderClassMapping(unknownClasses);
+        ucPanelMode = 'single';
+        const classMappingHtml = renderClassMapping(unknownClasses, currentFileId, { withDropdown: true });
         validationContent.innerHTML = items.join('') + (nonClassErrors.length ? renderErrors(nonClassErrors) : '') + classMappingHtml + batchTip;
 
         // 只有在没有非班级错误且所有未匹配班级都已选择对应班级时，才允许导入
@@ -1861,6 +2135,22 @@
         }
       });
 
+
+      validationContent.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-uc-action]');
+        if (!btn) return;
+        const className = btn.dataset.ucClass || '';
+        const fileId = btn.dataset.ucFile;
+        if (btn.dataset.ucAction === 'create') openCreateClassModal(className, fileId);
+        else if (btn.dataset.ucAction === 'link') openLinkAliasModal(className, fileId);
+      });
+
+      document.getElementById('uc-create-class-cancel').addEventListener('click', closeCreateClassModal);
+      document.getElementById('uc-create-class-submit').addEventListener('click', submitCreateClass);
+      document.getElementById('uc-create-class-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeCreateClassModal(); });
+      document.getElementById('uc-link-alias-cancel').addEventListener('click', closeLinkAliasModal);
+      document.getElementById('uc-link-alias-submit').addEventListener('click', submitLinkAlias);
+      document.getElementById('uc-link-alias-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeLinkAliasModal(); });
       loadSettings();
       loadFiles();
       loadAvailableClasses();

@@ -15,6 +15,7 @@ from repositories.score_subject_details import ScoreSubjectDetailRepository
 from repositories.classes import ClassRepository
 from repositories.timetables import TimetableMappingRepository
 from repositories.subject_aliases import SubjectAliasRepository
+from repositories.ignored_subjects import IgnoredSubjectRepository
 
 # 模块级 repo 单例（Phase 4 重构后数据访问统一走 Repository 层）
 _base_repo = BaseRepository()
@@ -400,8 +401,44 @@ def _canonical_subject(name, conn=None):
     return norm
 
 
+# 忽略名单: 存在 ignored_subjects 表中, 精确科目名匹配, 可在科目管理页勾选维护
+_ignored_subject_repo = IgnoredSubjectRepository()
+_IGNORE_CACHE = {"set": None}
+
+
+def _get_ignored_set(conn=None):
+    """读取忽略名单集合; 传入 conn 时刷新缓存."""
+    if conn is not None:
+        try:
+            _IGNORE_CACHE["set"] = _ignored_subject_repo.load_set(conn=conn)
+        except Exception:
+            _IGNORE_CACHE["set"] = set()
+    if _IGNORE_CACHE["set"] is None:
+        try:
+            _IGNORE_CACHE["set"] = _ignored_subject_repo.load_set()
+        except Exception:
+            _IGNORE_CACHE["set"] = set()
+    return _IGNORE_CACHE["set"]
+
+
+def refresh_ignored_subjects():
+    """忽略名单变更后调用, 使下次访问重新加载."""
+    _IGNORE_CACHE["set"] = None
+
+
+def _is_ignored_subject(name, conn=None):
+    """判断是否为忽略名单中的课程 (不需要与成绩侧专业科目对齐)."""
+    n = str(name or "").strip()
+    if not n:
+        return False
+    return n in _get_ignored_set(conn)
+
+
 def unaligned_subjects(conn, subject_names):
-    """课表导入校验: 返回未能与成绩侧科目对齐的科目名 (仅提示, 不写库)."""
+    """课表导入校验: 返回未能与成绩侧科目对齐的科目名 (仅提示, 不写库).
+
+    忽略名单中的课程 (体育/思政/军事/艺术等) 自动忽略, 不计入未映射清单。
+    """
     known = set()
     for r in _base_repo.query(
             "SELECT DISTINCT subject_name FROM score_subject_details", conn=conn):
@@ -411,6 +448,8 @@ def unaligned_subjects(conn, subject_names):
     core = {name for _, _, name in _CORE_SUBJECTS}
     out = set()
     for name in subject_names:
+        if _is_ignored_subject(name, conn=conn):
+            continue
         c = _canonical_subject(name, conn=conn)
         if c in core or c in known:
             continue

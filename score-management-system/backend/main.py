@@ -10,7 +10,8 @@ from fastapi.middleware.gzip import GZipMiddleware
 
 from config import ALLOWED_ORIGINS, BASE_DIR
 from database import init_db
-from routers import settings, import_scores, scores, scholarship, export_data, backup, dashboard, logs, timetable, stats, auth, headteacher
+from routers import class_import
+from routers import settings, import_scores, scores, scholarship, export_data, backup, dashboard, logs, timetable, stats, auth, headteacher, subject_aliases, ignored_subjects, course_settings, class_name_aliases
 
 app = FastAPI(title="成绩管理系统", version="1.0.0")
 
@@ -83,6 +84,11 @@ app.include_router(timetable.router, prefix="/api/timetable", tags=["课表管�
 app.include_router(logs.router, prefix="/api/logs", tags=["操作日志"])
 app.include_router(stats.router, prefix="/api/stats", tags=["统计分析"])
 app.include_router(headteacher.router, prefix="/api", tags=["班主任管理"])
+app.include_router(subject_aliases.router, prefix="/api", tags=["科目别名"])
+app.include_router(ignored_subjects.router, prefix="/api", tags=["忽略名单"])
+app.include_router(course_settings.router, prefix="/api", tags=["课程设置"])
+app.include_router(class_name_aliases.router, prefix="/api", tags=["班级别名"])
+app.include_router(class_import.router, prefix="/api", tags=["班级名单导入"])
 
 
 @app.on_event("startup")

@@ -78,9 +78,20 @@ class ScholarshipCandidateRepository(BaseRepository):
             conn=conn, commit=False)
         return cur.lastrowid
 
-    def delete_by_run(self, screen_run_id, conn=None):
-        self.execute_dml('DELETE FROM scholarships WHERE screen_run_id = ?', (screen_run_id,),
-                         conn=conn, commit=False)
+    def delete_by_scope(self, grade_id, class_type_ids, exam_id, class_id=None, conn=None):
+        """删除同一筛选范围（年级+班级类别+主考试[+班级]）下的历史候选。
+
+        否则每次点“筛选”都会新增一批候选，候选列表里同一学生会重复出现。
+        """
+        placeholders = ','.join(['?'] * len(class_type_ids))
+        sql = ('DELETE FROM scholarships WHERE exam_id = ? AND student_id IN ('
+               'SELECT id FROM students WHERE grade_id = ? AND class_type_id IN (' + placeholders + ')')
+        params = [exam_id, grade_id] + list(class_type_ids)
+        if class_id:
+            sql += ' AND class_id = ?'
+            params.append(class_id)
+        sql += ')'
+        self.execute_dml(sql, tuple(params), conn=conn, commit=False)
 
     def upsert_candidate(self, student_id, exam_id, class_id, average_score, language_avg, professional_avg,
                          total_score=None, subjects_json=None, category=None, screen_run_id=None,
